@@ -1,0 +1,78 @@
+<div class="d-flex align-items-center justify-content-center">
+  <div class="bg-dark mt-4 rounded">
+    <form
+      class="m-2 p-2"
+      #userSignUp="ngForm"
+      (ngSubmit)="signUp(userSignUp.value)"
+    >
+      <div class="form-group">
+        <label for="name"></label>
+        <input
+          type="text"
+          name="name"
+          class="form-control"
+          placeholder="Enter Name"
+          ngModel
+          #name="ngModel"
+          required
+        />
+        <p *ngIf="name.invalid && name.touched" class="text-danger">
+          Name must be Required
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="email"></label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          placeholder="Enter email"
+          ngModel
+          #email="ngModel"
+          required
+        />
+        <p *ngIf="email.invalid && email.touched" class="text-danger">
+          Enter valid Email
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label for="password"></label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          ngModel
+          #password="ngModel"
+          required
+          placeholder="Password"
+        />
+        <p *ngIf="password.invalid && password.touched" class="text-danger">
+          Password must be Required
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="file"></label>
+        <input
+          type="file"
+          class="form-control"
+          name="file"
+          ngModel
+          #file="ngModel"
+          required
+        />
+        <p *ngIf="file.invalid && file.touched" class="text-danger">
+          Password must be Required
+        </p>
+      </div>
+
+      <button type="submit" class="btn btn-info w-100 mt-2">Sign-Up</button>
+      <div class="text-white p-2">
+        Already have an Account ?
+        <a class="text-info text-decoration-none" routerLink="/login"
+          ><span>login here</span></a
+        >
+      </div>
+    </form>
+  </div>
+</div>

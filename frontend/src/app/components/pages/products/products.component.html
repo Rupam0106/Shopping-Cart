@@ -1,0 +1,29 @@
+<div class="bg-white p-4">
+  <h1 class="d-flex justify-content-center">List of Products</h1>
+
+  <div class="container">
+    <div class="row">
+      <div class="col" *ngFor="let product of Products">
+        <div class="card m-4" style="width: 18rem">
+          <img
+            class="card-img-top"
+            src="{{ product.productImage }}"
+            alt="productImage"
+          />
+          <div class="card-body">
+            <h5 class="card-title">
+              <strong>Product Name :- </strong> {{ product.title }}
+            </h5>
+            <p class="card-text">
+              <strong>Price :- </strong> {{ product.price }}
+            </p>
+            <a routerLink="/products" class="btn btn-info mx-2">
+              View Details</a
+            >
+            <a routerLink="/cart" class="btn btn-info"> Add To Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
