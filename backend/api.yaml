@@ -1,0 +1,36 @@
+openapi: 3.0.0
+info:
+  description: This is a simple API
+  version: "1.0.0"
+  title: Simple E-commerce API
+  contact:
+    email: you@rusolutions.com
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+
+servers:
+  - url: http://localhost:4000/
+    description: Local server
+  - url: https://prod.com/
+    description: Pre Production server
+  - url: https://test.com/
+    description: Production server
+tags:
+  Create User
+paths:
+  /users:
+    post:
+      summary: Creates a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+      responses: 
+        '201':
+          description: Created

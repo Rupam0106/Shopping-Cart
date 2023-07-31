@@ -1,0 +1,739 @@
+{
+	"info": {
+		"_postman_id": "276e317d-bcb6-40f2-8331-3cea523f006b",
+		"name": "E-Commerce-App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27832090"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Raju",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "abc@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/home/rudra/Pictures/Screenshot from 2023-06-22 17-32-24.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/register",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"rupam@gmail.com\",\n    \"password\":\"123456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/login",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"uttam1@gmail.com\",\n    \"password\":\"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/logout",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user Profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"uttam1@gmail.com\",\n    \"password\":\"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/me",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/refresh-token",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user Profile",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"uttam1@gmail.com\",\n    \"password\":\"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/me/delete",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"me",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgot-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"email\":\"rupam@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/password/forgot",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"password",
+								"forgot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update password",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"oldPassword\":\"123456789\",\n   \"newPassword\":\"123456789\",\n   \"confirmPassword\":\"123456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/password/update",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"password",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\":\"123456789\",\n    \"confirmPassword\":\"123456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://ecommerce-backend-xp0v.onrender.com/api/v1/user/password/reset/356d966fe31cccd7cf13d392add157aee5c1313c",
+							"protocol": "http",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"password",
+								"reset",
+								"356d966fe31cccd7cf13d392add157aee5c1313c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Create a new Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Redmi Note-9 new",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Best product with less money",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "13999",
+									"type": "text"
+								},
+								{
+									"key": "productImage",
+									"type": "file",
+									"src": "/home/rudra/Pictures/e-commerce-pic/product/redmi-note-9.jpg"
+								},
+								{
+									"key": "stock",
+									"value": "1000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/product/new",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"product",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Product",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"rupam@gmail.com\",\n    \"password\":\"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/product/all",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"product",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single Product",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\":\"Best camera for Wedding photography and fashion shoot\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/product/64996195faea92165322d3fc",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"product",
+								"64996195faea92165322d3fc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\":\"New Added Best camera for Wedding photography and fashion shoot\",\n    \"stock\":250\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/product/64996195faea92165322d3fc",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"product",
+								"64996195faea92165322d3fc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete single product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"uttam1@gmail.com\",\n    \"password\":\"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/product/64996202cc0aa86de2b95947",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"product",
+								"64996202cc0aa86de2b95947"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Cart Created",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "productId",
+									"value": "649be2e662c48868a015c945",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/cart/create",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"cart",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cart",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"rupam@gmail.com\",\n    \"password\":\"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/cart/all",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"cart",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update cart",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "productId",
+									"value": "649a77bff3b33eb6fcbfc76c",
+									"type": "text"
+								},
+								{
+									"key": "cartId",
+									"value": "649aae26c59133d97f499b5c",
+									"type": "text"
+								},
+								{
+									"key": "removeProduct",
+									"value": "649a77bff3b33eb6fcbfc76c",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/cart/update",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"cart",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "cartId",
+									"value": "649be35362c48868a015c94e",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/order/create",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"order",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancel order",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "orderId",
+									"value": "649be35362c48868a015c94e",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/order/cancel",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"order",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delivered Order",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "orderId",
+									"value": "649be35362c48868a015c94e",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://ecommerce-backend-xp0v.onrender.com/api/v1/user/order/delivered",
+							"protocol": "https",
+							"host": [
+								"ecommerce-backend-xp0v",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"order",
+								"delivered"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
