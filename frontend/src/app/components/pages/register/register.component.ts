@@ -7,13 +7,20 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
- 
+  userImage: string = '';
   constructor(private user: UserService) {}
   signUp(data: any) {
-    const file: File = data.file[0];
-    const reader = new FileReader();
-    console.log(data.file)
-    console.log(file)
-    // this.user.userSignUp(data);
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+    formData.append('avatar', this.userImage);
+    this.user.userSignUp(formData).subscribe();
+  }
+
+  onFileSelected(event: any) {
+    if (event.target.files.length > 0) {
+      this.userImage = event.target.files[0];
+    }
   }
 }

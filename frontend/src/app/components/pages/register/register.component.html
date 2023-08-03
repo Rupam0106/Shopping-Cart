@@ -60,9 +60,10 @@
           ngModel
           #file="ngModel"
           required
+          (change)="onFileSelected($event)"
         />
         <p *ngIf="file.invalid && file.touched" class="text-danger">
-          Password must be Required
+          File must be Required
         </p>
       </div>
 

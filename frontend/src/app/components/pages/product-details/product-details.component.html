@@ -1,0 +1,22 @@
+<h1 class="d-flex justify-content-center mt-4 mx-4">Product Details</h1>
+  <div class="d-flex justify-content-space-between justify-content-center m-4">
+    <div *ngIf="product" class="m-4">
+      <img [src]="product.productImage" [alt]="product.title" />
+    </div>
+    <div class="m-4">
+      <div class="fw-bold fs-3 my-3">
+        {{ product.title }}
+      </div>
+      <div class="mb-3">
+        <strong>Description :</strong> {{ product.description }}
+      </div>
+
+      <div class="mb-3">
+        <strong>Price :</strong>{{ product.price | currency }}
+      </div>
+
+      <div>
+        <button class="btn btn-info" (click)="addToCart()">Add To Cart</button>
+      </div>
+    </div>
+  </div>

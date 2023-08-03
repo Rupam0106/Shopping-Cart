@@ -14,10 +14,22 @@
         <a routerLink="" class="nav-item nav-link active">Home</a>
         <a routerLink="/products" class="nav-item nav-link">Shop</a>
       </div>
-      <div class="navbar-nav ms-auto">
+    </div>
+    <div [ngSwitch]="menuType">
+      <div *ngSwitchCase="'default'" class="navbar-nav ms-auto">
         <a routerLink="/login" class="nav-item nav-link">Login</a>
         <a routerLink="/register" class="nav-item nav-link">Sign-Up</a>
         <a routerLink="/register" class="nav-item nav-link">Cart</a>
+      </div>
+      <div *ngSwitchCase="'admin'" class="navbar-nav ms-auto">
+        <a routerLink="/products/new" class="nav-item nav-link">Add Product</a>
+        <a routerLink="/user/me" class="nav-item nav-link">Profile</a>
+        <a routerLink="/user/logout" (click)="adminLogout()" class="nav-item nav-link">Logout</a>
+      </div>
+      <div *ngSwitchCase="'user'" class="navbar-nav ms-auto">
+        <a routerLink="/admin/me" class="nav-item nav-link">Profile</a>
+        <a routerLink="/cart" class="nav-item nav-link">Cart {{ cartItems }}</a>
+        <a routerLink="/admin/logout" (click)="userLogout()" class="nav-item nav-link">Logout</a>
       </div>
     </div>
   </div>

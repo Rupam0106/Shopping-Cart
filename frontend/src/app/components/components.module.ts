@@ -9,6 +9,10 @@ import { HeroComponent } from './partials/hero/hero.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { FormsModule } from '@angular/forms';
+import { ProductDetailsComponent } from './pages/product-details/product-details.component';
+import { LoadingComponent } from './partials/loading/loading.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -19,8 +23,12 @@ import { FormsModule } from '@angular/forms';
     HeroComponent,
     LoginComponent,
     RegisterComponent,
+    ProductDetailsComponent,
+    LoadingComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
   ],
-  exports: [HeaderComponent, FooterComponent, HomeComponent, ProductsComponent],
+  exports: [HeaderComponent, FooterComponent, HomeComponent, ProductsComponent,LoadingComponent,],
   imports: [CommonModule,AppRoutingModule,FormsModule],
 })
 export class ComponentsModule {}
