@@ -20,8 +20,9 @@ export class CartService {
     this.cartObservable = this.cartDataSubject.asObservable();
   }
 
-  addToCart(data: any) {
-    return this.http.post<any>(CREATE_CART_URL, data).pipe(
+  addToCart(productId: any) {
+    console.log(productId)
+    return this.http.post<any>(CREATE_CART_URL, productId).pipe(
       tap({
         next: (cart: any) => {
           this.cartDataSubject.next(cart);

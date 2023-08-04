@@ -21,11 +21,10 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     const user = this.user.currentUser;
-    console.log(user);
     if (user) {
       request = request.clone({
         setHeaders: {
-          refreshToken: this.cookieService.get('refreshToken'),
+          authorization: this.cookieService.get('refreshToken'),
         },
       });
     }

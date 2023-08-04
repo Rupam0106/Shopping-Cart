@@ -26,7 +26,7 @@ export class ProductDetailsComponent {
   }
 
   addToCart() {
-    this.cart.addToCart(this.product).subscribe();
+    this.cart.addToCart(this.product._id).subscribe();
   }
   handleQuantity(val: string) {
     if (this.productQuantity < 20 && val === 'plus') {

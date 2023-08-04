@@ -48,6 +48,6 @@ export class HeaderComponent {
   }
 
   userLogout() {
-    this.userService.llogout()
+    this.userService.logout().subscribe();
   }
 }

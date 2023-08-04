@@ -125,12 +125,7 @@ export class UserService {
       })
     );
   }
-  llogout() {
-    this.userSubject.next(new User());
-    localStorage.removeItem(USER_KEY);
-    this.cookieService.deleteAll();
-    window.location.reload();
-  }
+
   logout() {
     return this.http.get<User>(LOGOUT_URL).pipe(
       tap({
@@ -139,7 +134,8 @@ export class UserService {
           localStorage.removeItem(USER_KEY);
           this.toastr.success(user.message, 'Logged-out Successful');
           window.location.reload();
-          this.router.navigate(['/logout']);
+          this.cookieService.deleteAll();
+          this.router.navigate(['/login']);
         },
         error: (errorResponse) => {
           this.toastr.error(
