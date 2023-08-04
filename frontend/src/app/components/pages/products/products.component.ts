@@ -8,8 +8,7 @@ import { Product } from 'src/app/shared/models/Product';
   styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent {
-  Products: undefined | Product[];
-
+  Products: undefined | Product[]
   constructor(private productService: ProductsService) {}
 
   ngOnInit() {
@@ -17,4 +16,5 @@ export class ProductsComponent {
     this.Products=data.products
    })
   }
+
 }

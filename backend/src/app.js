@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.urlencoded({ extended: true }));
 const upload = multer();
 app.use(upload.any());
-app.use(cors());
+app.use(cors("*"));
 
 const { swaggerServe, swaggerSetup } = require("./config/swagger");
 app.use("/api-docs", swaggerServe, swaggerSetup);

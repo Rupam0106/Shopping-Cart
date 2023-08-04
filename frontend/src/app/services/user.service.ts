@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 import { User } from '../shared/models/User';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
 import {
+  DELETE_USER_URL,
   FORGOT_USER_URL,
   LOGIN_USER_URL,
+  LOGOUT_URL,
   REGISTER_USER_URL,
   RESET_PASSWORD_URL,
+  USER_PROFILE_URL,
 } from '../shared/constants/urls';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
@@ -16,6 +20,8 @@ const USER_KEY = 'user';
   providedIn: 'root',
 })
 export class UserService {
+  private cookie_name = '';
+  isUserLoggedIn = new BehaviorSubject<boolean>(false);
   private userSubject = new BehaviorSubject<User>(
     this.getUserFromLocalStorage()
   );
@@ -23,15 +29,24 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private cookieService: CookieService
   ) {
     this.userObservable = this.userSubject.asObservable();
+    console.log(cookieService);
   }
+  ngOnInit() {
+    this.cookie_name = this.cookieService.get('ACCESS_TOKEN');
+    console.log(this.cookie_name);
+  }
+
   userSignUp(userRegiser: any): Observable<User> {
     return this.http.post<User>(REGISTER_USER_URL, userRegiser).pipe(
       tap({
         next: (user: any) => {
           this.setUserToLocalStorage(user.user);
+          this.isUserLoggedIn.next(true);
+          this.cookieService.set('refreshToken', user.refreshToken);
           this.userSubject.next(user);
           this.toastr.success(
             `Welcome to the R-Shop ${user.user.name}`,
@@ -50,8 +65,10 @@ export class UserService {
     return this.http.post<User>(LOGIN_USER_URL, userLogin).pipe(
       tap({
         next: (user: any) => {
+          this.isUserLoggedIn.next(true);
           this.setUserToLocalStorage(user.user);
           this.userSubject.next(user);
+          this.cookieService.set('refreshToken', user.refreshToken);
           this.toastr.success(` Welome ${user.user.name}!`, 'Login Successful');
           this.router.navigate(['/']);
         },
@@ -61,12 +78,24 @@ export class UserService {
       })
     );
   }
+  public get currentUser(): any {
+    return this.userSubject.value;
+  }
+
+  reloadUser() {
+    if (localStorage.getItem('seller')) {
+      this.isUserLoggedIn.next(true);
+      this.router.navigate(['/']);
+    }
+  }
 
   forgotPassword(email: string) {
     return this.http.post<User>(FORGOT_USER_URL, email).pipe(
       tap({
         next: (user: any) => {
           this.toastr.success(user.message, 'Forgot Password');
+          this.router.navigate([`/user/password/reset/${user.resetToken}`]);
+          console.log(user);
         },
         error: (errorResponse) => {
           this.toastr.error(
@@ -91,16 +120,67 @@ export class UserService {
         error: (errorResponse) => {
           console.log(errorResponse);
           this.toastr.error(errorResponse.error.message, 'Reset Failed');
+          this.router.navigate(['/user/password/forgot']);
+        },
+      })
+    );
+  }
+  llogout() {
+    this.userSubject.next(new User());
+    localStorage.removeItem(USER_KEY);
+    this.cookieService.deleteAll();
+    window.location.reload();
+  }
+  logout() {
+    return this.http.get<User>(LOGOUT_URL).pipe(
+      tap({
+        next: (user: any) => {
+          this.userSubject.next(new User());
+          localStorage.removeItem(USER_KEY);
+          this.toastr.success(user.message, 'Logged-out Successful');
+          window.location.reload();
+          this.router.navigate(['/logout']);
+        },
+        error: (errorResponse) => {
+          this.toastr.error(
+            errorResponse.error.message,
+            'Logged-out Successful Failed'
+          );
         },
       })
     );
   }
 
-  logout() {
-    this.userSubject.next(new User());
-    localStorage.removeItem(USER_KEY);
-    this.toastr.success(`User`, 'Logged-out Successful');
-    window.location.reload();
+  getUserDetails() {
+    return this.http.get<User>(USER_PROFILE_URL).pipe(
+      tap({
+        next: (user: any) => {
+          console.log(user);
+        },
+        error: (errorResponse) => {
+          this.toastr.error(
+            errorResponse.error.message,
+            'Something Wrong Happend'
+          );
+        },
+      })
+    );
+  }
+
+  deleteUser() {
+    return this.http.delete<User>(DELETE_USER_URL).pipe(
+      tap({
+        next: (user: any) => {
+          this.toastr.error(user.message, 'User!');
+        },
+        error: (errorResponse) => {
+          this.toastr.error(
+            errorResponse.error.message,
+            'Something Wrong Happend'
+          );
+        },
+      })
+    );
   }
 
   private setUserToLocalStorage(user: User) {

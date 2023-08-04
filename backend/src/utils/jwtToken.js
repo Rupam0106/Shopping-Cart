@@ -11,7 +11,7 @@ const sendToken = (user, statusCode, res) => {
   res
     .status(statusCode)
     .cookie("refreshToken", refreshToken, options)
-    .header("Authorization", accessToken)
+    .header("Authorization", refreshToken)
     .json({
       success: true,
       user,

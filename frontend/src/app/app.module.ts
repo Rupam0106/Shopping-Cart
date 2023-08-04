@@ -10,6 +10,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { LoadingInterceptor } from './shared/interceptors/loading.interceptor';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,10 +22,16 @@ import { LoadingInterceptor } from './shared/interceptors/loading.interceptor';
     ComponentsModule,
     FormsModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      timeOut: 2000,
+      positionClass: 'toast-top-right',
+      newestOnTop: false,
+    }),
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    CookieService,
   ],
   bootstrap: [AppComponent],
 })

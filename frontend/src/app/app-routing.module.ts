@@ -7,6 +7,9 @@ import { RegisterComponent } from './components/pages/register/register.componen
 import { ProductDetailsComponent } from './components/pages/product-details/product-details.component';
 import { ForgotPasswordComponent } from './components/pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/pages/reset-password/reset-password.component';
+import { UserProfileComponent } from './components/pages/user-profile/user-profile.component';
+import { CartPageComponent } from './components/pages/cart-page/cart-page.component';
+import { authGuard } from './auth/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -36,6 +39,21 @@ const routes: Routes = [
   {
     path: 'user/password/reset/:resetToken',
     component: ResetPasswordComponent,
+  },
+  {
+    path: 'user/me',
+    component: UserProfileComponent,
+    canActivate:[authGuard]
+  },
+  {
+    path: 'user/cart/create',
+    component: CartPageComponent,
+    canActivate:[authGuard]
+  },
+  {
+    path: 'user/cart/update',
+    component: CartPageComponent,
+    canActivate:[authGuard]
   },
 ];
 

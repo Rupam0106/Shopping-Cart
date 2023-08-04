@@ -13,6 +13,8 @@ import { ProductDetailsComponent } from './pages/product-details/product-details
 import { LoadingComponent } from './partials/loading/loading.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import { CartPageComponent } from './pages/cart-page/cart-page.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
     LoadingComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
+    UserProfileComponent,
+    CartPageComponent,
   ],
   exports: [HeaderComponent, FooterComponent, HomeComponent, ProductsComponent,LoadingComponent,],
   imports: [CommonModule,AppRoutingModule,FormsModule],
