@@ -8,14 +8,14 @@ exports.createProduct = catchAsyncError(async (req, res, next) => {
   let user = req.user.id;
   let productImage = await aws.uploadFile(req.files[0]);
 
-  const { title, description, price ,stock} = req.body;
+  const { title, description, price, stock } = req.body;
   const product = await productModel.create({
     user,
     title,
     description,
     price,
     productImage,
-    stock
+    stock,
   });
 
   res.status(201).json({
@@ -63,7 +63,6 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
     req.body,
     {
       new: true,
-      runValidators: true,
     }
   );
 
@@ -75,15 +74,12 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
 
 //delete product
 exports.deleteProduct = catchAsyncError(async (req, res, next) => {
-  const product = await productModel.findById(req.params.id);
-
+  const product = await productModel.findByIdAndDelete(req.params.id);
   if (!product) {
     return next(
       new ErrorHandler(`No product exist with this id : ${req.params.id}`)
     );
   }
-
-  await product.remove({});
   res.status(200).json({
     success: true,
     message: "Product is Successfully Deleted",

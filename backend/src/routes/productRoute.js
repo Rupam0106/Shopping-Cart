@@ -16,7 +16,7 @@ router
 router
   .route("/:id")
   .put(authorizeRoles("admin"), updateProduct)
-  .delete(authorizeRoles("admin"), deleteProduct)
+  .delete(isAuthenticate,authorizeRoles("admin"), deleteProduct)
   .get(getSingleProduct);
 
 module.exports = router;
