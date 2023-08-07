@@ -3,14 +3,23 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { CREATE_CART_URL } from '../shared/constants/urls';
+import {
+  CREATE_CART_URL,
+  GET_CART_URL,
+  UPDATE_CART_URL,
+} from '../shared/constants/urls';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
   cartData = new EventEmitter<any[] | []>();
-  private cartDataSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  count: number = 0;
+  cartDatas: [] = [];
+
+  private cartDataSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>(
+    []
+  );
   public cartObservable: Observable<any>;
   constructor(
     private http: HttpClient,
@@ -20,11 +29,30 @@ export class CartService {
     this.cartObservable = this.cartDataSubject.asObservable();
   }
 
-  addToCart(productId: any) {
-    console.log(productId)
-    return this.http.post<any>(CREATE_CART_URL, productId).pipe(
+  getCartData(productId: any) {
+    console.log(productId);
+    return this.http.get<any>(GET_CART_URL).pipe(
       tap({
         next: (cart: any) => {
+          console.log(cart);
+          this.cartData = cart;
+          this.cartDataSubject.next(this.cartDatas);
+          this.toastr.success(`Item Added into Cart ${cart.name}`, 'Cart');
+          this.router.navigate(['/user/cart/create']);
+        },
+        error: (errorResponse) => {
+          this.toastr.error(errorResponse.error.message, 'Cart Failed');
+        },
+      })
+    );
+  }
+
+  addToCart(productId: any) {
+    console.log(productId);
+    return this.http.post<any>(CREATE_CART_URL, { productId }).pipe(
+      tap({
+        next: (cart: any) => {
+          console.log(cart);
           this.cartDataSubject.next(cart);
           this.toastr.success(`Item Added into Cart ${cart.name}`, 'Cart');
           this.router.navigate(['/user/cart/create']);
@@ -36,7 +64,24 @@ export class CartService {
     );
   }
 
-  localAddToCart(data: any[]) {
+  updateCartData(productId: any) {
+    console.log(productId);
+    return this.http.put<any>(UPDATE_CART_URL, { productId }).pipe(
+      tap({
+        next: (cart: any) => {
+          console.log(cart);
+          this.cartDataSubject.next(cart);
+          this.toastr.success(`Item Added into Cart ${cart.name}`, 'Cart');
+          this.router.navigate(['/user/cart/create']);
+        },
+        error: (errorResponse) => {
+          this.toastr.error(errorResponse.error.message, 'Cart Failed');
+        },
+      })
+    );
+  }
+
+  localAddToCart(data: any) {
     let cartData = [];
     let localCart = localStorage.getItem('localCart');
     if (!localCart) {

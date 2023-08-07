@@ -1,0 +1,34 @@
+<div class="product-list">
+  <h1 class="d-flex justify-content-center mt-4 mx-4">Product Details</h1>
+  <p class="message-p">{{ productMessage }}</p>
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Image</th>
+        <th scope="col">Title</th>
+        <th scope="col">Price</th>
+        <th scope="col">Description</th>
+        <th scope="col">Stock</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of productList">
+        <th scope="row"><img src="{{ item.productImage }}" /></th>
+        <td>{{ item.title }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.stock }}</td>
+        <td>
+          <Button  class="btn btn-danger" (click)="deleteProduct(item._id)">Delete</Button>
+          <Button
+            class="btn btn-info mx-2"
+            routerLink="/admin/product/update/{{ item._id }}"
+          >
+            Update</Button
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

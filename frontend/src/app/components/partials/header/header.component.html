@@ -10,9 +10,14 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
-      <div class="navbar-nav">
+      <div *ngIf="user" class="navbar-nav">
         <a routerLink="" class="nav-item nav-link active">Home</a>
         <a routerLink="/products" class="nav-item nav-link">Shop</a>
+      </div>
+      <div *ngIf="admin" class="navbar-nav">
+        <a routerLink="/admin/home" class="nav-item nav-link active"
+          >Products</a
+        >
       </div>
     </div>
     <div [ngSwitch]="menuType">
@@ -22,12 +27,14 @@
         <a routerLink="/user/cart/create" class="nav-item nav-link">Cart</a>
       </div>
       <div *ngSwitchCase="'admin'" class="navbar-nav ms-auto">
-        <a routerLink="/products/new" class="nav-item nav-link">Add Product</a>
+        <a routerLink="/admin/products/new" class="nav-item nav-link"
+          >Add Product</a
+        >
         <a routerLink="/user/me" class="nav-item nav-link">{{
           admin | titlecase
         }}</a>
         <a
-          routerLink="/admin/logout"
+          routerLink="/user/logout"
           (click)="adminLogout()"
           class="nav-item nav-link"
           >Logout</a

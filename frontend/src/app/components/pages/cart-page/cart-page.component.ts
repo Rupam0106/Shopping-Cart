@@ -17,8 +17,16 @@ export class CartPageComponent {
     total: 0,
   };
   constructor(private cart: CartService, private router: Router) {}
-
+  productQuantity: number = 1;
   ngOnInit(): void {}
   removeToCart(cartId:string) {}
   checkout() {}
+
+  handleQuantity(val: string) {
+    if (this.productQuantity < 20 && val === 'plus') {
+      this.productQuantity += 1;
+    } else if (this.productQuantity > 1 && val === 'min') {
+      this.productQuantity -= 1;
+    }
+  }
 }

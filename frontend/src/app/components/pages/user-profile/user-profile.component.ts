@@ -11,7 +11,6 @@ export class UserProfileComponent {
   constructor(private userServie: UserService) {
     this.userServie.getUserDetails().subscribe((res: any) => {
       this.user = res.user;
-      console.log(this.user);
     });
   }
 

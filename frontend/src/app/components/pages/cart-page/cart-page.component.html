@@ -13,7 +13,11 @@
             <span> Price : {{ cart.price }}</span>
           </li>
           <li>
-            <span> Quantity : {{ cart.quantity }}</span>
+            <div class="quantity-group">
+              <button (click)="handleQuantity('min')">-</button>
+              <input type="text" value="{{ productQuantity }}" />
+              <button (click)="handleQuantity('plus')">+</button>
+            </div>
           </li>
           <li>
             <button class="btn btn-info" (click)="removeToCart(cart.id)">

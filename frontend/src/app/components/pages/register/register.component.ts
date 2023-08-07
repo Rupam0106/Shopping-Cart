@@ -8,7 +8,9 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class RegisterComponent {
   userImage: string = '';
-  constructor(private user: UserService) {}
+  constructor(private user: UserService) {
+    this.user.userReload();
+  }
   signUp(data: any) {
     const formData = new FormData();
     formData.append('name', data.name);

@@ -15,6 +15,7 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { CartPageComponent } from './pages/cart-page/cart-page.component';
+import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { CartPageComponent } from './pages/cart-page/cart-page.component';
     ResetPasswordComponent,
     UserProfileComponent,
     CartPageComponent,
+    MyOrdersComponent,
   ],
   exports: [HeaderComponent, FooterComponent, HomeComponent, ProductsComponent,LoadingComponent,],
   imports: [CommonModule,AppRoutingModule,FormsModule],

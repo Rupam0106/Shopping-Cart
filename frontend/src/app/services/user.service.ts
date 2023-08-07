@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { User } from '../shared/models/User';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
@@ -15,13 +15,11 @@ import {
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
-const USER_KEY = 'user';
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private cookie_name = '';
-  isUserLoggedIn = new BehaviorSubject<boolean>(false);
+  invalidUserAuth = new EventEmitter<boolean>(false);
   private userSubject = new BehaviorSubject<User>(
     this.getUserFromLocalStorage()
   );
@@ -33,19 +31,18 @@ export class UserService {
     private cookieService: CookieService
   ) {
     this.userObservable = this.userSubject.asObservable();
-    console.log(cookieService);
   }
-  ngOnInit() {
-    this.cookie_name = this.cookieService.get('ACCESS_TOKEN');
-    console.log(this.cookie_name);
-  }
+  ngOnInit() {}
 
   userSignUp(userRegiser: any): Observable<User> {
     return this.http.post<User>(REGISTER_USER_URL, userRegiser).pipe(
       tap({
         next: (user: any) => {
-          this.setUserToLocalStorage(user.user);
-          this.isUserLoggedIn.next(true);
+          if (user.user.role === 'user') {
+            this.setUserToLocalStorage('user', user);
+          } else {
+            this.setUserToLocalStorage('admin', user);
+          }
           this.cookieService.set('refreshToken', user.refreshToken);
           this.userSubject.next(user);
           this.toastr.success(
@@ -53,9 +50,11 @@ export class UserService {
             'Register Successful'
           );
           this.router.navigate(['/']);
+          this.invalidUserAuth.emit(false);
         },
         error: (errorResponse) => {
           this.toastr.error(errorResponse.error.message, 'Register Failed');
+          this.invalidUserAuth.emit(true);
         },
       })
     );
@@ -65,15 +64,21 @@ export class UserService {
     return this.http.post<User>(LOGIN_USER_URL, userLogin).pipe(
       tap({
         next: (user: any) => {
-          this.isUserLoggedIn.next(true);
-          this.setUserToLocalStorage(user.user);
+          if (user.user.role === 'user') {
+            this.setUserToLocalStorage('user', user);
+          } else {
+            this.setUserToLocalStorage('admin', user);
+          }
+
           this.userSubject.next(user);
           this.cookieService.set('refreshToken', user.refreshToken);
           this.toastr.success(` Welome ${user.user.name}!`, 'Login Successful');
           this.router.navigate(['/']);
+          this.invalidUserAuth.emit(false);
         },
         error: (errorResponse) => {
           this.toastr.error(errorResponse.error.message, 'Login Failed');
+          this.invalidUserAuth.emit(true);
         },
       })
     );
@@ -82,9 +87,8 @@ export class UserService {
     return this.userSubject.value;
   }
 
-  reloadUser() {
-    if (localStorage.getItem('seller')) {
-      this.isUserLoggedIn.next(true);
+  userReload() {
+    if (localStorage.getItem('user') || localStorage.getItem("admin")) {
       this.router.navigate(['/']);
     }
   }
@@ -130,8 +134,13 @@ export class UserService {
     return this.http.get<User>(LOGOUT_URL).pipe(
       tap({
         next: (user: any) => {
-          this.userSubject.next(new User());
-          localStorage.removeItem(USER_KEY);
+          // this.userSubject.next(new User());
+          if (localStorage.getItem('user')) {
+            localStorage.removeItem('user');
+          } else {
+            localStorage.removeItem('admin');
+          }
+
           this.toastr.success(user.message, 'Logged-out Successful');
           window.location.reload();
           this.cookieService.deleteAll();
@@ -158,6 +167,7 @@ export class UserService {
             errorResponse.error.message,
             'Something Wrong Happend'
           );
+          this.router.navigate(['/login']);
         },
       })
     );
@@ -167,7 +177,10 @@ export class UserService {
     return this.http.delete<User>(DELETE_USER_URL).pipe(
       tap({
         next: (user: any) => {
-          this.toastr.error(user.message, 'User!');
+          console.log(user)
+          this.toastr.success(user.message, 'User!');
+          localStorage.clear();
+          this.router.navigate(['/login']);
         },
         error: (errorResponse) => {
           this.toastr.error(
@@ -179,12 +192,12 @@ export class UserService {
     );
   }
 
-  private setUserToLocalStorage(user: User) {
+  private setUserToLocalStorage(USER_KEY: any, user: User) {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
-  private getUserFromLocalStorage(): User {
-    const userJson = localStorage.getItem(USER_KEY);
+  private getUserFromLocalStorage(): any {
+    const userJson = localStorage.getItem('user');
     if (userJson) return JSON.parse(userJson) as User;
     return new User();
   }

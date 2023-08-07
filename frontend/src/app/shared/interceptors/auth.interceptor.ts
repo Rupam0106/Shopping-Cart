@@ -6,12 +6,14 @@ import {
   HttpEvent,
   HttpInterceptor,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
+    private router: Router,
     private user: UserService,
     private cookieService: CookieService
   ) {}
@@ -29,6 +31,20 @@ export class AuthInterceptor implements HttpInterceptor {
       });
     }
 
-    return next.handle(request);
+    return next.handle(request).pipe(
+      tap({
+        next: (user: any) => {
+          if (user.status === 200 || 201) {
+          } else {
+            localStorage.clear();
+            this.router.navigate(['/login']);
+          }
+        },
+        error: (errorResponse) => {
+          console.log(errorResponse);
+          localStorage.clear();
+        },
+      })
+    );
   }
 }

@@ -6,12 +6,15 @@ import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { ComponentsModule } from './components/components.module';
+import { AdminModule } from './admin/admin.module';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { LoadingInterceptor } from './shared/interceptors/loading.interceptor';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { CookieService } from 'ngx-cookie-service';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +23,7 @@ import { CookieService } from 'ngx-cookie-service';
     AppRoutingModule,
     HttpClientModule,
     ComponentsModule,
+    AdminModule,
     FormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({

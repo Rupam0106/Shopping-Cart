@@ -10,6 +10,11 @@ import { ResetPasswordComponent } from './components/pages/reset-password/reset-
 import { UserProfileComponent } from './components/pages/user-profile/user-profile.component';
 import { CartPageComponent } from './components/pages/cart-page/cart-page.component';
 import { authGuard } from './auth/guards/auth.guard';
+import { MyOrdersComponent } from './components/pages/my-orders/my-orders.component';
+import { AddProductComponent } from './admin/add-product/add-product.component';
+import { adminAuthGuard } from './auth/admin-auth/admin-auth.guard';
+import { UpdateProductComponent } from './admin/update-product/update-product.component';
+import { AdminHomeComponent } from './admin/admin-home/admin-home.component';
 
 const routes: Routes = [
   {
@@ -43,17 +48,37 @@ const routes: Routes = [
   {
     path: 'user/me',
     component: UserProfileComponent,
-    canActivate:[authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'user/cart/create',
     component: CartPageComponent,
-    canActivate:[authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'user/cart/update',
     component: CartPageComponent,
-    canActivate:[authGuard]
+    canActivate: [authGuard],
+  },
+  {
+    path: 'user/order/create',
+    component: MyOrdersComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'admin/home',
+    component: AdminHomeComponent,
+    canActivate: [adminAuthGuard],
+  },
+  {
+    path: 'admin/products/new',
+    component: AddProductComponent,
+    canActivate: [adminAuthGuard],
+  },
+  {
+    path: 'admin/product/update/:id',
+    component: UpdateProductComponent,
+    canActivate: [adminAuthGuard],
   },
 ];
 

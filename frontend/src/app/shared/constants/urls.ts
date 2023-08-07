@@ -14,10 +14,16 @@ export const REFREASH_TOKEN_URL = BASE_URL + '/refresh-token';
 export const RESET_PASSWORD_URL = BASE_URL + '/user/password/reset/';
 export const LOGOUT_URL = BASE_URL + '/user/logout';
 
+export const ADD_PRODUCT_URL = BASE_URL + '/product/new';
 export const PRODUCTS_URL = BASE_URL + '/product/all';
 export const PRODUCT_BY_ID_URL = BASE_URL + '/product/';
+export const UPDATE_PEODUCT_BY_ID_URL = BASE_URL + '/product/';
+export const DELETE_PRODUCT_BY_ID_URL = BASE_URL + '/product/';
 
 export const CREATE_CART_URL = BASE_URL + '/user/cart/create';
 export const GET_CART_URL = BASE_URL + '/user/cart/create';
 export const UPDATE_CART_URL = BASE_URL + '/user/cart/create';
 
+export const CREATE_ORDER_URL = BASE_URL + '/user/order/create';
+export const CANCEL_ORDER_URL = BASE_URL + '/user/order/cancel';
+export const DELIVERED_ORDER_URL = BASE_URL + '/user/order/delivered';
