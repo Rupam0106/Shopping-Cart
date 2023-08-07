@@ -16,7 +16,7 @@ exports.createCart = catchAsyncError(async (req, res, next) => {
   if (!product) {
     return next(new ErrorHandler(`Product not found!`, 404));
   }
-  if (product.stock > 1) {
+  if (product.stock < 1) {
     return next(new ErrorHandler("Out of Stock !", 400));
   }
 
