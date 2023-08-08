@@ -4,8 +4,7 @@ const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
 exports.isAuthenticate = catchAsyncError(async (req, res, next) => {
-  const  {refreshToken}  = req.cookies;
-  console.log(refreshToken)
+  const { refreshToken } = req.cookies;
   const accessToken = req.headers["authorization"];
   if (!accessToken) {
     return next(new ErrorHandler("Session Expired please login in Again", 401));
@@ -25,7 +24,6 @@ exports.authorizeRoles = (...roles) => {
         )
       );
     }
-
     next();
   };
 };

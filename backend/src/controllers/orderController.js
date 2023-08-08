@@ -1,127 +1,181 @@
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const ErrorHandler = require("../utils/errorHandler");
-const { emptyCart } = require("../utils/helper");
-const Order = require("../models/orderModel");
-const Product = require("../models/productModel");
-const Cart = require("../models/cartModel");
+const orderModel = require("../models/orderModel");
+const productModel = require("../models/productModel");
+const cartModel = require("../models/cartModel");
 
 // create order
 exports.createOrder = catchAsyncError(async (req, res, next) => {
-  const { cartId } = req.body;
-  if (!cartId) {
-    return next(new ErrorHandler(`Please send your cart id!`, 400));
+  let userId = req.user.id;
+  console.log(userId)
+  let { name, phone, house, street, city, state, pincode } = req.body;
+  let cart = await cartModel
+    .findOne({ userId: userId })
+    .populate("cartItems.productId", "stock");
+  if (!cart) {
+    return next(new ErrorHandler("User cart not found", 404));
   }
-
-  // getting cart details using cartId
-  const cart = await Cart.findById(cartId);
-  if (!cart.items.length) {
-    return next(new ErrorHandler("Your Cart is Empty", 404));
-  }
-
-  for (let i = 0; i < cart.items.length; i++) {
-    const product = await Product.findById(cart.items[i].productId);
-    if (product._id.toString() == cart.items[i].productId.toString()) {
-      product.stock -= cart.items[i].quantity;
-    }
-    await product.save();
-  }
-
-  if (!cart || !cart.totalItems) {
+  if (cart.cartItems.length <= 0) {
     return next(
-      new ErrorHandler(
-        `${!cart ? "cart not found!" : " Your cart is empty!"}`,
-        400
-      )
+      new ErrorHandler("Please add some items in cart to place order", 400)
     );
   }
-
-  // creting an object to create a new order
-  const Obj = JSON.parse(JSON.stringify(cart));
-
-  // remocing extra field of the object
-  [("_id", "createdAt", "updatedAt", "__v")].map((el) => delete Obj[el]);
-
-  // create a order after removing unwanted field
-  const order = await Order.create(Obj);
-
-  //after successfully order creation making card empty
-  await emptyCart(cart);
-  await Cart.findByIdAndDelete(cartId);
-
-  res.status(201).json({
-    status: true,
-    message: "Your Order Placed Successfully",
-    data: {
-      order,
+  const filter = cart.cartItems.filter((x) => x.quantity > x.productId.stock);
+  if (filter.length > 0) {
+    return next(new ErrorHandler("Out of Stock", 400));
+  }
+  let order = {
+    userId,
+    orderDetails: {
+      totalItems: cart.totalItems,
+      totalPrice: cart.totalPrice,
+      products: cart.cartItems,
     },
+    shippingDetails: {
+      name,
+      phone,
+      address: {
+        house,
+        street,
+        city,
+        state,
+        pincode,
+      },
+    },
+  };
+  let userOrder = await orderModel.create(order);
+  cart.cartItems.forEach(async (item) => {
+    await productModel.findByIdAndUpdate(
+      item.productId._id,
+      { $inc: { stock: -item.quantity } },
+      { new: true }
+    );
   });
+  await cartModel.findByIdAndUpdate(
+    cart._id,
+    { $set: { cartItems: [], totalItems: 0, totalPrice: 0 } },
+    { new: true }
+  );
+  return res.status(200).send({ status: true, msg: "Order Done", userOrder });
+});
+
+exports.getOrder = catchAsyncError(async (req, res,next) => {
+  let userId = req.user.id;
+  let order = await orderModel
+    .find({ userId, status: { $in: ["pending", "delivered"] } })
+    .populate("orderDetails.products.productId");
+  if (!order) {
+    return next(new ErrorHandler("Not completed any order", 404));
+  }
+  return res.status(200).send({ status: true, msg: "User order", order });
+});
+
+exports.getSpecificOrder = catchAsyncError(async (req, res,next) => {
+  let orderId = req.params.orderId;
+  let order = await orderModel
+    .findById(orderId).populate("orderDetails.products.productId");
+  return res.status(200).send({ status: true, order });
 });
 
 //cancel the order
-exports.updateOrder = catchAsyncError(async (req, res, next) => {
-  const order = await Order.findById(req.body.orderId);
-  // if not order with this id
-  if (!order) {
-    return next(
-      new ErrorHandler(`No order found with id: ${req.body.orderId}.`, 404)
+exports.cancelOrder = catchAsyncError(async (req, res, next) => {
+  let orderId = req.params.orderId;
+  if (!orderId) {
+    return res
+      .status(400)
+      .send({ status: false, msg: "Please provide orderId" });
+  }
+
+  let userOrder = await orderModel.findById(orderId);
+
+  if (userOrder.status !== "pending") {
+    return res
+      .status(400)
+      .send({ status: false, msg: "Order cannot be cancel" });
+  }
+  userOrder.orderDetails.products.forEach(async (product) => {
+    await productModel.findByIdAndUpdate(
+      product.productId,
+      { $inc: { stock: +product.quantity } },
+      { new: true }
     );
-  }
-
-  if (!order.cancellable) {
-    return next(new ErrorHandler(`This order will not be cancel!`, 400));
-  }
-
-  // if order status is canceled
-  if (order.status === "canceled") {
-    return next(new ErrorHandler(`This order already canceled!`, 400));
-  }
-  for (let i = 0; i < order.items.length; i++) {
-    const product = await Product.findById(order.items[i].productId);
-    if (product._id.toString() == order.items[i].productId.toString()) {
-      product.stock += order.items[i].quantity;
-    }
-    await product.save();
-  }
-  // finally cancel the order
-  order.status = "canceled";
-  await order.save();
-  res.status(200).json({
-    status: true,
-    message: "Success",
-    data: {
-      order,
-    },
   });
+  await orderModel.findByIdAndUpdate(
+    orderId,
+    { $set: { status: "cancled" } },
+    { new: true }
+  );
+  return res.status(204).send({ status: true, msg: "order cancled" });
 });
 
-//cancel the order
-exports.completedOrder = catchAsyncError(async (req, res, next) => {
-  const order = await Order.findById(req.body.orderId);
+//updatedOrder the order
+exports.updatedOrder = catchAsyncError(async (req, res, next) => {
+  let { productId } = req.body;
+  let orderId = req.params.orderId;
 
-  // if not order wwith this id
-  if (!order) {
-    return next(
-      new ErrorHandler(`No order found with id: ${req.body.orderId}.`, 404)
-    );
+  let userOrder = await orderModel.findById(orderId);
+  if (!userOrder) {
+    return next(new ErrorHandler("Order not found with this id", 404));
   }
 
-  if (!order.cancellable) {
-    return next(new ErrorHandler(`This order will not be cancel!`, 400));
+  if (userOrder.status !== "pending") {
+    return next(new ErrorHandler("Order cannot be updated", 400));
   }
 
-  // if order status is canceled
-  if (order.status === "canceled") {
-    return next(new ErrorHandler(`This order already canceled!`, 400));
+  let product = await productModel.findById(productId);
+  if (!product) {
+    return next(new ErrorHandler("productId invalid", 404));
   }
 
-  // finally complete the order
-  order.status = "completed";
-  await order.save();
-  res.status(200).json({
-    status: true,
-    message: "Order Successfully Delivered...",
-    data: {
-      order,
-    },
+  if (userOrder.orderDetails.products.length === 0) {
+    return res
+      .status(400)
+      .send({ status: false, msg: "your order is already empty" });
+  }
+
+  // get quantity of removed product
+  let quantity = 0;
+  userOrder.orderDetails.products.map((x) => {
+    if (x.productId.valueOf() === productId) {
+      quantity = x.quantity;
+    }
   });
+  const filteredProducts = userOrder.orderDetails.products.filter(
+    (x) => x.productId.valueOf() !== productId
+  );
+
+  if (filteredProducts.length === userOrder.orderDetails.products.length) {
+    return next(new ErrorHandler("given product not found in your order", 404));
+  }
+
+  product.stock += quantity;
+  await product.save();
+  const updatedData = {};
+
+  // if no products left after filteration
+  if (filteredProducts.length === 0) {
+    (updatedData.products = filteredProducts),
+      (updatedData.totalItems = userOrder.orderDetails.totalItems - 1),
+      (updatedData.totalPrice =
+        userOrder.orderDetails.totalPrice - product.price * quantity);
+    await orderModel.findByIdAndUpdate(
+      orderId,
+      { $set: { orderDetails: updatedData, status: "cancled" } },
+      { new: true }
+    );
+    return res.status(204).send({ status: true, msg: "order cancled" });
+  } else {
+    (updatedData.products = filteredProducts),
+      (updatedData.totalItems = userOrder.orderDetails.totalItems - 1),
+      (updatedData.totalPrice =
+        userOrder.orderDetails.totalPrice - product.price * quantity);
+    const updatedOrder = await orderModel.findByIdAndUpdate(
+      orderId,
+      { $set: { orderDetails: updatedData } },
+      { new: true }
+    );
+    return res
+      .status(200)
+      .send({ status: true, msg: "product cancled", updatedOrder });
+  }
 });

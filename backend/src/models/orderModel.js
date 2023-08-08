@@ -1,58 +1,90 @@
 const mongoose = require("mongoose");
-
+const ObjectId = mongoose.Types.ObjectId;
 const orderSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Types.ObjectId,
+      type: ObjectId,
       ref: "User",
-      required: [true, "Please enter userId"],
+      required: true,
+      trim: true,
     },
-    items: [
-      {
-        productId: {
-          type: mongoose.Types.ObjectId,
-          ref: "Product",
-          required: [true, "Please provide product id!"],
+    orderDetails: {
+      products: [
+        {
+          productId: {
+            type: ObjectId,
+            ref: "Product",
+            required: true,
+            trim: true,
+          },
+          quantity: {
+            type: Number,
+            required: true,
+            trim: true,
+          },
+          _id: false,
         },
-        quantity: {
+      ],
+      totalItems: {
+        type: Number,
+        required: true,
+        trim: true,
+      },
+      totalPrice: {
+        type: Number,
+        required: true,
+        trim: true,
+      },
+    },
+    shippingDetails: {
+      name: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      phone: {
+        type: Number,
+        required: true,
+        trim: true,
+      },
+      address: {
+        house: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        street: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        city: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        state: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        pincode: {
           type: Number,
-          required: [true, "Please provide Qty!"],
-          min: 1,
+          required: true,
+          trim: true,
+          minLength: 6,
+          maxLength: 6,
         },
       },
-    ],
-    totalPrice: {
-      type: Number,
-      required: [true, "Total price required!"],
     },
-    totalItems: {
-      type: Number,
-      required: [true, "Total Item required!"],
-    },
-
-    totalQuantity: {
-      type: Number,
-      required: [true, "Total qty required!"],
-    },
-
-    cancellable: {
-      type: Boolean,
-      default: true,
-    },
-
     status: {
       type: String,
+      enum: ["pending", "delivered", "canceled"],
       default: "pending",
-      enum: {
-        values: ["pending", "completed", "canceled"],
-        message: 'status should be in "pending", "completed", "canceled"',
-      },
-    },
-    deletedAt: {
-      type: Date,
     },
   },
   { timestamps: true }
 );
+
 const Order = mongoose.model("Order", orderSchema);
 module.exports = Order;
