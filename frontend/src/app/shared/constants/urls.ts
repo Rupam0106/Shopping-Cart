@@ -21,9 +21,11 @@ export const UPDATE_PEODUCT_BY_ID_URL = BASE_URL + '/product/';
 export const DELETE_PRODUCT_BY_ID_URL = BASE_URL + '/product/';
 
 export const CREATE_CART_URL = BASE_URL + '/user/cart/create';
-export const GET_CART_URL = BASE_URL + '/user/cart/create';
-export const UPDATE_CART_URL = BASE_URL + '/user/cart/create';
+export const GET_CART_URL = BASE_URL + '/user/cart/all';
+export const UPDATE_CART_URL = BASE_URL + '/user/cart/update';
 
-export const CREATE_ORDER_URL = BASE_URL + '/user/order/create';
-export const CANCEL_ORDER_URL = BASE_URL + '/user/order/cancel';
-export const DELIVERED_ORDER_URL = BASE_URL + '/user/order/delivered';
+export const GET_ORDER_URL = BASE_URL + '/user/order/';
+export const GET_SPECIFIC_ORDER_URL = BASE_URL + '/user/order/get/';
+export const CREATE_ORDER_URL = BASE_URL + '/user/order';
+export const CANCEL_ORDER_URL = BASE_URL + '/user/order/cancel/';
+export const CANCEL_SPECIFIC_ORDER_URL = BASE_URL + '/user/cancel/';

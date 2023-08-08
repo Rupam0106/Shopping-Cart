@@ -8,7 +8,7 @@ import { AppRoutingModule } from '../app-routing.module';
 import { HeroComponent } from './partials/hero/hero.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductDetailsComponent } from './pages/product-details/product-details.component';
 import { LoadingComponent } from './partials/loading/loading.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
@@ -16,6 +16,8 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { CartPageComponent } from './pages/cart-page/cart-page.component';
 import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { OrderDetailsComponent } from './pages/order-details/order-details.component';
 
 @NgModule({
   declarations: [
@@ -33,8 +35,10 @@ import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
     UserProfileComponent,
     CartPageComponent,
     MyOrdersComponent,
+    CheckoutComponent,
+    OrderDetailsComponent,
   ],
   exports: [HeaderComponent, FooterComponent, HomeComponent, ProductsComponent,LoadingComponent,],
-  imports: [CommonModule,AppRoutingModule,FormsModule],
+  imports: [CommonModule,AppRoutingModule,FormsModule,ReactiveFormsModule],
 })
 export class ComponentsModule {}

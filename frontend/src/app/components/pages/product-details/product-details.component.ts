@@ -26,7 +26,10 @@ export class ProductDetailsComponent {
   }
 
   addToCart() {
-    this.cart.addToCart(this.product._id).subscribe();
+    this.cart.addToCart(this.product._id).subscribe()
+    this.cart.getCartData().subscribe((res:any)=>{
+      console.log(res)
+    })
   }
   
 }

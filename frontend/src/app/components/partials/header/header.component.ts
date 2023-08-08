@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CartService } from 'src/app/services/cart.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -11,15 +12,29 @@ export class HeaderComponent {
   menuType: string = 'default';
   admin: string = '';
   user: string = '';
-  cartItems: number = 0;
+  count: number = 0;
 
-  constructor(private route: Router, private userService: UserService) {
+  constructor(
+    private route: Router,
+    private userService: UserService,
+    private cartService: CartService
+  ) {
+    this.cartService.getUserCartData().subscribe();
+    let cart = localStorage.getItem('cart');
+    if (cart) {
+      this.count = JSON.parse(cart).cart.totalItems;
+    }
+    this.cartService.getCartData().subscribe((data: any) => {
+      if (data.cart) {
+        this.count = data.cart.totalItems;
+      }
+    });
+
     this.route.events.subscribe((val: any) => {
       if (localStorage.getItem('user')) {
         let userStore = localStorage.getItem('user');
         let userData = userStore && JSON.parse(userStore);
         this.user = userData.user.name;
-
         this.menuType = 'user';
       } else if (localStorage.getItem('admin')) {
         let adminStore = localStorage.getItem('admin');
@@ -31,14 +46,12 @@ export class HeaderComponent {
       }
     });
   }
+
   ngOnInit() {
     let cartData = localStorage.getItem('localCart');
     if (cartData) {
-      this.cartItems = JSON.parse(cartData).length;
+      this.count = JSON.parse(cartData).length;
     }
-    // this.cart.cartData.subscribe((items) => {
-    //   this.cartItems = items.length;
-    // });
   }
 
   adminLogout() {
@@ -47,5 +60,9 @@ export class HeaderComponent {
 
   userLogout() {
     this.userService.logout().subscribe();
+  }
+
+  getCartData() {
+    this.cartService.getUserCartData().subscribe();
   }
 }

@@ -10,8 +10,8 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
+      <a routerLink="" class="nav-item nav-link active">Home</a>
       <div *ngIf="user" class="navbar-nav">
-        <a routerLink="" class="nav-item nav-link active">Home</a>
         <a routerLink="/products" class="nav-item nav-link">Shop</a>
       </div>
       <div *ngIf="admin" class="navbar-nav">
@@ -44,9 +44,14 @@
         <a routerLink="/user/me" class="nav-item nav-link">{{
           user | titlecase
         }}</a>
-        <a routerLink="/user/cart/create" class="nav-item nav-link"
-          >Cart({{ cartItems }})</a
+        <a
+          (click)="getCartData()"
+          class="nav-item nav-link"
+          [routerLink]="count > 0 ? '/user/cart/create' : null"
+          >Cart({{ count }})</a
         >
+        <a routerLink="/orders" class="nav-item nav-link">My Orders</a>
+
         <button (click)="userLogout()" class="nav-item nav-link">Logout</button>
       </div>
     </div>

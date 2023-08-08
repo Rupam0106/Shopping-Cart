@@ -10,7 +10,7 @@ import { AdminModule } from './admin/admin.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoadingInterceptor } from './shared/interceptors/loading.interceptor';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { CookieService } from 'ngx-cookie-service';
@@ -26,10 +26,13 @@ import { CookieService } from 'ngx-cookie-service';
     AdminModule,
     FormsModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     ToastrModule.forRoot({
-      timeOut: 2000,
+      timeOut: 2500,
       positionClass: 'toast-top-right',
-      newestOnTop: false,
+      progressBar:true,
+      closeButton:true,
+      preventDuplicates: false,
     }),
   ],
   providers: [
