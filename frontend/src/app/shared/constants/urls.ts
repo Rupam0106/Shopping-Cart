@@ -28,4 +28,4 @@ export const GET_ORDER_URL = BASE_URL + '/user/order/';
 export const GET_SPECIFIC_ORDER_URL = BASE_URL + '/user/order/get/';
 export const CREATE_ORDER_URL = BASE_URL + '/user/order';
 export const CANCEL_ORDER_URL = BASE_URL + '/user/order/cancel/';
-export const CANCEL_SPECIFIC_ORDER_URL = BASE_URL + '/user/cancel/';
+export const CANCEL_SPECIFIC_ORDER_URL = BASE_URL + '/user/order/cancel/';

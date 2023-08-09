@@ -11,7 +11,6 @@ import { OrderService } from 'src/app/services/order.service';
 export class OrderDetailsComponent {
   constructor(
     private router: ActivatedRoute,
-    private route: Router,
     private orderService: OrderService,
     private toastr: ToastrService
   ) {}
@@ -45,7 +44,6 @@ export class OrderDetailsComponent {
       if (data.order) {
         this.orderDetail = data.order;
         this.toastr.success(data.msg);
-        this.route.navigate(['/']);
       }
     });
   }

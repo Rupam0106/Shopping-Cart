@@ -18,6 +18,7 @@ import { CartPageComponent } from './pages/cart-page/cart-page.component';
 import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { OrderDetailsComponent } from './pages/order-details/order-details.component';
+import { NotFoundComponent } from './partials/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { OrderDetailsComponent } from './pages/order-details/order-details.compo
     MyOrdersComponent,
     CheckoutComponent,
     OrderDetailsComponent,
+    NotFoundComponent,
   ],
   exports: [HeaderComponent, FooterComponent, HomeComponent, ProductsComponent,LoadingComponent,],
   imports: [CommonModule,AppRoutingModule,FormsModule,ReactiveFormsModule],

@@ -1,68 +1,79 @@
-<div class="cart-page">
-  <h1>Cart Page</h1>
-  <div class="row">
-    <div class="col-sm-8 details">
-      <ul *ngFor="let cart of cartItems">
-        <li>
-          <img src="{{ cart.productId.productImage }}" alt="" />
-        </li>
-        <li>
-          <span> {{ cart.productId.title }}</span>
-        </li>
-        <li>
-          <span> Price : {{ cart.productId.price }}</span>
-        </li>
-        <li>
-          <div class="d-flex m-2">
-            <button
-              class="btn btn-danger"
-              (click)="cartUpdate(cart.productId._id, cart.quantity - 1)"
-            >-</button>
-            <input
-              type="text"
-              class="w-5"
-              value="{{ cart.quantity }}"
-              disabled
-            />
+<div *ngIf="!cartItems.length">
+  <app-not-found></app-not-found>
+</div>
+<div class="w-100" style="height: 31.4rem">
+  <div *ngIf="cartItems.length" class="cart-page">
+    <h1>Cart Page</h1>
+    <div class="row">
+      <div class="col-sm-8 details">
+        <ul *ngFor="let cart of cartItems">
+          <li>
+            <img src="{{ cart.productId.productImage }}" alt="" />
+          </li>
+          <li>
+            <span> {{ cart.productId.title }}</span>
+          </li>
+          <li>
+            <span> Price : {{ cart.productId.price }}</span>
+          </li>
+          <li>
+            <div class="d-flex m-2">
+              <button
+                class="btn btn-danger"
+                (click)="cartUpdate(cart.productId._id, cart.quantity - 1)"
+              >
+                -
+              </button>
+              <input
+                type="text"
+                class="w-5"
+                value="{{ cart.quantity }}"
+                disabled
+              />
+              <button
+                class="btn btn-info"
+                (click)="cartUpdate(cart.productId._id, cart.quantity + 1)"
+              >
+                +
+              </button>
+            </div>
+          </li>
+          <li>
             <button
               class="btn btn-info"
-              (click)="cartUpdate(cart.productId._id, cart.quantity + 1)"
-            >+</button>
-          </div>
-        </li>
-        <li>
-          <button
-            class="btn btn-info"
-            (click)="cartUpdate(cart.productId._id,0)"
-          >
-            Remove To Cart
+              (click)="cartUpdate(cart.productId._id, 0)"
+            >
+              Remove To Cart
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="col-sm-4 summary">
+        <h3>Summary</h3>
+        <ul>
+          <li>
+            <span>Amount:</span><span>{{ priceSummary.price }}</span>
+          </li>
+          <li>
+            <span>Tax:</span><span>{{ priceSummary.tax }}</span>
+          </li>
+          <li>
+            <span>Delivery:</span><span>{{ priceSummary.delivery }}</span>
+          </li>
+          <li>
+            <span>Discount:</span><span>{{ priceSummary.discount }}</span>
+          </li>
+          <li>
+            <span><h4>Total</h4></span>
+            <span
+              ><h4>{{ priceSummary.total }}</h4></span
+            >
+          </li>
+          <button class="btn btn-info" routerLink="/user/order/checkout">
+            Checkout
           </button>
-        </li>
-      </ul>
-    </div>
-    <div class="col-sm-4 summary">
-      <h3>Summary</h3>
-      <ul>
-        <li>
-          <span>Amount:</span><span>{{ priceSummary.price }}</span>
-        </li>
-        <li>
-          <span>Tax:</span><span>{{ priceSummary.tax }}</span>
-        </li>
-        <li>
-          <span>Delivery:</span><span>{{ priceSummary.delivery }}</span>
-        </li>
-        <li>
-          <span>Discount:</span><span>{{ priceSummary.discount }}</span>
-        </li>
-        <li>
-          <span><h4>Total</h4></span>
-          <span
-            ><h4>{{ priceSummary.total }}</h4></span
-          >
-        </li>
-        <button class="btn btn-info" routerLink="/user/order/checkout">Checkout</button>
-      </ul>
+        </ul>
+      </div>
     </div>
   </div>
 </div>

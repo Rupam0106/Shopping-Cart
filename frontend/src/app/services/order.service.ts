@@ -51,7 +51,8 @@ export class OrderService {
           next: (order: any) => {
             this.orderData = order;
             this.orderDataSubject.next(this.orderData);
-            this.toastr.success(`Order Cancel Successfully`, 'Order');
+            this.toastr.success(`Item Cancel Successfully`, 'Order');
+            this.router.navigate(['/products']);
           },
           error: (errorResponse: any) => {
             this.toastr.error(errorResponse.error.message, 'Order Failed');
@@ -61,11 +62,13 @@ export class OrderService {
   }
 
   cancelOrder(orderId: string) {
-    return this.http.put<any>(CANCEL_ORDER_URL, orderId).pipe(
+    return this.http.put<any>(CANCEL_ORDER_URL + orderId, orderId).pipe(
       tap({
         next: (order: any) => {
+          console.log(order);
           this.orderDataSubject.next(this.orderData);
           this.toastr.success(`Order Cancel Successfully`, 'Order');
+          this.router.navigate(['/login']);
         },
         error: (errorResponse: any) => {
           this.toastr.error(errorResponse.error.message, 'Order Failed');
@@ -87,11 +90,11 @@ export class OrderService {
       })
     );
   }
+  
   getSpecificOrderDetails(orderId: any) {
     return this.http.get<any>(GET_SPECIFIC_ORDER_URL + orderId).pipe(
       tap({
         next: (order: any) => {
-          console.log(order)
           this.orderData = order;
           this.orderDataSubject.next(this.orderData);
         },

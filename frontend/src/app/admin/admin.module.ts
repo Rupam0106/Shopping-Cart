@@ -5,9 +5,10 @@ import { UpdateProductComponent } from './update-product/update-product.componen
 import { AppRoutingModule } from '../app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { AdminOrdersComponent } from './admin-orders/admin-orders.component';
 
 @NgModule({
-  declarations: [AddProductComponent, UpdateProductComponent, AdminHomeComponent],
+  declarations: [AddProductComponent, UpdateProductComponent, AdminHomeComponent, AdminOrdersComponent],
   exports: [AddProductComponent, UpdateProductComponent],
   imports: [CommonModule, AppRoutingModule, FormsModule],
 })

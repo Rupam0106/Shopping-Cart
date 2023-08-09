@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { OrderService } from 'src/app/services/order.service';
 
 @Component({
-  selector: 'app-my-orders',
-  templateUrl: './my-orders.component.html',
-  styleUrls: ['./my-orders.component.css'],
+  selector: 'app-admin-orders',
+  templateUrl: './admin-orders.component.html',
+  styleUrls: ['./admin-orders.component.css']
 })
-export class MyOrdersComponent {
+export class AdminOrdersComponent {
   constructor(
     private orderService: OrderService,
   ) {}
@@ -20,6 +20,7 @@ export class MyOrdersComponent {
     this.orderService.getUserOrderDetails().subscribe((data: any) => {
       if (data) {
         this.orders = data.order;
+        console.log(this.orders)
       }
     });
     this.orderService.getOrderData().subscribe((data: any) => {

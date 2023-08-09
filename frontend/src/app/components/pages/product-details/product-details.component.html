@@ -1,12 +1,16 @@
-<h1 class="d-flex justify-content-center mt-4 mx-4">Product Details</h1>
-<div class="d-flex justify-content-space-between justify-content-center m-4">
-  <div *ngIf="product" class="m-4">
-    <img [src]="product.productImage" [alt]="product.title" />
+<h1 class="d-flex justify-content-center mt-4" >Product Details</h1>
+<div
+  class=" d-flex flex-column flex-md-row justify-content-evenly align-items-center w-100" style="height: 29.75rem" 
+>
+  <div *ngIf="product">
+    <img
+      [src]="product.productImage"
+      [alt]="product.title"
+      style="width: 100%; height: 20rem; object-fit: contain"
+    />
   </div>
-  <div class="m-4">
-    <div class="fw-bold fs-3 my-3">
-      {{ product.title }}
-    </div>
+  <div style="max-width: 20rem">
+    <h6 class="fs-3">{{ product.title }}</h6>
     <div class="mb-3">
       <strong>Description :</strong> {{ product.description }}
     </div>
@@ -14,9 +18,9 @@
     <div class="mb-3">
       <strong>Price :</strong>{{ product.price | currency }}
     </div>
-    
+
     <div>
-      <button class="btn btn-info" (click)="addToCart()">Add To Cart</button>
+      <button class="btn btn-info" aria-hidden="true" (click)="addToCart()">Add To Cart</button>
     </div>
   </div>
 </div>

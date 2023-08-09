@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { CartService } from 'src/app/services/cart.service';
 
 @Component({
@@ -20,19 +19,18 @@ export class CartPageComponent {
     delivery: 0,
     total: 0,
   };
-  constructor(private cartService: CartService, private router: Router) {
-    this.cartService.getUserCartData().subscribe()
+  constructor(private cartService: CartService) {
     this.cartService.getCartData().subscribe((data: any) => {
       if (data.cart) {
         this.cartItems = data.cart.cartItems;
         this.cartDetails = data.cart;
         this.price = this.cartDetails.totalPrice;
         this.priceSummary.price = this.price;
-        this.priceSummary.discount = this.price / 10;
-        this.priceSummary.tax = this.price / 10;
-        this.priceSummary.delivery = 100;
+        this.priceSummary.discount = 0 ;
+        this.priceSummary.tax = 0 ;
+        this.priceSummary.delivery = 0;
         this.priceSummary.total =
-          this.price + this.price / 10 + 100 - this.price / 10;
+          this.price + this.price
       }
     });
   }

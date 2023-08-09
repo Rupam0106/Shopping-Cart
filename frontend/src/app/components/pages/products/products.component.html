@@ -1,29 +1,40 @@
 <div class="bg-white p-4">
   <h1 class="d-flex justify-content-center">List of Products</h1>
 
-  <div class="container">
-    <div class="row">
-      <div class="col" *ngFor="let product of Products">
-        <a class="text-decoration-none" routerLink="/product/{{ product._id }}">
-          <div class="card m-4" style="width: 16rem">
+  <div class="py-4">
+    <div class="container-fluid">
+      <div class="row row-cols-2 row-cols-sm-4 row-cols-md-6 g-2 gy-2">
+        <div class="col p-2" *ngFor="let product of Products">
+          <a
+            class="text-decoration-none card"
+            routerLink="/product/{{ product._id }}"
+          >
             <img
-              class="card-img-top p-4"
+              class="card-img-top"
+              style="height: 6rem"
               src="{{ product.productImage }}"
               alt="productImage"
             />
             <div class="card-body">
-              <h5 class="card-title">
-                <strong>Product Name :- </strong> {{ product.title }}
+              <h5 class="card-title" style="font-size: 12px; font-weight: 900">
+                {{ product.title }}
               </h5>
-              <p class="card-text">
-                <strong>Price :- </strong> {{ product.price }}
-              </p>
-              <a routerLink="/products" class="btn btn-info mx-2">
-                View Details</a
+              <p
+                class="card-text text-body-secondary overflow-y-hidden"
+                style="height: 2.5rem; font-size: 14px"
               >
+                {{ product.description }}
+              </p>
+              <p
+                class="card-text text-body-secondary overflow-y-hidden"
+                style="height: 2.5rem; font-size: 14px"
+              >
+                Price: {{ product.price }}
+              </p>
+              <a routerLink="/products" class="btn btn-info"> View Details</a>
             </div>
-          </div>
-        </a>
+          </a>
+        </div>
       </div>
     </div>
   </div>

@@ -17,6 +17,8 @@ import { UpdateProductComponent } from './admin/update-product/update-product.co
 import { AdminHomeComponent } from './admin/admin-home/admin-home.component';
 import { CheckoutComponent } from './components/pages/checkout/checkout.component';
 import { OrderDetailsComponent } from './components/pages/order-details/order-details.component';
+import { AdminOrdersComponent } from './admin/admin-orders/admin-orders.component';
+import { NotFoundComponent } from './components/partials/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -91,6 +93,15 @@ const routes: Routes = [
     path: 'admin/product/update/:id',
     component: UpdateProductComponent,
     canActivate: [adminAuthGuard],
+  },
+  {
+    path: 'admin/orders',
+    component: AdminOrdersComponent,
+    canActivate: [adminAuthGuard],
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
   },
 ];
 
