@@ -7,7 +7,7 @@ exports.isAuthenticate = catchAsyncError(async (req, res, next) => {
   const { refreshToken } = req.cookies;
   const accessToken = req.headers["authorization"];
   if (!accessToken) {
-    return next(new ErrorHandler("Session Expired please login in Again", 401));
+    return next(new ErrorHandler("Please Login", 401));
   }
   const decodedToken = jwt.verify(accessToken, process.env.JWT_SECRET);
   req.user = await userModel.findById(decodedToken.id);
