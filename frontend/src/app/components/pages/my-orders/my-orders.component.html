@@ -1,7 +1,8 @@
-<div *ngIf="!orders">
-  <app-not-found></app-not-found>
-</div>
-<div class="w-100" style="height: 34.40rem">
+<div class="w-100" style="height: 34.4rem">
+  <div *ngIf="!orders.length">
+    <app-not-found></app-not-found>
+  </div>
+
   <h1 *ngIf="orders && orders.length > 0" class="text-center">My orders</h1>
   <div *ngIf="orders && orders.length > 0" class="d-flex flex-column gap-2 p-3">
     <div *ngFor="let order of orders">

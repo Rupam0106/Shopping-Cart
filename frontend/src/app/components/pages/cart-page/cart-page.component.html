@@ -1,7 +1,8 @@
-<div *ngIf="!cartItems.length">
-  <app-not-found></app-not-found>
-</div>
-<div class="w-100" style="height: 31.4rem">
+<div class="w-100" style="height: 33.6rem">
+  <div *ngIf="!cartItems.length">
+    <app-not-found></app-not-found>
+  </div>
+
   <div *ngIf="cartItems.length" class="cart-page">
     <h1>Cart Page</h1>
     <div class="row">

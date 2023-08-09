@@ -33,7 +33,6 @@
         <a routerLink="/user/me" class="nav-item nav-link">{{
           admin | titlecase
         }}</a>
-        <a routerLink="/admin/orders" class="nav-item nav-link">Orders</a>
         <a
           routerLink="/user/logout"
           (click)="adminLogout()"
@@ -45,12 +44,6 @@
         <a routerLink="/user/me" class="nav-item nav-link">{{
           user | titlecase
         }}</a>
-        <!-- <a
-          (click)="getCartData()"
-          class="nav-item nav-link"
-          [routerLink]="count > 0 ? '/user/cart/create' : null"
-          >Cart({{ count }})</a
-        > -->
         <a
         (click)="getCartData()"
         class="nav-item nav-link"

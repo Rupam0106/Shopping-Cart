@@ -140,7 +140,6 @@ export class UserService {
           }
 
           this.toastr.success(user.message, 'Logged-out Successful');
-          window.location.reload();
           this.cookieService.deleteAll();
           this.router.navigate(['/login']);
         },

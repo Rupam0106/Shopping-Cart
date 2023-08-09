@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -13,13 +14,13 @@ export class HeaderComponent {
   admin: string = '';
   user: string = '';
   count: number = 0;
+  getCartDataSub!: Subscription;
 
   constructor(
     private route: Router,
     private userService: UserService,
     private cartService: CartService
   ) {
-    this.cartService.getUserCartData().subscribe();
     let cart = localStorage.getItem('cart');
     if (cart) {
       this.count = JSON.parse(cart).cart.totalItems;
@@ -63,6 +64,9 @@ export class HeaderComponent {
   }
 
   getCartData() {
-    this.cartService.getUserCartData().subscribe();
+    this.getCartDataSub = this.cartService.getUserCartData().subscribe();
+  }
+  ngOnDestroy() {
+    this.getCartDataSub && this.getCartDataSub.unsubscribe();
   }
 }
