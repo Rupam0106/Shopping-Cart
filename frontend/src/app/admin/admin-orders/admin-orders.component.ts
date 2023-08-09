@@ -23,10 +23,6 @@ export class AdminOrdersComponent {
         console.log(this.orders)
       }
     });
-    this.orderService.getOrderData().subscribe((data: any) => {
-      if (data) {
-        this.orders = data.order;
-      }
-    });
+    
   }
 }

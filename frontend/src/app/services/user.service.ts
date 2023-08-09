@@ -99,7 +99,6 @@ export class UserService {
         next: (user: any) => {
           this.toastr.success(user.message, 'Forgot Password');
           this.router.navigate([`/user/password/reset/${user.resetToken}`]);
-          console.log(user);
         },
         error: (errorResponse) => {
           this.toastr.error(
@@ -114,7 +113,7 @@ export class UserService {
   resetPassword(resetToken: string, data: string) {
     return this.http.put<User>(RESET_PASSWORD_URL + resetToken, data).pipe(
       tap({
-        next: (user: any) => {
+        next: () => {
           this.toastr.success(
             'Password Updated Successfully',
             'Reset Password'
@@ -134,7 +133,6 @@ export class UserService {
     return this.http.get<User>(LOGOUT_URL).pipe(
       tap({
         next: (user: any) => {
-          // this.userSubject.next(new User());
           if (localStorage.getItem('user')) {
             localStorage.removeItem('user');
           } else {
@@ -159,8 +157,8 @@ export class UserService {
   getUserDetails() {
     return this.http.get<User>(USER_PROFILE_URL).pipe(
       tap({
-        next: (user: any) => {
-          console.log(user);
+        next: () => {
+          
         },
         error: (errorResponse) => {
           this.toastr.error(
@@ -177,7 +175,6 @@ export class UserService {
     return this.http.delete<User>(DELETE_USER_URL).pipe(
       tap({
         next: (user: any) => {
-          console.log(user)
           this.toastr.success(user.message, 'User!');
           localStorage.clear();
           this.router.navigate(['/login']);

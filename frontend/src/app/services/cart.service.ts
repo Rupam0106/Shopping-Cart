@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import {
@@ -21,7 +20,6 @@ export class CartService {
   getCartData(): Observable<any> {
     return this.cartDataSubject.asObservable();
   }
-
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
@@ -32,7 +30,6 @@ export class CartService {
       tap({
         next: (cart: any) => {
           this.cartData = cart;
-          console.log(cart)
           this.cartDataSubject.next(this.cartData);
           localStorage.setItem('cart', JSON.stringify(this.cartData));
         },
@@ -64,7 +61,6 @@ export class CartService {
       tap({
         next: (cart: any) => {
           this.cartData = cart;
-          console.log(cart)
           this.cartDataSubject.next(this.cartData);
           localStorage.setItem('cart', JSON.stringify(this.cartData));
           this.toastr.success(`Item Updated into Cart`, 'Cart');

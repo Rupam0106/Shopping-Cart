@@ -14,7 +14,7 @@ export class ResetPasswordComponent {
     private userService: UserService
   ) {
     this.activatedRoute.params.subscribe((params: any) => {
-      if (params.resetToken) {
+      if (params) {
         this.resetToken = params.resetToken;
       }
     });

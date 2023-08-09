@@ -21,8 +21,7 @@ export class AdminService {
   addProduct(addProduct: any): Observable<any> {
     return this.http.post<any>(ADD_PRODUCT_URL, addProduct).pipe(
       tap({
-        next: (product: any) => {
-          console.log(product);
+        next: () => {
           this.toastr.success(` Product Added Successfully`, 'Product!');
           this.router.navigate(['/']);
         },

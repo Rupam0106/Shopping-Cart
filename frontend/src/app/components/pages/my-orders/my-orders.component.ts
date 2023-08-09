@@ -22,10 +22,5 @@ export class MyOrdersComponent {
         this.orders = data.order;
       }
     });
-    this.orderService.getOrderData().subscribe((data: any) => {
-      if (data) {
-        this.orders = data.order;
-      }
-    });
   }
 }

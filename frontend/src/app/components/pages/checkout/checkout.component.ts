@@ -74,12 +74,6 @@ export class CheckoutComponent {
       return;
     } else {
       this.orderService.orderPlace(this.form.value).subscribe();
-      this.orderService.getOrderData().subscribe((data: any) => {
-        if (data) {
-          localStorage.removeItem('cart');
-          this.router.navigate(['/orders']);
-        }
-      });
     }
   }
 }
