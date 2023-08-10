@@ -5,6 +5,7 @@ const User = require("./routes/userRoute");
 const Product = require("./routes/productRoute");
 const Cart = require("./routes/cartRoute");
 const Order = require("./routes/orderRoute");
+const Payment=require("./routes/paymentRoute")
 
 const cookie = require("cookie-parser");
 const app = express();
@@ -27,6 +28,7 @@ app.use("/api/v1/user", User);
 app.use("/api/v1/product", Product);
 app.use("/api/v1/user/cart", Cart);
 app.use("/api/v1/user/order", Order);
+app.use("/api/v1/user/order/payment", Payment);
 
 //error handle middleware
 app.use(ErrorHandler);
