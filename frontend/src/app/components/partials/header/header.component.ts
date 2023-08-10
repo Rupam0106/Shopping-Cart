@@ -10,11 +10,13 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
+
   menuType: string = 'default';
   admin: string = '';
   user: string = '';
   count: number = 0;
   getCartDataSub!: Subscription;
+  open:boolean = false
 
   constructor(
     private route: Router,
@@ -68,5 +70,12 @@ export class HeaderComponent {
   }
   ngOnDestroy() {
     this.getCartDataSub && this.getCartDataSub.unsubscribe();
+  }
+
+  show(){
+    this.open = true
+  }
+  hide(){
+    this.open = false
   }
 }

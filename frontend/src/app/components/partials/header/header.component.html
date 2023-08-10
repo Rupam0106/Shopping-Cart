@@ -1,14 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-info">
-  <div class="container-fluid">
-    <a routerLink="" class="navbar-brand">R-Shop</a>
-    <button
-      type="button"
-      class="navbar-toggler"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarCollapse"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
+<nav class="navbar navbar-expand-lg bg-info">
+  <div class="container-fluid d-flex justify-content-between">
+    <a routerLink="/" class="navbar-brand">R-Shop</a>
+
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <a routerLink="" class="nav-item nav-link active">Home</a>
       <div *ngIf="user" class="navbar-nav">
@@ -19,41 +12,115 @@
           >Products</a
         >
       </div>
-    </div>
-    <div [ngSwitch]="menuType">
-      <div *ngSwitchCase="'default'" class="navbar-nav ms-auto">
-        <a routerLink="/login" class="nav-item nav-link">Login</a>
-        <a routerLink="/register" class="nav-item nav-link">Sign-Up</a>
-        <a routerLink="/user/cart/create" class="nav-item nav-link">Cart</a>
-      </div>
-      <div *ngSwitchCase="'admin'" class="navbar-nav ms-auto">
-        <a routerLink="/admin/products/new" class="nav-item nav-link"
-          >Add Product</a
-        >
-        <a routerLink="/user/me" class="nav-item nav-link">{{
-          admin | titlecase
-        }}</a>
-        <a
-          routerLink="/user/logout"
-          (click)="adminLogout()"
-          class="nav-item nav-link"
-          >Logout</a
-        >
-      </div>
-      <div *ngSwitchCase="'user'" class="navbar-nav ms-auto">
-        <a routerLink="/user/me" class="nav-item nav-link">{{
-          user | titlecase
-        }}</a>
-        <a
-        (click)="getCartData()"
-        class="nav-item nav-link"
-        routerLink="/user/cart/create"
-        >Cart({{ count }})</a
-      >
-        <a routerLink="/orders" class="nav-item nav-link">My Orders</a>
 
-        <button (click)="userLogout()" class="nav-item nav-link">Logout</button>
+      <div [ngSwitch]="menuType" class="collapse navbar-collapse">
+        <div *ngSwitchCase="'default'" class="navbar-nav ms-auto">
+          <a routerLink="/login" class="nav-item nav-link">Login</a>
+          <a routerLink="/register" class="nav-item nav-link">Sign-Up</a>
+          <a
+            (click)="getCartData()"
+            class="nav-item nav-link"
+            routerLink="/user/cart/create"
+          >
+            <mat-icon matBadge="{{ count }}" matBadgeColor="warn"
+              ><i class="bi bi-bag-check"></i></mat-icon
+          ></a>
+        </div>
+        <div *ngSwitchCase="'admin'" class="navbar-nav ms-auto">
+          <a routerLink="/admin/products/new" class="nav-item nav-link"
+            ><i class="bi bi-database-add" style="font-size: 1.6rem"></i
+          ></a>
+          <a routerLink="/user/me" class="nav-item nav-link">
+            <i class="bi bi-person-circle" style="font-size: 1.6rem"></i>
+          </a>
+          <button (click)="adminLogout()" class="nav-item nav-link">
+            <i class="bi bi-box-arrow-right" style="font-size: 1.6rem"></i>
+          </button>
+        </div>
+        <div *ngSwitchCase="'user'" class="navbar-nav ms-auto">
+          <a routerLink="/user/me" class="nav-item nav-link">
+            <i class="bi bi-person-circle" style="font-size: 1.6rem"></i>
+          </a>
+          <a
+            (click)="getCartData()"
+            class="nav-item nav-link"
+            routerLink="/user/cart/create"
+          >
+            <mat-icon matBadge="{{ count }}" matBadgeColor="warn"
+              ><i class="bi bi-bag-check"></i></mat-icon
+          ></a>
+          <a routerLink="/orders" class="nav-item nav-link">My Orders</a>
+
+          <button (click)="userLogout()" class="nav-item nav-link">
+            <i class="bi bi-box-arrow-right" style="font-size: 1.6rem"></i>
+          </button>
+        </div>
       </div>
     </div>
+
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="Example icon-button with a menu"
+      class="navbar-toggler"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarCollapse"
+    >
+      <mat-icon>more_vert</mat-icon>
+      <mat-menu #menu="matMenu">
+        <div [ngSwitch]="menuType">
+          <div *ngSwitchCase="'default'" class="navbar-nav ms-auto">
+            <button mat-menu-item>
+              <a routerLink="/login" class="nav-item nav-link">Login</a>
+              <a routerLink="/register" class="nav-item nav-link">Sign-Up</a>
+              <a
+                (click)="getCartData()"
+                class="nav-item nav-link"
+                routerLink="/user/cart/create"
+              >
+                <mat-icon matBadge="{{ count }}" matBadgeColor="warn"
+                  ><i class="bi bi-bag-check"></i></mat-icon
+              ></a>
+            </button>
+          </div>
+
+          <div *ngSwitchCase="'admin'" class="navbar-nav">
+            <button mat-menu-item>
+              <a routerLink="/admin/products/new" class="nav-item nav-link"
+                ><i class="bi bi-database-add" style="font-size: 1.6rem"></i>
+                Add</a
+              >
+              <a routerLink="/user/me" class="nav-item nav-link">
+                <i class="bi bi-person-circle" style="font-size: 1.6rem"></i>
+              </a>
+              <button (click)="adminLogout()" class="nav-item nav-link">
+                <i class="bi bi-box-arrow-right" style="font-size: 1.6rem"></i>
+              </button>
+            </button>
+          </div>
+
+          <div *ngSwitchCase="'user'" class="navbar-nav ms-auto">
+            <button mat-menu-item>
+              <a routerLink="/user/me" class="nav-item nav-link">
+                <i class="bi bi-person-circle" style="font-size: 1.6rem"></i>
+              </a>
+              <a
+                (click)="getCartData()"
+                class="nav-item nav-link"
+                routerLink="/user/cart/create"
+              >
+                <mat-icon matBadge="{{ count }}" matBadgeColor="warn"
+                  ><i class="bi bi-bag-check"></i></mat-icon
+              ></a>
+              <a routerLink="/orders" class="nav-item nav-link">My Orders</a>
+
+              <button (click)="userLogout()" class="nav-item nav-link">
+                <i class="bi bi-box-arrow-right" style="font-size: 1.6rem"></i>
+              </button>
+            </button>
+          </div>
+        </div>
+      </mat-menu>
+    </button>
   </div>
 </nav>

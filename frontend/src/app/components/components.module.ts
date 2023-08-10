@@ -19,7 +19,9 @@ import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { OrderDetailsComponent } from './pages/order-details/order-details.component';
 import { NotFoundComponent } from './partials/not-found/not-found.component';
-
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatIconModule } from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -41,6 +43,6 @@ import { NotFoundComponent } from './partials/not-found/not-found.component';
     NotFoundComponent,
   ],
   exports: [HeaderComponent, FooterComponent, HomeComponent, ProductsComponent,LoadingComponent,],
-  imports: [CommonModule,AppRoutingModule,FormsModule,ReactiveFormsModule],
+  imports: [CommonModule,AppRoutingModule,FormsModule,ReactiveFormsModule,MatBadgeModule,MatIconModule,MatMenuModule],
 })
 export class ComponentsModule {}
