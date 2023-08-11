@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { UserService } from 'src/app/services/user.service';
+import { User } from 'src/app/shared/models/User';
 
 @Component({
   selector: 'header',
@@ -10,20 +11,25 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
-
   menuType: string = 'default';
   admin: string = '';
-  user: string = '';
+  user: any = '';
   count: number = 0;
   getCartDataSub!: Subscription;
-  open:boolean = false
 
   constructor(
     private route: Router,
     private userService: UserService,
     private cartService: CartService
   ) {
-    let cart = localStorage.getItem('cart');
+    this.cartService.getCartObservable().subscribe((newCart) => {
+      this.count = newCart.totalCount;
+    })
+    userService.userObservable.subscribe((newUser) => {
+      this.user = newUser;
+    })
+
+    let cart = localStorage.getItem('Cart');
     if (cart) {
       this.count = JSON.parse(cart).cart.totalItems;
     }
@@ -51,10 +57,6 @@ export class HeaderComponent {
   }
 
   ngOnInit() {
-    let cartData = localStorage.getItem('localCart');
-    if (cartData) {
-      this.count = JSON.parse(cartData).length;
-    }
   }
 
   adminLogout() {
@@ -65,17 +67,8 @@ export class HeaderComponent {
     this.userService.logout().subscribe();
   }
 
-  getCartData() {
-    this.getCartDataSub = this.cartService.getUserCartData().subscribe();
-  }
   ngOnDestroy() {
     this.getCartDataSub && this.getCartDataSub.unsubscribe();
   }
 
-  show(){
-    this.open = true
-  }
-  hide(){
-    this.open = false
-  }
 }

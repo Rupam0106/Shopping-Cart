@@ -14,6 +14,7 @@ import {
 } from '../shared/constants/urls';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { IUserLogin } from '../shared/interfaces/IUserLogin';
 
 @Injectable({
   providedIn: 'root',
@@ -49,7 +50,6 @@ export class UserService {
             `Welcome to the R-Shop ${user.user.name}`,
             'Register Successful'
           );
-          this.router.navigate(['/']);
           this.invalidUserAuth.emit(false);
         },
         error: (errorResponse) => {
@@ -60,7 +60,7 @@ export class UserService {
     );
   }
 
-  userLogin(userLogin: any): Observable<User> {
+  userLogin(userLogin: IUserLogin): Observable<User> {
     return this.http.post<User>(LOGIN_USER_URL, userLogin).pipe(
       tap({
         next: (user: any) => {
@@ -73,7 +73,6 @@ export class UserService {
           this.userSubject.next(user);
           this.cookieService.set('refreshToken', user.refreshToken);
           this.toastr.success(` Welome ${user.user.name}!`, 'Login Successful');
-          this.router.navigate(['/']);
           this.invalidUserAuth.emit(false);
         },
         error: (errorResponse) => {
@@ -88,7 +87,7 @@ export class UserService {
   }
 
   userReload() {
-    if (localStorage.getItem('user') || localStorage.getItem("admin")) {
+    if (localStorage.getItem('user') || localStorage.getItem('admin')) {
       this.router.navigate(['/']);
     }
   }
@@ -138,9 +137,10 @@ export class UserService {
           } else {
             localStorage.removeItem('admin');
           }
-
+          localStorage.clear();
           this.toastr.success(user.message, 'Logged-out Successful');
           this.cookieService.deleteAll();
+          window.location.reload();
           this.router.navigate(['/login']);
         },
         error: (errorResponse) => {
@@ -156,9 +156,7 @@ export class UserService {
   getUserDetails() {
     return this.http.get<User>(USER_PROFILE_URL).pipe(
       tap({
-        next: () => {
-          
-        },
+        next: () => {},
         error: (errorResponse) => {
           this.toastr.error(
             errorResponse.error.message,
@@ -176,6 +174,7 @@ export class UserService {
         next: (user: any) => {
           this.toastr.success(user.message, 'User!');
           localStorage.clear();
+          window.location.reload();
           this.router.navigate(['/login']);
         },
         error: (errorResponse) => {

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CartService } from 'src/app/services/cart.service';
 import { ProductsService } from 'src/app/services/products.service';
-import { Product } from 'src/app/shared/models/Product';
 
 @Component({
   selector: 'app-product-details',
@@ -27,9 +26,6 @@ export class ProductDetailsComponent {
 
   addToCart() {
     this.cart.addToCart(this.product._id).subscribe()
-    this.cart.getCartData().subscribe((res:any)=>{
-      console.log(res)
-    })
   }
   
 }

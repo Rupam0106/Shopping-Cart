@@ -21,7 +21,8 @@ import { OrderDetailsComponent } from './pages/order-details/order-details.compo
 import { NotFoundComponent } from './partials/not-found/not-found.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
+import { TitleComponent } from './partials/title/title.component';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -41,8 +42,23 @@ import {MatMenuModule} from '@angular/material/menu';
     CheckoutComponent,
     OrderDetailsComponent,
     NotFoundComponent,
+    TitleComponent,
   ],
-  exports: [HeaderComponent, FooterComponent, HomeComponent, ProductsComponent,LoadingComponent,],
-  imports: [CommonModule,AppRoutingModule,FormsModule,ReactiveFormsModule,MatBadgeModule,MatIconModule,MatMenuModule],
+  exports: [
+    HeaderComponent,
+    FooterComponent,
+    HomeComponent,
+    ProductsComponent,
+    LoadingComponent,
+  ],
+  imports: [
+    CommonModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatBadgeModule,
+    MatIconModule,
+    MatMenuModule,
+  ],
 })
 export class ComponentsModule {}

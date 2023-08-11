@@ -1,8 +1,4 @@
-<div class="d-flex align-items-center justify-content-center vh-20">
-  <div class="text-center">
-    <h1 class="display-1 fw-bold">404</h1>
-    <p class="fs-3"><span class="text-danger">Opps!</span> Page not found.</p>
-    <p class="lead">The page you’re looking for doesn’t exist.</p>
-    <a routerLink="/products" class="btn btn-info">Go Home</a>
-  </div>
+<div *ngIf="visible">
+  {{notFoundMessage}}
+  <a [routerLink]="resetLinkRoute">{{resetLinkText}}</a>
 </div>

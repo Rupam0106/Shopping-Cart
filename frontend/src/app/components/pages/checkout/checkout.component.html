@@ -1,8 +1,6 @@
-<div class="w-100" style="height: 34.7rem">
+<app-title title="Order Form" fontSize="1.6rem"></app-title>
   <div class="d-flex p-3 flex-column flex-md-row align-items-center">
     <div>
-      <h1 class="ps-5 pt-1">Shipping address</h1>
-
       <form class="row g-2 p-4" [formGroup]="form">
         <div class="col-sm-6">
           <label for="name" class="form-label">name</label>
@@ -130,7 +128,7 @@
       </div>
       <div>
         <span>Total Items</span>
-        <span>{{ cartDetails.totalItems }}</span>
+        <span>{{ cartDetails.totalCount }}</span>
       </div>
       <div>
         <span>Shipping charges</span>
@@ -141,12 +139,11 @@
         <span>Total</span>
         <span>{{ cartDetails.totalPrice }}</span>
       </div>
-      <button
+      <!-- <button
         class="order btn btn-info"
         (click)="placeOrder(cartDetails.totalPrice)"
       >
         Payment
-      </button>
+      </button> -->
     </div>
   </div>
-</div>

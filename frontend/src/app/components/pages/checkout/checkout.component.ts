@@ -2,8 +2,18 @@ import { PaymentService } from './../../../services/payment.service';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CartService } from 'src/app/services/cart.service';
 import { OrderService } from 'src/app/services/order.service';
-import { LOCATE, PUBLISHABLE_KEY, SCRIPT, SCRIPT_ID, SCRIPT_SRC, SCRIPT_TYPE, STRIPE_SCRIPT } from 'src/app/shared/constants/urls';
+import { UserService } from 'src/app/services/user.service';
+import {
+  LOCATE,
+  PUBLISHABLE_KEY,
+  SCRIPT,
+  SCRIPT_ID,
+  SCRIPT_SRC,
+  SCRIPT_TYPE,
+  STRIPE_SCRIPT,
+} from 'src/app/shared/constants/urls';
 import { states } from 'src/app/state';
 
 @Component({
@@ -15,6 +25,8 @@ export class CheckoutComponent {
   paymentHandler: any;
   constructor(
     private router: Router,
+    private userService: UserService,
+    private cartService: CartService,
     private orderService: OrderService,
     private paymentService: PaymentService
   ) {}
@@ -23,16 +35,14 @@ export class CheckoutComponent {
 
   ngOnInit(): void {
     this.invokeStripe();
-    let cart = localStorage.getItem('cart');
-    if (cart) {
-      this.cartDetails = JSON.parse(cart).cart;
-      console.log(this.cartDetails);
-      if (this.cartDetails.cartItems.length === null) {
-        this.router.navigate(['/cart']);
-      }
+    const user = this.userService.currentUser;
+    console.log(user.success);
+    if (user.success) {
     } else {
-      this.router.navigate(['/cart']);
+      this.router.navigate(['/login']);
     }
+    const cart = this.cartService.getCart();
+    this.cartDetails = cart;
   }
 
   form = new FormGroup({
@@ -84,10 +94,10 @@ export class CheckoutComponent {
       this.orderService.orderPlace(this.form.value).subscribe();
       const paymentHandler = (<any>window).StripeCheckout.configure({
         key: PUBLISHABLE_KEY,
-        locale: 'auto',
+        locale: LOCATE,
         token: function (stripeToken: any) {
-          paymentStripe(stripeToken)
-          alert('Stripe token generated!');
+          paymentStripe(stripeToken);
+          this.router.navigate(['/orders']);
         },
       });
 
@@ -108,9 +118,9 @@ export class CheckoutComponent {
   invokeStripe() {
     if (!window.document.getElementById(STRIPE_SCRIPT)) {
       const script = window.document.createElement(SCRIPT);
-      script.id = SCRIPT_ID
-      script.type = SCRIPT_TYPE
-      script.src =  SCRIPT_SRC
+      script.id = SCRIPT_ID;
+      script.type = SCRIPT_TYPE;
+      script.src = SCRIPT_SRC;
       script.onload = () => {
         this.paymentHandler = (<any>window).StripeCheckout.configure({
           key: PUBLISHABLE_KEY,

@@ -57,12 +57,10 @@ const routes: Routes = [
   {
     path: 'user/cart/create',
     component: CartPageComponent,
-    canActivate: [authGuard],
   },
   {
     path: 'user/cart/update',
     component: CartPageComponent,
-    canActivate: [authGuard],
   },
   {
     path: 'orders',
@@ -72,7 +70,6 @@ const routes: Routes = [
   {
     path: 'user/order/checkout',
     component: CheckoutComponent,
-    canActivate: [authGuard],
   },
   {
     path: 'user/order/details/:orderId',

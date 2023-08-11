@@ -40,8 +40,7 @@ export class AuthInterceptor implements HttpInterceptor {
             this.router.navigate(['/login']);
           }
         },
-        error: (errorResponse) => {
-          console.log(errorResponse);
+        error: () => {
           localStorage.clear();
         },
       })
