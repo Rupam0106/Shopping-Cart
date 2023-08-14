@@ -17,7 +17,7 @@ exports.createCart = catchAsyncError(async (req, res, next) => {
   if (validProduct.stock === 0) {
     return res
       .status(400)
-      .send({ status: false, msg: "item is not currenty available" });
+      .send({ status: false, msg: "item is not currently available" });
   }
   let userCart = await cartModel.findOne({ userId: userId });
   if (!userCart) {

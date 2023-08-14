@@ -7,7 +7,6 @@ const cartModel = require("../models/cartModel");
 // create order
 exports.createOrder = catchAsyncError(async (req, res, next) => {
   let userId = req.user.id;
-  console.log(userId)
   let { name, phone, house, street, city, state, pincode } = req.body;
   let cart = await cartModel
     .findOne({ userId: userId })
@@ -17,7 +16,7 @@ exports.createOrder = catchAsyncError(async (req, res, next) => {
   }
   if (cart.cartItems.length <= 0) {
     return next(
-      new ErrorHandler("Please add some items in cart to place order", 400)
+      new ErrorHandler("Cart Is Empty!", 400)
     );
   }
   const filter = cart.cartItems.filter((x) => x.quantity > x.productId.stock);

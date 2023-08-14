@@ -77,6 +77,7 @@ const orderSchema = new mongoose.Schema(
         },
       },
     },
+    paymentId: { type: String },
     status: {
       type: String,
       enum: ["pending", "delivered", "canceled"],

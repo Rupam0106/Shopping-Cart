@@ -5,7 +5,7 @@ exports.createPayment = catchAsyncError(async (req, res, next) => {
   console.log(req.body);
   stripe.customers
     .create({
-      email: "rupam.gupta@rudrainnovative.in",
+      email: "rupam@gmail.com",
       source: token.id,
     })
     .then((customer) => {
