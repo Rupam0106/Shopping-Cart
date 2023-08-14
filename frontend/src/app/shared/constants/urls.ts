@@ -1,8 +1,8 @@
 import { environment } from 'src/environments/environment';
 
 const BASE_URL = environment.production
-  ? 'http://localhost:4000/api/v1'
-  : 'https://r-shop.onrender.com/api/v1';
+  ? 'https://r-shop.onrender.com/api/v1'
+  : 'http://localhost:4000/api/v1';
 
 export const USER_PROFILE_URL = BASE_URL + '/user/me';
 export const DELETE_USER_URL = USER_PROFILE_URL + '/delete';
@@ -31,10 +31,11 @@ export const CANCEL_ORDER_URL = BASE_URL + '/user/order/cancel/';
 export const CANCEL_SPECIFIC_ORDER_URL = BASE_URL + '/user/order/cancel/';
 
 export const CREATE_PAYMENT_URL = BASE_URL + '/user/order/payment';
-export const PUBLISHABLE_KEY='pk_test_51NdRRlSDTl5cay5Ya0mMX3wKTnSWESpnkR6QOc9xjIKEOLxii5Mn7HDXJEEnx9x2tF8qAusyTrYrEVj0hZhX6FGC00bOC21pb1'
-export const LOCATE='auto'
-export const STRIPE_SCRIPT='stripe-script'
-export const SCRIPT='script'
-export const SCRIPT_ID='stripe-script'
-export const SCRIPT_TYPE='text/javascript'
-export const SCRIPT_SRC='https://checkout.stripe.com/checkout.js';
+export const PUBLISHABLE_KEY =
+  'pk_test_51NdRRlSDTl5cay5Ya0mMX3wKTnSWESpnkR6QOc9xjIKEOLxii5Mn7HDXJEEnx9x2tF8qAusyTrYrEVj0hZhX6FGC00bOC21pb1';
+export const LOCATE = 'auto';
+export const STRIPE_SCRIPT = 'stripe-script';
+export const SCRIPT = 'script';
+export const SCRIPT_ID = 'stripe-script';
+export const SCRIPT_TYPE = 'text/javascript';
+export const SCRIPT_SRC = 'https://checkout.stripe.com/checkout.js';

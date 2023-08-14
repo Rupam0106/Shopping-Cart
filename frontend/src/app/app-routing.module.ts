@@ -63,7 +63,7 @@ const routes: Routes = [
     component: CartPageComponent,
   },
   {
-    path: 'orders',
+    path: 'user/orders',
     component: MyOrdersComponent,
     canActivate: [authGuard],
   },

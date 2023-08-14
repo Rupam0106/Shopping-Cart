@@ -25,7 +25,6 @@ export class CheckoutComponent {
   paymentHandler: any;
   constructor(
     private router: Router,
-    private userService: UserService,
     private cartService: CartService,
     private orderService: OrderService,
     private paymentService: PaymentService
@@ -35,13 +34,12 @@ export class CheckoutComponent {
 
   ngOnInit(): void {
     this.invokeStripe();
-    const user = this.userService.currentUser;
-    console.log(user.success);
-    if (user.success) {
+    
+    if (localStorage.getItem('token')) {
     } else {
       this.router.navigate(['/login']);
     }
-    const cart = this.cartService.getCart();
+    const cart = this.cartService.getCartData();
     this.cartDetails = cart;
   }
 
@@ -97,7 +95,8 @@ export class CheckoutComponent {
         locale: LOCATE,
         token: function (stripeToken: any) {
           paymentStripe(stripeToken);
-          this.router.navigate(['/orders']);
+          console.log(stripeToken)
+          this.router.navigate(['/user/orders']);
         },
       });
 

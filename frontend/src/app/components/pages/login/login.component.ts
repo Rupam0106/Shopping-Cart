@@ -9,7 +9,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class LoginComponent {
   returnUrl = '';
- constructor(
+  constructor(
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
     private router: Router
@@ -22,11 +22,10 @@ export class LoginComponent {
       .userLogin({ email: data.email, password: data.password })
       .subscribe(() => {
         this.router.navigateByUrl(this.returnUrl);
+        
       });
   }
-
   ngOnInit() {
     this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'];
   }
-
 }

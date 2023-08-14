@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 import { Cart } from 'src/app/shared/models/Cart';
-import { CartItem } from 'src/app/shared/models/CartItem';
 
 @Component({
   selector: 'app-cart-page',
@@ -22,47 +21,52 @@ export class CartPageComponent {
   };
   cart!: Cart;
   constructor(private cartService: CartService) {
-    this.cartService.getCartObservable().subscribe((cart:any) => {
-      this.cartItems = cart.cart.cartItems;
-      console.log(this.cartItems)
+    this.cartService.getCartData().subscribe((cart: any) => {
+      this.cartItems = cart.cart;
     });
 
     this.cartService.getCartData().subscribe((data: any) => {
       if (data.cart) {
         this.cartItems = data.cart.cartItems;
         this.cartDetails = data.cart;
-        
         this.price = this.cartDetails.totalPrice;
         this.priceSummary.price = this.price;
-        this.priceSummary.discount = 0 ;
-        this.priceSummary.tax = 0 ;
+        this.priceSummary.discount = 0;
+        this.priceSummary.tax = 0;
         this.priceSummary.delivery = 0;
-        this.priceSummary.total =
-          this.price + this.price
+        this.priceSummary.total = this.price + this.price;
       }
     });
   }
 
-  ngOnInit(): void {}
-
-  removeFromCart(cartItem: CartItem) {
-    this.cartService.removeFromCart(cartItem.product._id);
+  ngOnInit(): void {
+    let cart = localStorage.getItem('cart');
+    if (cart && !localStorage.getItem('token')) {
+      let localCart = JSON.parse(cart);
+      this.cartItems = localCart.cartItems;
+      this.cartDetails = localCart;
+      localStorage.setItem('cart', JSON.stringify(this.cartDetails));
+    } else if (!cart && !localStorage.getItem('token')) {
+    } else {
+      this.cartService.getUserCart();
+      this.cartService.getCartData().subscribe((data: any) => {
+        if (data) {
+          this.cartItems = data.cartItems;
+          this.cartDetails = data;
+          localStorage.setItem('cart', JSON.stringify(this.cartDetails));
+        }
+      });
+    }
   }
 
-  changeQuantity(cartItem: CartItem, quantityInString: string) {
-    const quantity = parseInt(quantityInString);
-    this.cartService.changeQuantity(cartItem.product._id, quantity);
-  }
-
-  cartUpdate(productId: any, quantity: any) {
-    this.cartService.updateCartData(productId, quantity).subscribe();
+  cartUpdate(productId: string, quantity: number) {
+    this.cartService.cartUpdate(productId, quantity);
     this.cartService.getCartData().subscribe((data: any) => {
-      if (data.cart) {
-        this.cartItems = data.cart.cartItems;
-        this.cartDetails = data.cart;
-        
+      if (data) {
+        this.cartItems = data.cartItems;
+        this.cartDetails = data;
       }
-      localStorage.setItem('Cart', JSON.stringify(this.cartDetails));
+      localStorage.setItem('cart', JSON.stringify(this.cartDetails));
     });
   }
 }

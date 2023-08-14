@@ -22,22 +22,21 @@ export class HeaderComponent {
     private userService: UserService,
     private cartService: CartService
   ) {
-    this.cartService.getCartObservable().subscribe((newCart) => {
-      this.count = newCart.totalCount;
-    })
-    userService.userObservable.subscribe((newUser) => {
-      this.user = newUser;
-    })
-
-    let cart = localStorage.getItem('Cart');
+    let cart = localStorage.getItem('cart');
     if (cart) {
-      this.count = JSON.parse(cart).cart.totalItems;
+      this.count = JSON.parse(cart).totalItems;
+      this.cartService.getCartData().subscribe((data: any) => {
+        if (data.totalItems) {
+          this.count = data.totalItems;
+        }
+      });
+    } else {
+      this.cartService.getCartData().subscribe((data: any) => {
+        if (data) {
+          this.count = data.totalItems;
+        }
+      });
     }
-    this.cartService.getCartData().subscribe((data: any) => {
-      if (data.cart) {
-        this.count = data.cart.totalItems;
-      }
-    });
 
     this.route.events.subscribe((val: any) => {
       if (localStorage.getItem('user')) {
@@ -56,8 +55,7 @@ export class HeaderComponent {
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   adminLogout() {
     this.userService.logout().subscribe();
@@ -70,5 +68,4 @@ export class HeaderComponent {
   ngOnDestroy() {
     this.getCartDataSub && this.getCartDataSub.unsubscribe();
   }
-
 }

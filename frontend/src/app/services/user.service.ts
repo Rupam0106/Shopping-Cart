@@ -66,10 +66,11 @@ export class UserService {
         next: (user: any) => {
           if (user.user.role === 'user') {
             this.setUserToLocalStorage('user', user);
+            this.setUserToLocalStorage('token',user.accessToken);
           } else {
             this.setUserToLocalStorage('admin', user);
+            this.setUserToLocalStorage('token', user.accessToken);
           }
-
           this.userSubject.next(user);
           this.cookieService.set('refreshToken', user.refreshToken);
           this.toastr.success(` Welome ${user.user.name}!`, 'Login Successful');
@@ -88,7 +89,7 @@ export class UserService {
 
   userReload() {
     if (localStorage.getItem('user') || localStorage.getItem('admin')) {
-      this.router.navigate(['/']);
+      // this.router.navigate(['/']);
     }
   }
 

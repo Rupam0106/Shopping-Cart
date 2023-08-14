@@ -1,50 +1,56 @@
 <app-not-found
   [visible]="!cartItems || !cartItems.length"
-  notFoundMessage="Cart Page Is Empty!"
-  resetLinkText="Go To Homepage"
+  notFoundMessage="Cart is Empty"
+  resetLinkText="Continue Shopping"
 ></app-not-found>
 
-<div *ngIf="cartItems.length" class="container">
+<div class="container" *ngIf="cartItems && cartItems.length > 0">
   <ul>
-    <li *ngFor="let cartItem of cartItems">
+    <li *ngFor="let items of cartItems">
       <div>
         <img
-          [src]="cartItem.productId.productImage"
-          [alt]="cartItem.productId.title"
+          src="{{ items.productId.productImage }}"
+          alt="{{ items.productId.title }}"
         />
       </div>
-      <div>
-        <div class="d-flex m-2">
-          <button
-            class="btn btn-danger"
-            (click)="cartUpdate(cartItem.productId._id, cartItem.quantity - 1)"
-          >
-            -
-          </button>
-          <input type="text" class="w-5" value="{{ cartItem.quantity }}" disabled />
-          <button
-            class="btn btn-info"
-            (click)="cartUpdate(cartItem.productId._id, cartItem.quantity + 1)"
-          >
-            +
-          </button>
-        </div>
-      </div>
-      <div>
-        {{ cartItem.price | currency }}
+      <a routerLink="/product/{{ items.productId._id }}">
+        {{ items.productId.title }}
+      </a>
+      <div class="item-description">{{ items.productId.description }}</div>
+      <div class="quantityBtn">
+        <i
+          class="bi bi-dash-lg px-2"
+          (click)="cartUpdate(items.productId._id, items.quantity - 1)"
+        ></i>
+        <input
+          type="text"
+          class="w-100"
+          value="{{ items.quantity }}"
+          disabled
+        />
+        <i
+          class="bi bi-plus-lg px-2"
+          (click)="cartUpdate(items.productId._id, items.quantity + 1)"
+        ></i>
       </div>
 
       <div>
-        <button class="remove-button" (click)="removeFromCart(cartItem)">
-          Remove
-        </button>
+        <span>
+          <i class="bi bi-currency-rupee"></i>
+          <span>{{ items.productId.price }}</span>
+        </span>
+        <i
+          class="bi bi-trash text-danger m-2"
+          title="Delete"
+          (click)="cartUpdate(items.productId._id, 0)"
+        ></i>
       </div>
     </li>
   </ul>
   <div class="checkout">
     <div>
-      <div class="products-count">{{ priceSummary.totalItems }}</div>
-      <div class="total-price">{{ priceSummary.totalPrice | currency }}</div>
+      <div class="products-count">{{ cartDetails.totalItems }}</div>
+      <div class="total-price">{{ cartDetails.totalPrice }}</div>
     </div>
 
     <a routerLink="/user/order/checkout">Proceed to Checkout</a>
