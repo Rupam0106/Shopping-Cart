@@ -19,6 +19,9 @@ import { CheckoutComponent } from './components/pages/checkout/checkout.componen
 import { OrderDetailsComponent } from './components/pages/order-details/order-details.component';
 import { AdminOrdersComponent } from './admin/admin-orders/admin-orders.component';
 import { NotFoundComponent } from './components/partials/not-found/not-found.component';
+import { PaymentSuccessComponent } from './components/partials/payment-success/payment-success.component';
+import { PaymentFailedComponent } from './components/partials/payment-failed/payment-failed.component';
+import { PaymentPageComponent } from './components/pages/payment-page/payment-page.component';
 
 const routes: Routes = [
   {
@@ -70,10 +73,26 @@ const routes: Routes = [
   {
     path: 'user/order/checkout',
     component: CheckoutComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'user/order/summery',
+    component: PaymentPageComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'user/order/details/:orderId',
     component: OrderDetailsComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'user/order/payment/success',
+    component: PaymentSuccessComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'user/order/payment/failed',
+    component: PaymentFailedComponent,
     canActivate: [authGuard],
   },
   {
@@ -96,6 +115,7 @@ const routes: Routes = [
     component: AdminOrdersComponent,
     canActivate: [adminAuthGuard],
   },
+
   {
     path: '**',
     component: NotFoundComponent,

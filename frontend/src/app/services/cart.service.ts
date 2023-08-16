@@ -5,6 +5,7 @@ import {
   CREATE_CART_URL,
   GET_CART_URL,
   UPDATE_CART_URL,
+  UPDATE_LOCAL_CART_URL,
 } from '../shared/constants/urls';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
@@ -45,11 +46,12 @@ export class CartService {
     }
   }
 
+
   storeLocalCart() {
     let cart = localStorage.getItem('cart');
     if (cart) {
       cart = JSON.parse(cart);
-      this.http.put(GET_CART_URL, this.cartData).subscribe((response: any) => {
+      this.http.put(UPDATE_LOCAL_CART_URL, this.cartData).subscribe((response: any) => {
         this.cartData = response.cart;
         localStorage.setItem('cart', JSON.stringify(this.cartData));
         return this.cartDataSubject.next(this.cartData);

@@ -23,14 +23,18 @@ export const DELETE_PRODUCT_BY_ID_URL = BASE_URL + '/product/';
 export const CREATE_CART_URL = BASE_URL + '/user/cart/create';
 export const GET_CART_URL = BASE_URL + '/user/cart/all';
 export const UPDATE_CART_URL = BASE_URL + '/user/cart/update';
+export const UPDATE_LOCAL_CART_URL = BASE_URL + '/user/cart/local-store';
 
 export const GET_ORDER_URL = BASE_URL + '/user/order/';
+export const ORDER_NEW_FOR_CURRENT_USER_URL = BASE_URL + '/user/order/summary';
 export const GET_SPECIFIC_ORDER_URL = BASE_URL + '/user/order/get/';
 export const CREATE_ORDER_URL = BASE_URL + '/user/order';
 export const CANCEL_ORDER_URL = BASE_URL + '/user/order/cancel/';
 export const CANCEL_SPECIFIC_ORDER_URL = BASE_URL + '/user/order/cancel/';
 
 export const CREATE_PAYMENT_URL = BASE_URL + '/user/order/payment';
+export const PAYMENT_STATUS_URL = BASE_URL + '/user/order/payment/status';
+
 export const PUBLISHABLE_KEY =
   'pk_test_51NdRRlSDTl5cay5Ya0mMX3wKTnSWESpnkR6QOc9xjIKEOLxii5Mn7HDXJEEnx9x2tF8qAusyTrYrEVj0hZhX6FGC00bOC21pb1';
 export const LOCATE = 'auto';

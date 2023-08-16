@@ -2,18 +2,10 @@ import { PaymentService } from './../../../services/payment.service';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { CartService } from 'src/app/services/cart.service';
 import { OrderService } from 'src/app/services/order.service';
-import { UserService } from 'src/app/services/user.service';
-import {
-  LOCATE,
-  PUBLISHABLE_KEY,
-  SCRIPT,
-  SCRIPT_ID,
-  SCRIPT_SRC,
-  SCRIPT_TYPE,
-  STRIPE_SCRIPT,
-} from 'src/app/shared/constants/urls';
+
 import { states } from 'src/app/state';
 
 @Component({
@@ -25,6 +17,7 @@ export class CheckoutComponent {
   paymentHandler: any;
   constructor(
     private router: Router,
+    private toastr: ToastrService,
     private cartService: CartService,
     private orderService: OrderService,
     private paymentService: PaymentService
@@ -33,14 +26,15 @@ export class CheckoutComponent {
   states: string[] = states;
 
   ngOnInit(): void {
-    this.invokeStripe();
-    
+    // this.invokeStripe();
+
     if (localStorage.getItem('token')) {
     } else {
       this.router.navigate(['/login']);
     }
-    const cart = this.cartService.getCartData();
-    this.cartDetails = cart;
+    this.cartService.getCartData().subscribe((data) => {
+      this.cartDetails = data;
+    });
   }
 
   form = new FormGroup({
@@ -85,52 +79,20 @@ export class CheckoutComponent {
     return this.form.get('pincode');
   }
 
-  placeOrder(amount: any) {
+  placeOrder() {
     if (this.form.errors) {
       return;
     } else {
-      this.orderService.orderPlace(this.form.value).subscribe();
-      const paymentHandler = (<any>window).StripeCheckout.configure({
-        key: PUBLISHABLE_KEY,
-        locale: LOCATE,
-        token: function (stripeToken: any) {
-          paymentStripe(stripeToken);
-          console.log(stripeToken)
-          this.router.navigate(['/user/orders']);
-        },
+      this.orderService.orderPlace(this.form.value).subscribe((data: any) => {
+        if (data) {
+          localStorage.removeItem('cart');
+          this.cartService.getUserCart();
+          this.toastr.success(data.msg);
+          setTimeout(() => {
+            this.router.navigate(['/user/order']);
+          }, 1500);
+        }
       });
-
-      const paymentStripe = (stripeToken: any) => {
-        this.paymentService.makePayment(stripeToken).subscribe((data: any) => {
-          console.log(data);
-        });
-      };
-
-      paymentHandler.open({
-        name: 'Welcome to R-Shop',
-        description: 'A E-commerce Site',
-        amount: amount * 100,
-      });
-    }
-  }
-
-  invokeStripe() {
-    if (!window.document.getElementById(STRIPE_SCRIPT)) {
-      const script = window.document.createElement(SCRIPT);
-      script.id = SCRIPT_ID;
-      script.type = SCRIPT_TYPE;
-      script.src = SCRIPT_SRC;
-      script.onload = () => {
-        this.paymentHandler = (<any>window).StripeCheckout.configure({
-          key: PUBLISHABLE_KEY,
-          locale: LOCATE,
-          token: function (stripeToken: any) {
-            console.log(stripeToken);
-            alert('Payment has been successfull!');
-          },
-        });
-      };
-      window.document.body.appendChild(script);
     }
   }
 }

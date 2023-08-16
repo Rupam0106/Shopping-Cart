@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.payment-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+     max-width: 30rem;
+    margin-top: 5rem;
+    margin-left: 33%
+
+}
+
+.icon {
+    font-size: 50px;
+    color: #27ae60;
+}
+
+h2 {
+    margin-top: 10px;
+    font-size: 24px;
+    color: #333;
+}
+
+p {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #777;
+}
+
+.back-button {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #2980b9;
+}
+

@@ -15,6 +15,7 @@ import {
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { IUserLogin } from '../shared/interfaces/IUserLogin';
+import { CartService } from './cart.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,8 @@ export class UserService {
     private http: HttpClient,
     private toastr: ToastrService,
     private router: Router,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private cartService:CartService
   ) {
     this.userObservable = this.userSubject.asObservable();
   }
@@ -45,6 +47,7 @@ export class UserService {
             this.setUserToLocalStorage('admin', user);
           }
           this.cookieService.set('refreshToken', user.refreshToken);
+          this.cartService.storeLocalCart();
           this.userSubject.next(user);
           this.toastr.success(
             `Welcome to the R-Shop ${user.user.name}`,
@@ -71,6 +74,7 @@ export class UserService {
             this.setUserToLocalStorage('admin', user);
             this.setUserToLocalStorage('token', user.accessToken);
           }
+          this.cartService.storeLocalCart();
           this.userSubject.next(user);
           this.cookieService.set('refreshToken', user.refreshToken);
           this.toastr.success(` Welome ${user.user.name}!`, 'Login Successful');

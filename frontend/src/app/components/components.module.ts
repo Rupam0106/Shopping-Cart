@@ -23,6 +23,10 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { TitleComponent } from './partials/title/title.component';
+import { PaymentSuccessComponent } from './partials/payment-success/payment-success.component';
+import { PaymentFailedComponent } from './partials/payment-failed/payment-failed.component';
+import { PaymentPageComponent } from './pages/payment-page/payment-page.component';
+import { StripeComponent } from './partials/stripe/stripe.component';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -43,6 +47,11 @@ import { TitleComponent } from './partials/title/title.component';
     OrderDetailsComponent,
     NotFoundComponent,
     TitleComponent,
+    PaymentSuccessComponent,
+    PaymentFailedComponent,
+    PaymentPageComponent,
+    StripeComponent,
+   
   ],
   exports: [
     HeaderComponent,

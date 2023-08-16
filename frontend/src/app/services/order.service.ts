@@ -6,6 +6,7 @@ import {
   CREATE_ORDER_URL,
   GET_ORDER_URL,
   GET_SPECIFIC_ORDER_URL,
+  ORDER_NEW_FOR_CURRENT_USER_URL,
 } from '../shared/constants/urls';
 
 @Injectable({
@@ -26,6 +27,9 @@ export class OrderService {
       
   }
 
+  getNewOrderForCurrentUser(){
+    return this.http.get<any>(ORDER_NEW_FOR_CURRENT_USER_URL);
+  }
   cancelOrder(orderId: string) {
     return this.http.put<any>(CANCEL_ORDER_URL + orderId, orderId)
   }
