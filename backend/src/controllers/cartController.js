@@ -2,6 +2,62 @@ const catchAsyncError = require("../middlewares/catchAsyncError");
 const ErrorHandler = require("../utils/errorHandler");
 const productModel = require("../models/productModel");
 const cartModel = require("../models/cartModel");
+const  {getUserId}  = require("../utils/jwtToken");
+
+exports.addToCartFromLocalStorage = async (req, res) => {
+  let userId = getUserId();
+  let { cartItems } = req.body;
+  let userCart = await cartModel
+    .findOne({ userId })
+    .populate("cartItems.productId");
+  if (!userCart) {
+    let cartDetails = {
+      userId,
+      cartItems: cartItems,
+      totalPrice: req.body.totalPrice,
+      totalItems: req.body.totalItems,
+    };
+    let newCart = await cartModel.create(cartDetails);
+    return res
+      .status(201)
+      .send({ status: true, msg: "Items added to cart", cart: newCart });
+  } else {
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    userCart.cartItems.forEach((x) => {
+      let id = x.productId._id.toString();
+      cartItems.map((y) => {
+        if (y.productId._id === id) {
+          x.quantity += y.quantity;
+        } 
+      });
+    });
+
+    cartItems.forEach((secondItem) => {
+      const existingItem = userCart.cartItems.find(
+        (item) =>
+          item.productId._id.toString() === secondItem.productId._id.toString()
+      );
+
+      if (!existingItem) {
+        userCart.cartItems.push(secondItem);
+      }
+    });
+
+    userCart.cartItems.forEach((x) => {
+      totalItems += x.quantity;
+      totalPrice += x.quantity * x.productId.price;
+    });
+
+    userCart.cartItems = userCart.cartItems;
+    userCart.totalPrice = totalPrice;
+    userCart.totalItems = totalItems;
+    userCart.save();
+
+    return res.status(200).send({ cart: userCart });
+  }
+};
 
 // create a cart
 exports.createCart = catchAsyncError(async (req, res, next) => {
@@ -121,9 +177,11 @@ exports.updateCartById = catchAsyncError(async (req, res, next) => {
       userCart.totalPrice +
       (quantity * product.price - cartItem.quantity * product.price);
     cartItem.quantity = quantity;
-    let cart = await cartModel.findByIdAndUpdate(userCart._id, updatedCart, {
-      new: true,
-    }).populate("cartItems.productId");;
+    let cart = await cartModel
+      .findByIdAndUpdate(userCart._id, updatedCart, {
+        new: true,
+      })
+      .populate("cartItems.productId");
     return res
       .status(200)
       .send({ status: true, msg: "cart updated", cart: cart });

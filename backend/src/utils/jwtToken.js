@@ -1,3 +1,8 @@
+let localUser;
+ const getUserId = () => {
+  return localUser; 
+};
+
 // Create Token and saving in cookie
 const sendToken = (user, statusCode, res) => {
   let { accessToken, refreshToken } = user.getJWTToken();
@@ -7,7 +12,8 @@ const sendToken = (user, statusCode, res) => {
     expires: new Date(new Date().getTime() + 5 * 60 * 1000),
     httpOnly: true, // accessible only web server
   };
-
+  console.log(user._id)
+  localUser=user._id;
   res
     .status(statusCode)
     .cookie("refreshToken", refreshToken, options)
@@ -20,4 +26,4 @@ const sendToken = (user, statusCode, res) => {
     });
 };
 
-module.exports = sendToken;
+module.exports = {sendToken,getUserId};
