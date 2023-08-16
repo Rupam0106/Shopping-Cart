@@ -15,9 +15,7 @@ exports.createOrder = catchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler("User cart not found", 404));
   }
   if (cart.cartItems.length <= 0) {
-    return next(
-      new ErrorHandler("Cart Is Empty!", 400)
-    );
+    return next(new ErrorHandler("Cart Is Empty!", 400));
   }
   const filter = cart.cartItems.filter((x) => x.quantity > x.productId.stock);
   if (filter.length > 0) {
@@ -58,7 +56,7 @@ exports.createOrder = catchAsyncError(async (req, res, next) => {
   return res.status(200).send({ status: true, msg: "Order Done", userOrder });
 });
 
-exports.getOrder = catchAsyncError(async (req, res,next) => {
+exports.getOrder = catchAsyncError(async (req, res, next) => {
   let userId = req.user.id;
   let order = await orderModel
     .find({ userId, status: { $in: ["pending", "delivered"] } })
@@ -69,10 +67,11 @@ exports.getOrder = catchAsyncError(async (req, res,next) => {
   return res.status(200).send({ status: true, msg: "User order", order });
 });
 
-exports.getSpecificOrder = catchAsyncError(async (req, res,next) => {
+exports.getSpecificOrder = catchAsyncError(async (req, res, next) => {
   let orderId = req.params.orderId;
   let order = await orderModel
-    .findById(orderId).populate("orderDetails.products.productId");
+    .findById(orderId)
+    .populate("orderDetails.products.productId");
   return res.status(200).send({ status: true, order });
 });
 
@@ -177,4 +176,15 @@ exports.updatedOrder = catchAsyncError(async (req, res, next) => {
       .status(200)
       .send({ status: true, msg: "product cancled", updatedOrder });
   }
+});
+
+exports.getOrderOfCurrentUser = catchAsyncError(async (req, res, next) => {
+  let userId = req.user.id;
+  let order = await orderModel
+    .find({ userId })
+    .populate("orderDetails.products.productId");
+  if (!order) {
+    return next(new ErrorHandler("Not completed any order", 404));
+  }
+  return res.status(200).send({ status: true, msg: "User order", order });
 });

@@ -12,7 +12,6 @@ const sendToken = (user, statusCode, res) => {
     expires: new Date(new Date().getTime() + 5 * 60 * 1000),
     httpOnly: true, // accessible only web server
   };
-  console.log(user._id)
   localUser=user._id;
   res
     .status(statusCode)
