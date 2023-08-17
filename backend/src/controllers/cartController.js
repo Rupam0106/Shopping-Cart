@@ -54,7 +54,6 @@ exports.addToCartFromLocalStorage = async (req, res) => {
     userCart.totalPrice = totalPrice;
     userCart.totalItems = totalItems;
     userCart.save();
-
     return res.status(200).send({ cart: userCart });
   }
 };
@@ -75,6 +74,7 @@ exports.createCart = catchAsyncError(async (req, res, next) => {
       .status(400)
       .send({ status: false, msg: "item is not currently available" });
   }
+
   let userCart = await cartModel.findOne({ userId: userId });
   if (!userCart) {
     let items = [{ productId, quantity: 1 }];
@@ -84,6 +84,7 @@ exports.createCart = catchAsyncError(async (req, res, next) => {
       totalPrice: validProduct.price,
       totalItems: 1,
     };
+
     let newCart = await cartModel.create(cartDetails);
     return res
       .status(201)
@@ -118,6 +119,7 @@ exports.createCart = catchAsyncError(async (req, res, next) => {
       let updatedCart = await cartModel.findByIdAndUpdate(userCart._id, cart, {
         new: true,
       });
+
       return res
         .status(200)
         .send({ status: true, msg: "Item added to cart", cart: updatedCart });
@@ -167,6 +169,7 @@ exports.updateCartById = catchAsyncError(async (req, res, next) => {
         { new: true }
       )
       .populate("cartItems.productId");
+      
     return res
       .status(200)
       .send({ status: true, msg: "cart updated", cart: cart });

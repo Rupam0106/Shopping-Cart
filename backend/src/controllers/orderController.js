@@ -7,59 +7,134 @@ const cartModel = require("../models/cartModel");
 // create order
 exports.createOrder = catchAsyncError(async (req, res, next) => {
   let userId = req.user.id;
-  let { name, phone, house, street, city, state, pincode } = req.body;
-  let cart = await cartModel
-    .findOne({ userId: userId })
-    .populate("cartItems.productId", "stock");
-  if (!cart) {
-    return next(new ErrorHandler("User cart not found", 404));
-  }
-  if (cart.cartItems.length <= 0) {
-    return next(new ErrorHandler("Cart Is Empty!", 400));
-  }
-  const filter = cart.cartItems.filter((x) => x.quantity > x.productId.stock);
-  if (filter.length > 0) {
-    return next(new ErrorHandler("Out of Stock", 400));
-  }
-  let order = {
-    userId,
-    orderDetails: {
-      totalItems: cart.totalItems,
-      totalPrice: cart.totalPrice,
-      products: cart.cartItems,
-    },
-    shippingDetails: {
-      name,
-      phone,
-      address: {
-        house,
-        street,
-        city,
-        state,
-        pincode,
+  if (userId) {
+    let { name, phone, house, street, city, state, pincode } = req.body.form;
+    let cart = await cartModel
+      .findOne({ userId: userId })
+      .populate("cartItems.productId", "stock");
+    if (!cart) {
+      return next(new ErrorHandler("User cart not found", 404));
+    }
+    if (cart.cartItems.length <= 0) {
+      return next(new ErrorHandler("Cart Is Empty!", 400));
+    }
+    const filter = cart.cartItems.filter((x) => x.quantity > x.productId.stock);
+    if (filter.length > 0) {
+      return next(new ErrorHandler("Out of Stock", 400));
+    }
+    let order = {
+      userId,
+      orderDetails: {
+        totalItems: cart.totalItems,
+        totalPrice: cart.totalPrice,
+        products: cart.cartItems,
       },
-    },
-  };
-  let userOrder = await orderModel.create(order);
-  cart.cartItems.forEach(async (item) => {
-    await productModel.findByIdAndUpdate(
-      item.productId._id,
-      { $inc: { stock: -item.quantity } },
+      shippingDetails: {
+        name,
+        phone,
+        address: {
+          house,
+          street,
+          city,
+          state,
+          pincode,
+        },
+      },
+    };
+    let userOrder = await orderModel.create(order);
+    cart.cartItems.forEach(async (item) => {
+      await productModel.findByIdAndUpdate(
+        item.productId._id,
+        { $inc: { stock: -item.quantity } },
+        { new: true }
+      );
+    });
+    await cartModel.findByIdAndUpdate(
+      cart._id,
+      { $set: { cartItems: [], totalItems: 0, totalPrice: 0 } },
       { new: true }
     );
-  });
-  await cartModel.findByIdAndUpdate(
-    cart._id,
-    { $set: { cartItems: [], totalItems: 0, totalPrice: 0 } },
-    { new: true }
-  );
-  return res.status(200).send({ status: true, msg: "Order Done", userOrder });
+    cart.cartItems.forEach(async (item) => {
+      await productModel.findByIdAndUpdate(
+        item.productId._id,
+        { $inc: { stock: -item.quantity } },
+        { new: true }
+      );
+    });
+
+    return res.status(200).send({ status: true, msg: "Order Done", userOrder });
+  } else {
+    let cart = await cartModel
+      .findOne({ userId: userId })
+      .populate("cartItems.productId", "stock");
+    if (!cart) {
+      return res
+        .status(404)
+        .send({ status: false, msg: "User cart not found" });
+    }
+    if (cart.cartItems.length <= 0) {
+      if (cartItems.length <= 0) {
+        return res.status(400).send({
+          status: false,
+          msg: "Please add some items in cart to place order",
+        });
+      }
+      const filterProduct = cartItems.filter(
+        (x) => x.quantity > x.productId.stock
+      );
+      if (filterProduct.length > 0) {
+        return res.status(400).send({
+          status: false,
+          msg: "Products are Out of Stock",
+          filterProduct,
+        });
+      }
+      let order = {
+        userId,
+        orderDetails: {
+          totalItems: cart.totalItems,
+          totalPrice: cart.totalPrice,
+          products: cart.cartItems,
+          totalItems: totalItems,
+          totalPrice: totalPrice,
+          products: cartItems,
+        },
+        shippingDetails: {
+          name,
+          phone,
+          address: {
+            house,
+            street,
+            city,
+            state,
+            pincode,
+          },
+        },
+      };
+      let userOrder = await orderModel.create(order);
+      cart.cartItems.forEach(async (item) => {
+        await productModel.findByIdAndUpdate(
+          item.productId._id,
+          { $inc: { stock: -item.quantity } },
+          { new: true }
+        );
+      });
+      await cartModel.findByIdAndUpdate(
+        cart._id,
+        { $set: { cartItems: [], totalItems: 0, totalPrice: 0 } },
+        { new: true }
+      );
+      return res
+        .status(200)
+        .send({ status: true, msg: "Order Done", userOrder });
+    }
+  }
 });
 
 exports.getOrder = catchAsyncError(async (req, res, next) => {
   let userId = req.user.id;
   let order = await orderModel
-    .find({ userId, status: { $in: ["pending", "delivered"] } })
+    .find({ userId, status: { $in: ["pending", "delivered","payed","canceled"] } })
     .populate("orderDetails.products.productId");
   if (!order) {
     return next(new ErrorHandler("Not completed any order", 404));
@@ -150,7 +225,7 @@ exports.updatedOrder = catchAsyncError(async (req, res, next) => {
   await product.save();
   const updatedData = {};
 
-  // if no products left after filteration
+  // if no products left after Filter
   if (filteredProducts.length === 0) {
     (updatedData.products = filteredProducts),
       (updatedData.totalItems = userOrder.orderDetails.totalItems - 1),
