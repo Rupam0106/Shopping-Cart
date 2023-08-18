@@ -7,8 +7,8 @@ const cartModel = require("../models/cartModel");
 // create order
 exports.createOrder = catchAsyncError(async (req, res, next) => {
   let userId = req.user.id;
+  let { name, phone, house, street, city, state, pincode } = req.body.form;
   if (userId) {
-    let { name, phone, house, street, city, state, pincode } = req.body.form;
     let cart = await cartModel
       .findOne({ userId: userId })
       .populate("cartItems.productId", "stock");
@@ -70,7 +70,7 @@ exports.createOrder = catchAsyncError(async (req, res, next) => {
       if (cartItems.length <= 0) {
         return res.status(400).send({
           status: false,
-          msg: "Please add some items in cart to place order",
+          msg: "Please Add items in cart to place order",
         });
       }
       const filterProduct = cartItems.filter(
@@ -133,9 +133,11 @@ exports.getOrder = catchAsyncError(async (req, res, next) => {
       status: { $in: ["pending", "delivered", "payed", "canceled"] },
     })
     .populate("orderDetails.products.productId");
+    
   if (!order) {
     return next(new ErrorHandler("Not completed any order", 404));
   }
+
   return res.status(200).send({ status: true, msg: "User order", order });
 });
 
@@ -157,8 +159,8 @@ exports.cancelOrder = catchAsyncError(async (req, res, next) => {
   }
 
   let userOrder = await orderModel.findById(orderId);
-
-  if (userOrder.status !== "pending") {
+console.log(userOrder)
+  if (userOrder.status !=="payed") {
     return res
       .status(400)
       .send({ status: false, msg: "Order cannot be cancel" });
