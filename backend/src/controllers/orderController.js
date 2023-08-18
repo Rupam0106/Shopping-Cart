@@ -20,7 +20,7 @@ exports.createOrder = catchAsyncError(async (req, res, next) => {
     }
     const filter = cart.cartItems.filter((x) => x.quantity > x.productId.stock);
     if (filter.length > 0) {
-      return next(new ErrorHandler("Out of Stock", 400));
+      return next(new ErrorHandler("Out of Stock",400));
     }
     let order = {
       userId,
@@ -49,18 +49,12 @@ exports.createOrder = catchAsyncError(async (req, res, next) => {
         { new: true }
       );
     });
+
     await cartModel.findByIdAndUpdate(
       cart._id,
       { $set: { cartItems: [], totalItems: 0, totalPrice: 0 } },
       { new: true }
     );
-    cart.cartItems.forEach(async (item) => {
-      await productModel.findByIdAndUpdate(
-        item.productId._id,
-        { $inc: { stock: -item.quantity } },
-        { new: true }
-      );
-    });
 
     return res.status(200).send({ status: true, msg: "Order Done", userOrder });
   } else {
@@ -134,7 +128,10 @@ exports.createOrder = catchAsyncError(async (req, res, next) => {
 exports.getOrder = catchAsyncError(async (req, res, next) => {
   let userId = req.user.id;
   let order = await orderModel
-    .find({ userId, status: { $in: ["pending", "delivered","payed","canceled"] } })
+    .find({
+      userId,
+      status: { $in: ["pending", "delivered", "payed", "canceled"] },
+    })
     .populate("orderDetails.products.productId");
   if (!order) {
     return next(new ErrorHandler("Not completed any order", 404));

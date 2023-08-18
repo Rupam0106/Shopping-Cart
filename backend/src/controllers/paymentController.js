@@ -17,8 +17,8 @@ exports.createPayment = catchAsyncError(async (req, res, next) => {
       quantity: item.quantity,
     })),
     mode: "payment",
-    success_url: process.env.SUCCESS_URL,
-    cancel_url: process.env.FAILED_URL,
+    success_url: `${process.env.HOST_NAME}/success`,
+    cancel_url: `${process.env.HOST_NAME}/failed`,
   });
   if (req.body.form.email) {
     let order = await orderModel.findOne({
@@ -71,6 +71,8 @@ exports.paymentStatus = catchAsyncError(async (req, res, next) => {
 
 exports.trackOrder = catchAsyncError(async (req, res, next) => {
   const orderId = req.params.id;
-  const order = await orderModel.findById(orderId).populate('orderDetails.products.productId');
+  const order = await orderModel
+    .findById(orderId)
+    .populate("orderDetails.products.productId");
   res.status(200).json({ order: order });
 });
