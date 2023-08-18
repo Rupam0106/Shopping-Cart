@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="content" *ngIf="order">
+    <h1>OrderID #{{ order._id }}</h1>
+    <div class="details">
+      <div><strong>Date</strong> {{ order.createdAt | date : "medium" }}</div>
+      <div><strong>Name</strong> {{ order.shippingDetails.name }}</div>
+      <div>
+        <strong>Address</strong> {{ order.shippingDetails.address.state }}
+      </div>
+      <div><strong>Status</strong> {{ order.status }}</div>
+      <div *ngIf="order.paymentId">
+        <strong>Payment ID</strong> {{ order.paymentId }}
+      </div>
+    </div>
+
+    <table>
+      <tr>
+        <td colspan="5">
+          <h3>Order Items:</h3>
+        </td>
+      </tr>
+      <tr *ngFor="let item of order.orderDetails.products">
+        <td>
+          <a routerLink="/product/{{ item._id }}">
+            <img [src]="item.productId.productImage" />
+          </a>
+        </td>
+        <td>
+          {{ item.productId.title }}
+        </td>
+        <td>
+          <i class="bi bi-currency-rupee"></i>
+          {{ item.productId.price }}
+        </td>
+        <td>
+          {{ item.quantity }}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3"></td>
+        <td>
+          <strong> Total : </strong>
+        </td>
+        <td>
+          <strong>
+            <i class="bi bi-currency-rupee"></i>
+            {{ order.orderDetails.totalPrice }}
+          </strong>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

@@ -140,13 +140,7 @@
         <span>Total :</span>
         <span>{{ cartDetails.totalPrice }}</span>
       </div>
-      <button
-        class="order btn btn-info"
-        routerLink="/user/order/summery"
-        [disabled]="!this.form.valid"
-      >
-        Order
-      </button>
+      <app-stripe [order]="cartDetails" [form]="form.value"></app-stripe>
     </div>
   </div>
 </div>

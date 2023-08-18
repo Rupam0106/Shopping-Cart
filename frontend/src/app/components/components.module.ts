@@ -25,8 +25,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { TitleComponent } from './partials/title/title.component';
 import { PaymentSuccessComponent } from './partials/payment-success/payment-success.component';
 import { PaymentFailedComponent } from './partials/payment-failed/payment-failed.component';
-import { PaymentPageComponent } from './pages/payment-page/payment-page.component';
 import { StripeComponent } from './partials/stripe/stripe.component';
+import { TrackPageComponent } from './partials/track-page/track-page.component';
+
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -49,8 +50,8 @@ import { StripeComponent } from './partials/stripe/stripe.component';
     TitleComponent,
     PaymentSuccessComponent,
     PaymentFailedComponent,
-    PaymentPageComponent,
     StripeComponent,
+    TrackPageComponent,
    
   ],
   exports: [
@@ -60,6 +61,7 @@ import { StripeComponent } from './partials/stripe/stripe.component';
     ProductsComponent,
     LoadingComponent,
   ],
+  
   imports: [
     CommonModule,
     AppRoutingModule,

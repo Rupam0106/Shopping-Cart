@@ -1,11 +1,6 @@
-import { PaymentService } from './../../../services/payment.service';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { CartService } from 'src/app/services/cart.service';
-import { OrderService } from 'src/app/services/order.service';
-
 import { states } from 'src/app/state';
 
 @Component({
@@ -15,26 +10,24 @@ import { states } from 'src/app/state';
 })
 export class CheckoutComponent {
   paymentHandler: any;
-  constructor(
-    private router: Router,
-    private toastr: ToastrService,
-    private cartService: CartService,
-    private orderService: OrderService,
-    private paymentService: PaymentService
-  ) {}
+  cartItems: any[] = [];
+  constructor(private router: Router) {}
   cartDetails: any;
   states: string[] = states;
 
   ngOnInit(): void {
-    // this.invokeStripe();
-
     if (localStorage.getItem('token')) {
     } else {
       this.router.navigate(['/login']);
     }
-    this.cartService.getCartData().subscribe((data) => {
-      this.cartDetails = data;
-    });
+    let cart = localStorage.getItem('cart');
+    if (cart) {
+      this.cartDetails = JSON.parse(cart);
+      this.cartItems = this.cartDetails.cartItems;
+      if (!this.cartDetails.cartItems.length) {
+        this.router.navigate(['/user/order/checkout']);
+      }
+    } 
   }
 
   form = new FormGroup({
@@ -77,22 +70,5 @@ export class CheckoutComponent {
   }
   get pincode() {
     return this.form.get('pincode');
-  }
-
-  placeOrder() {
-    if (this.form.errors) {
-      return;
-    } else {
-      this.orderService.orderPlace(this.form.value).subscribe((data: any) => {
-        if (data) {
-          localStorage.removeItem('cart');
-          this.cartService.getUserCart();
-          this.toastr.success(data.msg);
-          setTimeout(() => {
-            this.router.navigate(['/user/order']);
-          }, 1500);
-        }
-      });
-    }
   }
 }

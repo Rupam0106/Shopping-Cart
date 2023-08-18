@@ -9,7 +9,8 @@ import { ProductsService } from 'src/app/services/products.service';
   styleUrls: ['./product-details.component.css'],
 })
 export class ProductDetailsComponent {
-  product: any='';
+  product: any = '';
+  loading: any = false;
 
   constructor(
     activatedRoute: ActivatedRoute,
@@ -25,7 +26,6 @@ export class ProductDetailsComponent {
   }
 
   addToCart() {
-    this.cart.addToCart(this.product)
+    this.cart.addToCart(this.product);
   }
-  
 }

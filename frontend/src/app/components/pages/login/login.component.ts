@@ -1,6 +1,7 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,8 @@ export class LoginComponent {
   constructor(
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cartService:CartService
   ) {
     this.userService.userReload();
   }
@@ -27,5 +29,9 @@ export class LoginComponent {
   }
   ngOnInit() {
     this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'];
+  }
+
+  gestLogin(){
+    this.cartService.storeLocalCart();
   }
 }

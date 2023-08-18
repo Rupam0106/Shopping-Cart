@@ -1,11 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
-import { ToastrService } from 'ngx-toastr';
-import { CartService } from 'src/app/services/cart.service';
 import { OrderService } from 'src/app/services/order.service';
+import { PaymentService } from 'src/app/services/payment.service';
 import {
-  CREATE_PAYMENT_URL,
   PUBLISHABLE_KEY,
 } from 'src/app/shared/constants/urls';
 
@@ -17,31 +14,28 @@ import {
 export class StripeComponent {
   @Input()
   order!: any;
+  
+  @Input()
+  form!: any;
+
+  handler: any;
 
   constructor(
-    private toastr: ToastrService,
-    private cartService: CartService,
-    private http: HttpClient,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private paymentService: PaymentService
   ) {}
   onPayment() {
-    console.log('order', this.order);
-    this.orderService.orderPlace(this.order[0].shippingDetails).subscribe();
-    const response = this.http
-      .post(CREATE_PAYMENT_URL, {
-        itmes: this.order[0].shippingDetails.address,
-      })
+    this.orderService.orderPlace(this.form, this.order).subscribe((res) => {});
+    this.paymentService
+      .payment(this.order, this.form)
       .subscribe(async (res: any) => {
-        let stripe = await loadStripe(PUBLISHABLE_KEY);
+        let stripe = await loadStripe(
+          PUBLISHABLE_KEY
+        );
         localStorage.setItem('paymentResponse', JSON.stringify(res));
-        console.log('paymentResponse', stripe);
-
         stripe?.redirectToCheckout({
           sessionId: res.id,
         });
       });
-
-    localStorage.removeItem('cart');
-    this.cartService.storeLocalCart();
   }
 }

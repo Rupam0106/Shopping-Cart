@@ -14,9 +14,7 @@ export class AdminService {
     private http: HttpClient,
     private toastr: ToastrService,
     private router: Router
-  ) {
-    
-  }
+  ) {}
 
   addProduct(addProduct: any): Observable<any> {
     return this.http.post<any>(ADD_PRODUCT_URL, addProduct).pipe(

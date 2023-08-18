@@ -1,9 +1,9 @@
+import { OrderService } from './../../../services/order.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/shared/models/User';
 
 @Component({
   selector: 'header',
@@ -16,15 +16,17 @@ export class HeaderComponent {
   user: any = '';
   count: number = 0;
   getCartDataSub!: Subscription;
-
+  order: any;
   constructor(
     private route: Router,
     private userService: UserService,
-    private cartService: CartService
+    private cartService: CartService,
+    private orderService: OrderService
   ) {
     let cart = localStorage.getItem('cart');
     if (cart) {
       this.count = JSON.parse(cart).totalItems;
+
       this.cartService.getCartData().subscribe((data: any) => {
         if (data.totalItems) {
           this.count = data.totalItems;
@@ -55,13 +57,20 @@ export class HeaderComponent {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.cartService.getCartData().subscribe((data: any) => {
+      if (data.totalItems) {
+        this.count = data.totalItems;
+      }
+    });
+  }
 
   adminLogout() {
     this.userService.logout().subscribe();
   }
 
   userLogout() {
+    this.count = 0;
     this.userService.logout().subscribe();
   }
 

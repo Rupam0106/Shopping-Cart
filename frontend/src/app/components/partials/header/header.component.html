@@ -7,6 +7,7 @@
       <div *ngIf="user" class="navbar-nav">
         <a routerLink="/products" class="nav-item nav-link">Shop</a>
       </div>
+
       <div *ngIf="admin" class="navbar-nav">
         <a routerLink="/admin/home" class="nav-item nav-link active"
           >Products</a
@@ -17,11 +18,7 @@
         <div *ngSwitchCase="'default'" class="navbar-nav ms-auto">
           <a routerLink="/login" class="nav-item nav-link">Login</a>
           <a routerLink="/register" class="nav-item nav-link">Sign-Up</a>
-          <a
-           
-            class="nav-item nav-link"
-            routerLink="/user/cart/create"
-          >
+          <a class="nav-item nav-link" routerLink="/user/cart/create">
             <mat-icon matBadge="{{ count }}" matBadgeColor="warn"
               ><i class="bi bi-bag-check"></i></mat-icon
           ></a>
@@ -41,10 +38,7 @@
           <a routerLink="/user/me" class="nav-item nav-link">
             <i class="bi bi-person-circle" style="font-size: 1.6rem"></i>
           </a>
-          <a
-            class="nav-item nav-link"
-            routerLink="/user/cart/create"
-          >
+          <a class="nav-item nav-link" routerLink="/user/cart/create">
             <mat-icon matBadge="{{ count }}" matBadgeColor="warn"
               ><i class="bi bi-bag-check"></i></mat-icon
           ></a>
@@ -72,11 +66,7 @@
             <button mat-menu-item>
               <a routerLink="/login" class="nav-item nav-link">Login</a>
               <a routerLink="/register" class="nav-item nav-link">Sign-Up</a>
-              <a
-               
-                class="nav-item nav-link"
-                routerLink="/user/cart/create"
-              >
+              <a class="nav-item nav-link" routerLink="/user/cart/create">
                 <mat-icon matBadge="{{ count }}" matBadgeColor="warn"
                   ><i class="bi bi-bag-check"></i></mat-icon
               ></a>
@@ -103,16 +93,13 @@
               <a routerLink="/user/me" class="nav-item nav-link">
                 <i class="bi bi-person-circle" style="font-size: 1.6rem"></i>
               </a>
-              <a
-                
-                class="nav-item nav-link"
-                routerLink="/user/cart/create"
-              >
+              <a class="nav-item nav-link" routerLink="/user/cart/create">
                 <mat-icon matBadge="{{ count }}" matBadgeColor="warn"
                   ><i class="bi bi-bag-check"></i></mat-icon
               ></a>
-              <a routerLink="/user/orders" class="nav-item nav-link">My Orders</a>
-
+              <a routerLink="/user/orders" class="nav-item nav-link"
+                >My Orders</a
+              >
               <button (click)="userLogout()" class="nav-item nav-link">
                 <i class="bi bi-box-arrow-right" style="font-size: 1.6rem"></i>
               </button>

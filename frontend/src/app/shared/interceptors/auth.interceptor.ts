@@ -34,10 +34,10 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       tap({
         next: (user: any) => {
-          if (user.status === 200 || 201 || 500) {
-          } else {
+          if (user.status === 401) {
             localStorage.clear();
             this.router.navigate(['/login']);
+          } else {
           }
         },
         error: () => {

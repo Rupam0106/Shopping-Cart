@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { Cart } from 'src/app/shared/models/Cart';
 
@@ -8,6 +9,7 @@ import { Cart } from 'src/app/shared/models/Cart';
   styleUrls: ['./cart-page.component.css'],
 })
 export class CartPageComponent {
+  getCartDataSub!: Subscription;
   cartDetails: any;
   productQuantity: number = 1;
   cartItems: any[] = [];
@@ -68,5 +70,9 @@ export class CartPageComponent {
       }
       localStorage.setItem('cart', JSON.stringify(this.cartDetails));
     });
+  }
+
+  ngOnDestroy() {
+    this.getCartDataSub && this.getCartDataSub.unsubscribe();
   }
 }

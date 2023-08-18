@@ -1,6 +1,7 @@
-<h1 class="d-flex justify-content-center mt-4" >Product Details</h1>
+<app-title title="Product Details" fontSize="1.6rem"></app-title>
 <div
-  class=" d-flex flex-column flex-md-row justify-content-evenly align-items-center w-100" style="height: 29.75rem" 
+  class="d-flex flex-column flex-md-row justify-content-evenly align-items-center w-100"
+  style="height: 29.75rem"
 >
   <div *ngIf="product">
     <img
@@ -15,12 +16,18 @@
       <strong>Description :</strong> {{ product.description }}
     </div>
 
-    <div class="mb-3">
-      <strong>Price :</strong>{{ product.price}}
-    </div>
+    <div class="mb-3"><strong>Price :</strong>{{ product.price }}</div>
 
     <div>
-      <button class="btn btn-info" aria-hidden="true" (click)="addToCart()">Add To Cart</button>
+      <button class="btn btn-info" [disabled]="loading" (click)="addToCart()">
+        Add to Cart
+        <span
+          *ngIf="loading"
+          class="spinner-border spinner-border-sm"
+          aria-hidden="true"
+        ></span>
+        <i *ngIf="!loading" class="bi bi-cart"></i>
+      </button>
     </div>
   </div>
 </div>

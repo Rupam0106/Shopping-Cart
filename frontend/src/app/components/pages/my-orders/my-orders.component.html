@@ -13,9 +13,12 @@
       >
         <div class="d-flex flex-row gap-2">
           <img
+            routerLink="/product/{{
+              order.orderDetails.products[0].productId._id
+            }}"
             src="{{ order.orderDetails.products[0].productId.productImage }}"
             alt=""
-            style="height: 4rem; width: 4rem"
+            style="height: 4rem; width: 4rem;cursor: pointer;"
           />
           <div class="d-flex flex-column w-50">
             <h5 class="card-title">
@@ -48,12 +51,13 @@
             [class.text-bg-danger]="order.status === 'cancled'"
             [class.text-bg-warning]="order.status === 'pending'"
             [class.text-bg-success]="order.status === 'delivered'"
+            [class.text-bg-success]="order.status === 'payed'"
           >
             {{ order.status }}
           </span>
           <button
             class="mt-2 btn btn-sm btn-info"
-            *ngIf="order.status === 'pending'"
+            *ngIf="order.status === 'payed' ||'pending' || 'delivered'||'cancled' "
             title="View Details"
             [routerLink]="['/user/order/details/', order._id]"
           >

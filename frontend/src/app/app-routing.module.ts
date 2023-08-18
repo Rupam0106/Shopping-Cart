@@ -21,7 +21,7 @@ import { AdminOrdersComponent } from './admin/admin-orders/admin-orders.componen
 import { NotFoundComponent } from './components/partials/not-found/not-found.component';
 import { PaymentSuccessComponent } from './components/partials/payment-success/payment-success.component';
 import { PaymentFailedComponent } from './components/partials/payment-failed/payment-failed.component';
-import { PaymentPageComponent } from './components/pages/payment-page/payment-page.component';
+import { TrackPageComponent } from './components/partials/track-page/track-page.component';
 
 const routes: Routes = [
   {
@@ -62,10 +62,6 @@ const routes: Routes = [
     component: CartPageComponent,
   },
   {
-    path: 'user/cart/update',
-    component: CartPageComponent,
-  },
-  {
     path: 'user/orders',
     component: MyOrdersComponent,
     canActivate: [authGuard],
@@ -73,12 +69,6 @@ const routes: Routes = [
   {
     path: 'user/order/checkout',
     component: CheckoutComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'user/order/summery',
-    component: PaymentPageComponent,
-    canActivate: [authGuard],
   },
   {
     path: 'user/order/details/:orderId',
@@ -88,11 +78,14 @@ const routes: Routes = [
   {
     path: 'user/order/payment/success',
     component: PaymentSuccessComponent,
-    canActivate: [authGuard],
   },
   {
     path: 'user/order/payment/failed',
     component: PaymentFailedComponent,
+  },
+  {
+    path: 'user/order/payment/track/:orderId',
+    component: TrackPageComponent,
     canActivate: [authGuard],
   },
   {

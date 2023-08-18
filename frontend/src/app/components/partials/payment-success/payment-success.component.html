@@ -1,6 +1,11 @@
 <div class="payment-container">
-    <div class="icon">&#x2714;</div>
-    <h2>Payment Successful</h2>
-    <p>Your payment has been successfully processed.</p>
-    <button class="back-button" routerLink="/">Back to Home</button>
+  <div class="icon">&#x2714;</div>
+  <h2>Payment Successful</h2>
+  <p>Your payment has been successfully processed.</p>
+  <button
+    class="back-button"
+    [routerLink]="['/user/orders',order]"
+  >
+    Go to OrderDetails
+  </button>
 </div>

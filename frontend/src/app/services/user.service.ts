@@ -31,7 +31,7 @@ export class UserService {
     private toastr: ToastrService,
     private router: Router,
     private cookieService: CookieService,
-    private cartService:CartService
+    private cartService: CartService
   ) {
     this.userObservable = this.userSubject.asObservable();
   }
@@ -49,6 +49,7 @@ export class UserService {
           this.cookieService.set('refreshToken', user.refreshToken);
           this.cartService.storeLocalCart();
           this.userSubject.next(user);
+          this.cartService.getUserCart();
           this.toastr.success(
             `Welcome to the R-Shop ${user.user.name}`,
             'Register Successful'
@@ -69,13 +70,14 @@ export class UserService {
         next: (user: any) => {
           if (user.user.role === 'user') {
             this.setUserToLocalStorage('user', user);
-            this.setUserToLocalStorage('token',user.accessToken);
+            this.setUserToLocalStorage('token', user.accessToken);
           } else {
             this.setUserToLocalStorage('admin', user);
             this.setUserToLocalStorage('token', user.accessToken);
           }
           this.cartService.storeLocalCart();
           this.userSubject.next(user);
+          this.cartService.getUserCart();
           this.cookieService.set('refreshToken', user.refreshToken);
           this.toastr.success(` Welome ${user.user.name}!`, 'Login Successful');
           this.invalidUserAuth.emit(false);
@@ -93,7 +95,7 @@ export class UserService {
 
   userReload() {
     if (localStorage.getItem('user') || localStorage.getItem('admin')) {
-      // this.router.navigate(['/']);
+      this.router.navigate(['/']);
     }
   }
 
@@ -122,10 +124,9 @@ export class UserService {
             'Password Updated Successfully',
             'Reset Password'
           );
-          this.router.navigate(['/']);
+          this.router.navigate(['/login']);
         },
         error: (errorResponse) => {
-          console.log(errorResponse);
           this.toastr.error(errorResponse.error.message, 'Reset Failed');
           this.router.navigate(['/user/password/forgot']);
         },
@@ -137,22 +138,13 @@ export class UserService {
     return this.http.get<User>(LOGOUT_URL).pipe(
       tap({
         next: (user: any) => {
-          if (localStorage.getItem('user')) {
-            localStorage.removeItem('user');
-          } else {
-            localStorage.removeItem('admin');
-          }
           localStorage.clear();
           this.toastr.success(user.message, 'Logged-out Successful');
           this.cookieService.deleteAll();
-          window.location.reload();
           this.router.navigate(['/login']);
         },
         error: (errorResponse) => {
-          this.toastr.error(
-            errorResponse.error.message,
-            'Logged-out Successful Failed'
-          );
+          this.toastr.error(errorResponse.error.message, 'Logged-out Failed');
         },
       })
     );
@@ -179,7 +171,6 @@ export class UserService {
         next: (user: any) => {
           this.toastr.success(user.message, 'User!');
           localStorage.clear();
-          window.location.reload();
           this.router.navigate(['/login']);
         },
         error: (errorResponse) => {

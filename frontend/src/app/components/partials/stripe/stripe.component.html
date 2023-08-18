@@ -1,4 +1,8 @@
-<div class="button">
-
-    <button #stripe (click)="onPayment()">Proceed to pay</button>
-</div>
+<button
+  [disabled]="form.status === 'INVALID'"
+  class="btn btn-info"
+  #paypal
+  (click)="onPayment()"
+>
+  <span>Proceed to pay</span>
+</button>

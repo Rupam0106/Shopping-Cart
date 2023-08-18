@@ -36,6 +36,5 @@ export class RegisterComponent {
 
   ngOnInit() {
     this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'];
-    console.log(this.returnUrl)
   }
 }

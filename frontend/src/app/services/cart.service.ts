@@ -1,3 +1,4 @@
+import { Product } from './../shared/models/Product';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Cart } from '../shared/models/Cart';
@@ -139,7 +140,7 @@ export class CartService {
           localStorage.setItem('cart', JSON.stringify(localCart));
           return this.cartDataSubject.next(localCart);
         }
-        // IF USER DECREASE THE QUANTITY
+        // IF USER INCREASE THE QUANTITY
         else if (quantity > product.quantity) {
           product.quantity += 1;
           localCart.totalItems += 1;
