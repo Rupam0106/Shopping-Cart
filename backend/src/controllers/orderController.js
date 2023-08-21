@@ -20,7 +20,7 @@ exports.createOrder = catchAsyncError(async (req, res, next) => {
     }
     const filter = cart.cartItems.filter((x) => x.quantity > x.productId.stock);
     if (filter.length > 0) {
-      return next(new ErrorHandler("Out of Stock",400));
+      return next(new ErrorHandler("Out of Stock", 400));
     }
     let order = {
       userId,
@@ -133,9 +133,9 @@ exports.getOrder = catchAsyncError(async (req, res, next) => {
       status: { $in: ["pending", "delivered", "payed", "canceled"] },
     })
     .populate("orderDetails.products.productId");
-    
+
   if (!order) {
-    return next(new ErrorHandler("Not completed any order", 404));
+    return next(new ErrorHandler("You Don't have any order", 404));
   }
 
   return res.status(200).send({ status: true, msg: "User order", order });
@@ -159,8 +159,7 @@ exports.cancelOrder = catchAsyncError(async (req, res, next) => {
   }
 
   let userOrder = await orderModel.findById(orderId);
-console.log(userOrder)
-  if (userOrder.status !=="payed") {
+  if (userOrder.status !== "payed") {
     return res
       .status(400)
       .send({ status: false, msg: "Order cannot be cancel" });

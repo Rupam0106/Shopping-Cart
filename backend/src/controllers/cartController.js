@@ -2,7 +2,7 @@ const catchAsyncError = require("../middlewares/catchAsyncError");
 const ErrorHandler = require("../utils/errorHandler");
 const productModel = require("../models/productModel");
 const cartModel = require("../models/cartModel");
-const  {getUserId}  = require("../utils/jwtToken");
+const { getUserId } = require("../utils/jwtToken");
 
 exports.addToCartFromLocalStorage = async (req, res) => {
   let userId = getUserId();
@@ -30,7 +30,7 @@ exports.addToCartFromLocalStorage = async (req, res) => {
       cartItems.map((y) => {
         if (y.productId._id === id) {
           x.quantity += y.quantity;
-        } 
+        }
       });
     });
 
@@ -169,7 +169,7 @@ exports.updateCartById = catchAsyncError(async (req, res, next) => {
         { new: true }
       )
       .populate("cartItems.productId");
-      
+
     return res
       .status(200)
       .send({ status: true, msg: "cart updated", cart: cart });
@@ -195,11 +195,11 @@ exports.updateCartById = catchAsyncError(async (req, res, next) => {
 exports.getCartById = catchAsyncError(async (req, res, next) => {
   const userId = req.user.id;
   const cart = await cartModel
-    .findOne({ userId })
+    .findOne({ userId: userId })
     .populate("cartItems.productId");
-  if (!cart) {
-    return next(new ErrorHandler(`Cart dose not found for this user!`, 404));
-  }
+  // if (!cart) {
+  //   return next(new ErrorHandler(`Cart dose not found for this user!`, 404));
+  // }
   res.status(200).json({
     status: true,
     message: "Success",

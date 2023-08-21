@@ -72,6 +72,16 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
   });
 });
 
+//search product
+exports.searchProduct = catchAsyncError(async (req, res, next) => {
+  const searchRegex = new RegExp(req.params.searchTerm, "i");
+  const products = await productModel.find({ title: { $regex: searchRegex } });
+  res.status(200).json({
+    success: true,
+    products,
+  });
+});
+
 //delete product
 exports.deleteProduct = catchAsyncError(async (req, res, next) => {
   const product = await productModel.findByIdAndDelete(req.params.id);

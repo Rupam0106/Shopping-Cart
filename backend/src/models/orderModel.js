@@ -23,6 +23,10 @@ const orderSchema = new mongoose.Schema(
             trim: true,
           },
           _id: false,
+          cancel: {
+            type: Boolean,
+            default: false,
+          },
         },
       ],
       totalItems: {
@@ -80,7 +84,7 @@ const orderSchema = new mongoose.Schema(
     paymentId: { type: String },
     status: {
       type: String,
-      enum: ["pending", "delivered", "cancled","payed"],
+      enum: ["pending", "delivered", "cancled", "payed"],
       default: "payed",
     },
   },

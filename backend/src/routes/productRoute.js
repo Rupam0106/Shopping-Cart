@@ -6,17 +6,20 @@ const {
   updateProduct,
   deleteProduct,
   getSingleProduct,
+  searchProduct,
 } = require("../controllers/productController");
 const router = express.Router();
 
 router.route("/all").get(getAllProduct);
+router.route("/search/:searchTerm").get(searchProduct);
+
 router
   .route("/new")
   .post(isAuthenticate, authorizeRoles("admin"), createProduct);
 router
   .route("/:id")
   .put(authorizeRoles("admin"), updateProduct)
-  .delete(isAuthenticate,authorizeRoles("admin"), deleteProduct)
+  .delete(isAuthenticate, authorizeRoles("admin"), deleteProduct)
   .get(getSingleProduct);
 
 module.exports = router;
