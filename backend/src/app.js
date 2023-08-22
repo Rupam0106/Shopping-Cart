@@ -1,11 +1,13 @@
 const ErrorHandler = require("./middlewares/error");
 const express = require("express");
 const cors = require("cors");
+
 const User = require("./routes/userRoute");
 const Product = require("./routes/productRoute");
 const Cart = require("./routes/cartRoute");
+const WishList = require("./routes/wishRoute");
 const Order = require("./routes/orderRoute");
-const Payment=require("./routes/paymentRoute")
+const Payment = require("./routes/paymentRoute");
 
 const cookie = require("cookie-parser");
 const app = express();
@@ -27,6 +29,7 @@ app.use("/api-docs", swaggerServe, swaggerSetup);
 app.use("/api/v1/user", User);
 app.use("/api/v1/product", Product);
 app.use("/api/v1/user/cart", Cart);
+app.use("/api/v1/user/wish", WishList);
 app.use("/api/v1/user/order", Order);
 app.use("/api/v1/user/order/payment", Payment);
 

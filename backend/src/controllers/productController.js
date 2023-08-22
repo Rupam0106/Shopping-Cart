@@ -75,6 +75,11 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
 //search product
 exports.searchProduct = catchAsyncError(async (req, res, next) => {
   const searchRegex = new RegExp(req.params.searchTerm, "i");
+  if(!searchRegex){
+    return next(
+      new ErrorHandler(`No product exist : ${req.params.searchTerm}`)
+    );
+  }
   const products = await productModel.find({ title: { $regex: searchRegex } });
   res.status(200).json({
     success: true,

@@ -130,7 +130,7 @@ exports.getOrder = catchAsyncError(async (req, res, next) => {
   let order = await orderModel
     .find({
       userId,
-      status: { $in: ["pending", "delivered", "payed", "canceled"] },
+      status: { $in: ["pending", "delivered", "payed", "cancled"] },
     })
     .populate("orderDetails.products.productId");
 
@@ -157,8 +157,8 @@ exports.cancelOrder = catchAsyncError(async (req, res, next) => {
       .status(400)
       .send({ status: false, msg: "Please provide orderId" });
   }
-
   let userOrder = await orderModel.findById(orderId);
+
   if (userOrder.status !== "payed") {
     return res
       .status(400)
@@ -171,44 +171,57 @@ exports.cancelOrder = catchAsyncError(async (req, res, next) => {
       { new: true }
     );
   });
-  await orderModel.findByIdAndUpdate(
+  const order = await orderModel.findByIdAndUpdate(
     orderId,
     { $set: { status: "cancled" } },
     { new: true }
   );
-  return res.status(204).send({ status: true, msg: "order cancled" });
+  return res.status(200).send({ status: true, msg: "order cancled", order });
 });
 
 //updatedOrder the order
 exports.updatedOrder = catchAsyncError(async (req, res, next) => {
   let { productId } = req.body;
   let orderId = req.params.orderId;
+  if (!orderId) {
+    return res
+      .status(400)
+      .send({ status: false, msg: "Please provide orderId" });
+  }
+
+  if (!productId) {
+    return res
+      .status(400)
+      .send({ status: false, msg: "Please provide productId" });
+  }
 
   let userOrder = await orderModel.findById(orderId);
   if (!userOrder) {
-    return next(new ErrorHandler("Order not found with this id", 404));
+    return res
+      .status(404)
+      .send({ status: false, msg: "order not found with this id" });
   }
 
-  if (userOrder.status !== "pending") {
-    return next(new ErrorHandler("Order cannot be updated", 400));
+  if (userOrder.status !== "payed") {
+    return res
+      .status(400)
+      .send({ status: false, msg: "Order cannot be updated" });
   }
-
   let product = await productModel.findById(productId);
   if (!product) {
-    return next(new ErrorHandler("productId invalid", 404));
+    return res.status(404).send({ status: false, msg: "productId invalid" });
   }
-
   if (userOrder.orderDetails.products.length === 0) {
     return res
       .status(400)
       .send({ status: false, msg: "your order is already empty" });
   }
-
   // get quantity of removed product
   let quantity = 0;
   userOrder.orderDetails.products.map((x) => {
     if (x.productId.valueOf() === productId) {
       quantity = x.quantity;
+      x.cancel = true;
     }
   });
   const filteredProducts = userOrder.orderDetails.products.filter(
@@ -216,38 +229,50 @@ exports.updatedOrder = catchAsyncError(async (req, res, next) => {
   );
 
   if (filteredProducts.length === userOrder.orderDetails.products.length) {
-    return next(new ErrorHandler("given product not found in your order", 404));
+    return res
+      .status(404)
+      .send({ status: false, msg: "given product not found in your order" });
   }
 
   product.stock += quantity;
   await product.save();
   const updatedData = {};
 
-  // if no products left after Filter
+  // if no products left after filteration
   if (filteredProducts.length === 0) {
     (updatedData.products = filteredProducts),
-      (updatedData.totalItems = userOrder.orderDetails.totalItems - 1),
+      (updatedData.totalItems = userOrder.orderDetails.totalItems - quantity),
       (updatedData.totalPrice =
         userOrder.orderDetails.totalPrice - product.price * quantity);
-    await orderModel.findByIdAndUpdate(
+    let order = await orderModel.findByIdAndUpdate(
       orderId,
       { $set: { orderDetails: updatedData, status: "cancled" } },
       { new: true }
     );
-    return res.status(204).send({ status: true, msg: "order cancled" });
+    return res.status(200).send({ status: true, msg: "order cancled", order });
   } else {
     (updatedData.products = filteredProducts),
-      (updatedData.totalItems = userOrder.orderDetails.totalItems - 1),
+      (updatedData.totalItems = userOrder.orderDetails.totalItems - quantity),
       (updatedData.totalPrice =
         userOrder.orderDetails.totalPrice - product.price * quantity);
-    const updatedOrder = await orderModel.findByIdAndUpdate(
-      orderId,
-      { $set: { orderDetails: updatedData } },
-      { new: true }
-    );
+
+    userOrder.orderDetails.products.forEach(async (product) => {
+      await productModel.findByIdAndUpdate(
+        product._id,
+        { $inc: { stock: +product.quantity } },
+        { new: true }
+      );
+    });
+    const order = await orderModel
+      .findByIdAndUpdate(
+        orderId,
+        { $set: { orderDetails: updatedData } },
+        { new: true }
+      )
+      .populate("orderDetails.products.productId");
     return res
       .status(200)
-      .send({ status: true, msg: "product cancled", updatedOrder });
+      .send({ status: true, msg: "product cancled", order });
   }
 });
 

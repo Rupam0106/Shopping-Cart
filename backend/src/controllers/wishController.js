@@ -4,7 +4,7 @@ const productModel = require("../models/productModel");
 const cartModel = require("../models/cartModel");
 const { getUserId } = require("../utils/jwtToken");
 
-exports.addToCartFromLocalStorage = async (req, res) => {
+exports.addToWishListFromLocalStorage = async (req, res) => {
   let userId = getUserId();
   let { cartItems } = req.body;
   let userCart = await cartModel
@@ -20,7 +20,7 @@ exports.addToCartFromLocalStorage = async (req, res) => {
     let newCart = await cartModel.create(cartDetails);
     return res
       .status(201)
-      .send({ status: true, msg: "Items added to cart", cart: newCart });
+      .send({ status: true, msg: "Items added to WishList", cart: newCart });
   } else {
     let totalItems = 0;
     let totalPrice = 0;
@@ -59,7 +59,7 @@ exports.addToCartFromLocalStorage = async (req, res) => {
 };
 
 // create a cart
-exports.createCart = catchAsyncError(async (req, res, next) => {
+exports.createWishList = catchAsyncError(async (req, res, next) => {
   let productId = req.body.productId;
   let userId = req.user.id;
   let validProduct = await productModel.findById(productId);
@@ -67,12 +67,6 @@ exports.createCart = catchAsyncError(async (req, res, next) => {
     return res
       .status(404)
       .send({ status: false, msg: "product not found with given id" });
-  }
-
-  if (validProduct.stock === 0) {
-    return res
-      .status(400)
-      .send({ status: false, msg: "item is not currently available" });
   }
 
   let userCart = await cartModel.findOne({ userId: userId });
@@ -128,7 +122,7 @@ exports.createCart = catchAsyncError(async (req, res, next) => {
 });
 
 //update cart
-exports.updateCartById = catchAsyncError(async (req, res, next) => {
+exports.updateWishListById = catchAsyncError(async (req, res, next) => {
   let userId = req.user.id;
   let { productId, quantity } = req.body;
 
@@ -192,7 +186,7 @@ exports.updateCartById = catchAsyncError(async (req, res, next) => {
 });
 
 //get cart details by id
-exports.getCartById = catchAsyncError(async (req, res, next) => {
+exports.getWishListById = catchAsyncError(async (req, res, next) => {
   const userId = req.user.id;
   const cart = await cartModel
     .findOne({ userId: userId })
