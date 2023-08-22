@@ -1,4 +1,3 @@
-import { Product } from './../shared/models/Product';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Cart } from '../shared/models/Cart';
@@ -47,16 +46,17 @@ export class CartService {
     }
   }
 
-
   storeLocalCart() {
     let cart = localStorage.getItem('cart');
     if (cart) {
       cart = JSON.parse(cart);
-      this.http.put(UPDATE_LOCAL_CART_URL, this.cartData).subscribe((response: any) => {
-        this.cartData = response.cart;
-        localStorage.setItem('cart', JSON.stringify(this.cartData));
-        return this.cartDataSubject.next(this.cartData);
-      });
+      this.http
+        .put(UPDATE_LOCAL_CART_URL, this.cartData)
+        .subscribe((response: any) => {
+          this.cartData = response.cart;
+          localStorage.setItem('cart', JSON.stringify(this.cartData));
+          return this.cartDataSubject.next(this.cartData);
+        });
     }
   }
 
@@ -72,7 +72,6 @@ export class CartService {
         //  IF ITEM IS ALREADY PRESENT IN A CART
         if (cartItemIndex >= 0) {
           let product = localCart.cartItems[cartItemIndex];
-          console.log(product);
           product.quantity += 1;
           localCart.totalItems += 1;
           localCart.totalPrice += product.productId.price;
@@ -96,6 +95,7 @@ export class CartService {
           return this.cartDataSubject.next(this.cartData);
         }
       }
+
       //  IF ITEM IS NOT PRESENT IN A LOCAL_STORAGE
       else {
         this.cartData = {
@@ -108,6 +108,7 @@ export class CartService {
         return this.cartDataSubject.next(this.cartData); // Emit
       }
     }
+
     //  IF USER IS LOGGED IN
     else {
       this.http
@@ -121,6 +122,7 @@ export class CartService {
     }
   }
 
+  //UPDATE HTE EXITING-CARD
   cartUpdate(data: any, quantity: number): void {
     if (!localStorage.getItem('token')) {
       let cart = localStorage.getItem('cart');
@@ -149,6 +151,7 @@ export class CartService {
           localStorage.setItem('cart', JSON.stringify(localCart));
           return this.cartDataSubject.next(localCart);
         }
+
         // IF USER DECREASE THE QUANTITY
         else if (quantity < product.quantity) {
           product.quantity -= 1;
@@ -160,16 +163,21 @@ export class CartService {
         }
       }
     }
+
     // IF USER LOGGED IN
     else {
-      this.http
-        .put(UPDATE_CART_URL, { productId: data, quantity })
-        .subscribe((response: any) => {
+      this.http.put(UPDATE_CART_URL, { productId: data, quantity }).subscribe(
+        (response: any) => {
           this.cartData = response.cart;
           this.cartDataSubject.next(this.cartData);
           this.toastr.success(response.msg);
           localStorage.setItem('cart', JSON.stringify(this.cartData));
-        });
+        },
+        (error) => {
+          console.log(error);
+          this.toastr.error(error.error.msg, 'Out Of Stock');
+        }
+      );
     }
   }
 }

@@ -29,8 +29,12 @@
                 class="card-text text-body-secondary overflow-y-hidden"
                 style="height: 2.5rem; font-size: 14px"
               >
-                Price: {{ product.price }}
+                <i class="bi bi-currency-rupee text-black"></i>
+                {{ product.price }}
               </p>
+              <!-- <p *ngIf="product.stock == 0" class="text-danger">
+              Currently item is not available
+              </p> -->
               <a routerLink="/products" class="btn btn-info"> View Details</a>
             </div>
           </a>

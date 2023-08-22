@@ -21,7 +21,7 @@ export class OrderService {
   }
 
   cancelOrderItem(orderId: string, productId: string) {
-    return this.http.put<any>(CANCEL_SPECIFIC_ORDER_URL + orderId, productId);
+    return this.http.put<any>(CANCEL_SPECIFIC_ORDER_URL + orderId, {productId});
   }
 
   getNewOrderForCurrentUser() {

@@ -27,6 +27,9 @@ import { PaymentSuccessComponent } from './partials/payment-success/payment-succ
 import { PaymentFailedComponent } from './partials/payment-failed/payment-failed.component';
 import { StripeComponent } from './partials/stripe/stripe.component';
 import { TrackPageComponent } from './partials/track-page/track-page.component';
+import { AboutUsComponent } from './partials/about-us/about-us.component';
+import { SearchComponent } from './partials/search/search.component';
+import { WishlistComponent } from './partials/wishlist/wishlist.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +55,9 @@ import { TrackPageComponent } from './partials/track-page/track-page.component';
     PaymentFailedComponent,
     StripeComponent,
     TrackPageComponent,
+    AboutUsComponent,
+    SearchComponent,
+    WishlistComponent,
    
   ],
   exports: [

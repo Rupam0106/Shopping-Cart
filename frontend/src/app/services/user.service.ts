@@ -82,8 +82,8 @@ export class UserService {
           this.toastr.success(` Welome ${user.user.name}!`, 'Login Successful');
           this.invalidUserAuth.emit(false);
         },
-        error: (errorResponse) => {
-          this.toastr.error(errorResponse.error.message, 'Login Failed');
+        error: () => {
+          this.toastr.error('Login Failed');
           this.invalidUserAuth.emit(true);
         },
       })

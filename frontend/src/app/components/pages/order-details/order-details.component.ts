@@ -17,16 +17,24 @@ export class OrderDetailsComponent {
   notFound: boolean = false;
   orderDetail: any;
   orderId: any;
+  cancelbtn: boolean = false;
 
   ngOnInit(): void {
     this.orderId = this.ActivatedRouter.snapshot.paramMap.get('orderId');
     if (this.orderId) {
-    
-      this.orderService.getSpecificOrderDetails(this.orderId).subscribe((data: any) => {
-        if (data) {
-          this.orderDetail = data.order
-        }
-      });
+      this.orderService
+        .getSpecificOrderDetails(this.orderId)
+        .subscribe((data: any) => {
+          if (data) {
+            this.orderDetail = data.order;
+            console.log(data.order.status);
+            if (data.order.status == 'cancled') {
+              this.cancelbtn = true;
+            }else{
+              this.cancelbtn = false;
+            }
+          }
+        });
     }
   }
 

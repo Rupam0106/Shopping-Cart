@@ -4,16 +4,30 @@
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <a routerLink="" class="nav-item nav-link active">Home</a>
-      <div *ngIf="user" class="navbar-nav">
+      <div class="mx-2">
         <a routerLink="/products" class="nav-item nav-link">Shop</a>
       </div>
-
+      <div class="mx-2">
+        <a routerLink="/about" class="nav-item nav-link">About Us</a>
+      </div>
       <div *ngIf="admin" class="navbar-nav">
         <a routerLink="/admin/home" class="nav-item nav-link active"
           >Products</a
         >
       </div>
-
+      <input
+        type="text"
+        (blur)="hideSearch()"
+        #searchInput
+        (keyup)="searchProduct($event)"
+        placeholder="Search Products"
+      />
+      <button class="seachbtn" (click)="submitSearch(searchInput.value)">Search</button>
+      <ul class="suggested-search" *ngIf="searchResult">
+        <li *ngFor="let item of searchResult">
+          <a (mousedown)="redirectToDetails(item._id)">{{ item.title }}</a>
+        </li>
+      </ul>
       <div [ngSwitch]="menuType" class="collapse navbar-collapse">
         <div *ngSwitchCase="'default'" class="navbar-nav ms-auto">
           <a routerLink="/login" class="nav-item nav-link">Login</a>

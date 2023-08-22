@@ -8,13 +8,12 @@ import { Product } from 'src/app/shared/models/Product';
   styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent {
-  Products: undefined | Product[]
+  Products: undefined | Product[];
   constructor(private productService: ProductsService) {}
 
   ngOnInit() {
-   this.productService.getAllProduct().subscribe((data:any)=>{
-    this.Products=data.products
-   })
+    this.productService.getAllProduct().subscribe((data: any) => {
+      this.Products = data.products;
+    });
   }
-
 }

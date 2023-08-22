@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { ProductsService } from 'src/app/services/products.service';
 
@@ -29,7 +28,6 @@ export class AdminHomeComponent {
   list() {
     this.product.getAllProduct().subscribe((result: any) => {
       if (result) {
-        console.log(result)
         this.productList = result.products;
       }
     });

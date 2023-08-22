@@ -24,7 +24,7 @@
               {{ item.quantity }}</span
             >
             <button
-              class="btn btn-warning"
+              class="btn btn-warning" [disabled]="cancelbtn"
               (click)="cancelItem(item.productId._id)"
             >
               Cancel Item
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <button class="cancel btn btn-danger" (click)="orderCancel(orderDetail._id)">
+    <button class="cancel btn btn-danger" [disabled]="cancelbtn" (click)="orderCancel(orderDetail._id)">
       Cancel Order
     </button>
     <button class="cancel btn btn-info" [routerLink]="['/user/order/payment/track/',orderDetail._id]">Track-Order</button>

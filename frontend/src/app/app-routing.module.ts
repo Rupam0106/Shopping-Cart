@@ -22,11 +22,18 @@ import { NotFoundComponent } from './components/partials/not-found/not-found.com
 import { PaymentSuccessComponent } from './components/partials/payment-success/payment-success.component';
 import { PaymentFailedComponent } from './components/partials/payment-failed/payment-failed.component';
 import { TrackPageComponent } from './components/partials/track-page/track-page.component';
+import { AboutUsComponent } from './components/partials/about-us/about-us.component';
+import { SearchComponent } from './components/partials/search/search.component';
+import { WishlistComponent } from './components/partials/wishlist/wishlist.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
+  },
+  {
+    path: 'search/:searchTerm',
+    component: SearchComponent,
   },
   {
     path: 'login',
@@ -39,6 +46,10 @@ const routes: Routes = [
   {
     path: 'products',
     component: ProductsComponent,
+  },
+  {
+    path: 'about',
+    component: AboutUsComponent,
   },
   {
     path: 'product/:id',
@@ -60,6 +71,10 @@ const routes: Routes = [
   {
     path: 'user/cart/create',
     component: CartPageComponent,
+  },
+  {
+    path: 'user/wishlist',
+    component: WishlistComponent,
   },
   {
     path: 'user/orders',

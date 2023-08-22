@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { CartService } from 'src/app/services/cart.service';
-import { Cart } from 'src/app/shared/models/Cart';
+import { WishlistService } from 'src/app/services/wishlist.service';
 
 @Component({
-  selector: 'app-cart-page',
-  templateUrl: './cart-page.component.html',
-  styleUrls: ['./cart-page.component.css'],
+  selector: 'app-wishlist',
+  templateUrl: './wishlist.component.html',
+  styleUrls: ['./wishlist.component.css'],
 })
-export class CartPageComponent {
+export class WishlistComponent {
+  wishItems: any;
   getCartDataSub!: Subscription;
   cartDetails: any;
   productQuantity: number = 1;
@@ -22,13 +22,16 @@ export class CartPageComponent {
     delivery: 0,
     total: 0,
   };
-  cart!: Cart;
-  constructor(private cartService: CartService, private toastr: ToastrService) {
-    this.cartService.getCartData().subscribe((cart: any) => {
+  cart!: any;
+  constructor(
+    private cartService: WishlistService,
+    private toastr: ToastrService
+  ) {
+    this.cartService.getwishData().subscribe((cart: any) => {
       this.cartItems = cart.cart;
     });
 
-    this.cartService.getCartData().subscribe((data: any) => {
+    this.cartService.getwishData().subscribe((data: any) => {
       if (data) {
         if (data.cart) {
           this.cartItems = data.cart.cartItems;
@@ -45,33 +48,33 @@ export class CartPageComponent {
   }
 
   ngOnInit(): void {
-    let cart = localStorage.getItem('cart');
+    let cart = localStorage.getItem('wish');
     if (cart && !localStorage.getItem('token')) {
       let localCart = JSON.parse(cart);
       this.cartItems = localCart.cartItems;
       this.cartDetails = localCart;
-      localStorage.setItem('cart', JSON.stringify(this.cartDetails));
+      localStorage.setItem('wish', JSON.stringify(this.cartDetails));
     } else if (!cart && !localStorage.getItem('token')) {
     } else {
-      this.cartService.getUserCart();
-      this.cartService.getCartData().subscribe((data: any) => {
+      this.cartService.getUserwish();
+      this.cartService.getwishData().subscribe((data: any) => {
         if (data) {
           this.cartItems = data.cartItems;
           this.cartDetails = data;
-          localStorage.setItem('cart', JSON.stringify(this.cartDetails));
+          localStorage.setItem('wish', JSON.stringify(this.cartDetails));
         }
       });
     }
   }
 
   cartUpdate(productId: string, quantity: number) {
-    this.cartService.cartUpdate(productId, quantity);
-    this.cartService.getCartData().subscribe((data: any) => {
+    this.cartService.wishUpdate(productId, quantity);
+    this.cartService.getwishData().subscribe((data: any) => {
       if (data) {
         this.cartItems = data.cartItems;
         this.cartDetails = data;
       }
-      localStorage.setItem('cart', JSON.stringify(this.cartDetails));
+      localStorage.setItem('wish', JSON.stringify(this.cartDetails));
     });
   }
 

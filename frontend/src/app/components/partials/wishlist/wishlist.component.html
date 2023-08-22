@@ -1,0 +1,58 @@
+<app-not-found
+  [visible]="!wishItems || !wishItems.length"
+  notFoundMessage="WishList is Empty"
+  resetLinkText="Add to WishList"
+></app-not-found>
+
+<div class="container" *ngIf="cartItems && cartItems.length > 0">
+  <ul>
+    <li *ngFor="let items of cartItems">
+      <div>
+        <img
+          src="{{ items.productId.productImage }}"
+          alt="{{ items.productId.title }}"
+        />
+      </div>
+      <a routerLink="/product/{{ items.productId._id }}">
+        {{ items.productId.title }}
+      </a>
+      <div class="item-description">{{ items.productId.description }}</div>
+      <div class="quantityBtn d-flex align-items-center">
+        <i
+          class="bi bi-dash-lg px-2"
+          (click)="cartUpdate(items.productId._id, items.quantity - 1)"
+        ></i>
+        <input
+          type="text"
+          class="w-100"
+          value="{{ items.quantity }}"
+          disabled
+        />
+        <i
+          class="bi bi-plus-lg px-2"
+          (click)="cartUpdate(items.productId._id, items.quantity + 1)"
+        ></i>
+      </div>
+
+      <div class="d-flex flex-row justify-content-between align-items-center">
+        <span>
+          <i class="bi bi-currency-rupee"></i>
+          <span>{{ items.productId.price }}</span>
+        </span>
+        <i
+          class="bi bi-trash text-danger m-2"
+          title="Delete"
+          (click)="cartUpdate(items.productId._id, 0)"
+        ></i>
+      </div>
+    </li>
+  </ul>
+  <div class="checkout">
+    <div>
+      <div class="products-count">{{ cartDetails.totalItems }}</div>
+      <div class="total-price">{{ cartDetails.totalPrice }}</div>
+    </div>
+
+    <a routerLink="/user/order/checkout">Proceed to Checkout</a>
+  </div>
+</div>

@@ -1,15 +1,18 @@
-<div class="w-100" style="height: 33.2rem">
-  <app-title title="User Profile" fontSize="1.6rem"></app-title>
-  <div class="d-flex justify-content-space-between justify-content-center m-4 ">
-    <div *ngIf="user" class="w-25 p-3">
-      <img class="rounded img-fluid img-thumbnail" [src]="user.avatar" [alt]="'rupam'" />
-    </div>
-    <div class="m-4">
-      <div class="mb-3"><strong>Name :</strong> {{ user.name }}</div>
-      <div class="mb-3"><strong>Email :</strong> {{ user.email }}</div>
-      <div>
-        <button class="btn btn-danger" (click)="deleteProfile()">Delete</button>
-      </div>
+<app-title title="User Profile" fontSize="1.6rem"></app-title>
+<div class="d-flex justify-content-space-between justify-content-center m-4">
+  <div *ngIf="user">
+    <img
+      class="rounded img-fluid img-thumbnail"
+      style="object-fit: contain; width: 15rem"
+      [src]="user.avatar"
+      [alt]="'rupam'"
+    />
+  </div>
+  <div class="m-4">
+    <div class="mb-3"><strong>Name :</strong> {{ user.name }}</div>
+    <div class="mb-3"><strong>Email :</strong> {{ user.email }}</div>
+    <div>
+      <button class="btn btn-danger" (click)="deleteProfile()">Delete</button>
     </div>
   </div>
 </div>

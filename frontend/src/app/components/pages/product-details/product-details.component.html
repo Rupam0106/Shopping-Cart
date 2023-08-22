@@ -1,7 +1,6 @@
 <app-title title="Product Details" fontSize="1.6rem"></app-title>
 <div
   class="d-flex flex-column flex-md-row justify-content-evenly align-items-center w-100"
-  style="height: 29.75rem"
 >
   <div *ngIf="product">
     <img
@@ -17,9 +16,13 @@
     </div>
 
     <div class="mb-3"><strong>Price :</strong>{{ product.price }}</div>
-
+    <div *ngIf="outOfStock" class="text-danger mb-2">{{ outOfStock }}</div>
     <div>
-      <button class="btn btn-info" [disabled]="loading" (click)="addToCart()">
+      <button
+        class="btn btn-info"
+        [disabled]="loading || outOfStock"
+        (click)="addToCart()"
+      >
         Add to Cart
         <span
           *ngIf="loading"
@@ -27,6 +30,19 @@
           aria-hidden="true"
         ></span>
         <i *ngIf="!loading" class="bi bi-cart"></i>
+      </button>
+      <button
+        class="btn btn-info mx-2"
+        [disabled]="loading || outOfStock"
+        (click)="addToWishList()"
+      >
+        WishList
+        <span
+          *ngIf="loading"
+          class="spinner-border spinner-border-sm"
+          aria-hidden="true"
+        ></span>
+        <i *ngIf="!loading" class="bi bi-heart"></i>
       </button>
     </div>
   </div>
