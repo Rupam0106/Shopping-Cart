@@ -75,6 +75,7 @@ const routes: Routes = [
   {
     path: 'user/wishlist',
     component: WishlistComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'user/orders',

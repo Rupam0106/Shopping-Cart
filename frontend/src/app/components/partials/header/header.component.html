@@ -22,7 +22,9 @@
         (keyup)="searchProduct($event)"
         placeholder="Search Products"
       />
-      <button class="seachbtn" (click)="submitSearch(searchInput.value)">Search</button>
+      <button class="seachbtn" (click)="submitSearch(searchInput.value)">
+        Search
+      </button>
       <ul class="suggested-search" *ngIf="searchResult">
         <li *ngFor="let item of searchResult">
           <a (mousedown)="redirectToDetails(item._id)">{{ item.title }}</a>
@@ -51,6 +53,13 @@
         <div *ngSwitchCase="'user'" class="navbar-nav ms-auto">
           <a routerLink="/user/me" class="nav-item nav-link">
             <i class="bi bi-person-circle" style="font-size: 1.6rem"></i>
+          </a>
+          <a routerLink="/user/wishlist" class="nav-item nav-link">
+            <i
+              class="bi bi-heart"
+              title="WishList"
+              style="font-size: 1.6rem"
+            ></i>
           </a>
           <a class="nav-item nav-link" routerLink="/user/cart/create">
             <mat-icon matBadge="{{ count }}" matBadgeColor="warn"

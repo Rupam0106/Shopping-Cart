@@ -1,58 +1,38 @@
 <app-not-found
-  [visible]="!wishItems || !wishItems.length"
+  [visible]="!wishItems || !wishItems.productId.length"
   notFoundMessage="WishList is Empty"
   resetLinkText="Add to WishList"
 ></app-not-found>
 
-<div class="container" *ngIf="cartItems && cartItems.length > 0">
+<div class="container" *ngIf="wishItems && wishItems.productId.length > 0">
+  <app-title title="WishList" fontSize="1.6rem"></app-title>
   <ul>
-    <li *ngFor="let items of cartItems">
+    <li *ngFor="let items of wishItems.productId">
       <div>
-        <img
-          src="{{ items.productId.productImage }}"
-          alt="{{ items.productId.title }}"
-        />
+        <img src="{{ items.productImage }}" alt="{{ items.title }}" />
       </div>
-      <a routerLink="/product/{{ items.productId._id }}">
-        {{ items.productId.title }}
+      <a routerLink="/product/{{ items._id }}">
+        {{ items.title }}
       </a>
-      <div class="item-description">{{ items.productId.description }}</div>
-      <div class="quantityBtn d-flex align-items-center">
-        <i
-          class="bi bi-dash-lg px-2"
-          (click)="cartUpdate(items.productId._id, items.quantity - 1)"
-        ></i>
-        <input
-          type="text"
-          class="w-100"
-          value="{{ items.quantity }}"
-          disabled
-        />
-        <i
-          class="bi bi-plus-lg px-2"
-          (click)="cartUpdate(items.productId._id, items.quantity + 1)"
-        ></i>
-      </div>
+      <div class="item-description">{{ items.description }}</div>
 
       <div class="d-flex flex-row justify-content-between align-items-center">
         <span>
           <i class="bi bi-currency-rupee"></i>
-          <span>{{ items.productId.price }}</span>
+          <span>{{ items.price }}</span>
         </span>
         <i
           class="bi bi-trash text-danger m-2"
           title="Delete"
-          (click)="cartUpdate(items.productId._id, 0)"
+          (click)="wishUpdate(items._id)"
         ></i>
       </div>
+      <button
+        class="btn btn-info"
+        (click)="moveToCart(wishItems.productId._id)"
+      >
+        Move to cart
+      </button>
     </li>
   </ul>
-  <div class="checkout">
-    <div>
-      <div class="products-count">{{ cartDetails.totalItems }}</div>
-      <div class="total-price">{{ cartDetails.totalPrice }}</div>
-    </div>
-
-    <a routerLink="/user/order/checkout">Proceed to Checkout</a>
-  </div>
 </div>

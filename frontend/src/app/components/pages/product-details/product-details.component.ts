@@ -1,6 +1,6 @@
 import { WishlistService } from './../../../services/wishlist.service';
 import { Component } from '@angular/core';
-import { ActivatedRoute, TitleStrategy } from '@angular/router';
+import { ActivatedRoute, Router, TitleStrategy } from '@angular/router';
 import { CartService } from 'src/app/services/cart.service';
 import { ProductsService } from 'src/app/services/products.service';
 
@@ -17,7 +17,8 @@ export class ProductDetailsComponent {
     activatedRoute: ActivatedRoute,
     product: ProductsService,
     private cart: CartService,
-    private wishlistService: WishlistService
+    private wishlistService: WishlistService,
+    private router: Router
   ) {
     activatedRoute.params.subscribe((params: any) => {
       if (params.id)
@@ -34,6 +35,10 @@ export class ProductDetailsComponent {
   }
 
   addToWishList() {
-    this.wishlistService.addToWishList(this.product);
+    if (localStorage.getItem('token')) {
+      this.wishlistService.addToWishList(this.product);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }

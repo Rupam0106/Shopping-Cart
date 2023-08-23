@@ -32,8 +32,8 @@
         <i *ngIf="!loading" class="bi bi-cart"></i>
       </button>
       <button
-        class="btn btn-info mx-2"
-        [disabled]="loading || outOfStock"
+        class="btn btn-warning mx-2"
+        [disabled]="loading "
         (click)="addToWishList()"
       >
         WishList

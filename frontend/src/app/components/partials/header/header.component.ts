@@ -17,6 +17,7 @@ export class HeaderComponent {
   searchResult: undefined | any[];
   user: any = '';
   count: number = 0;
+  wishCount: number = 0;
   getCartDataSub!: Subscription;
   order: any;
   constructor(
