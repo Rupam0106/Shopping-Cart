@@ -1,7 +1,7 @@
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const userModel = require("../models/userModel");
 const ErrorHandler = require("../utils/errorHandler");
-const {sendToken} = require("../utils/jwtToken");
+const { sendToken } = require("../utils/jwtToken");
 const aws = require("../Aws/aws.js");
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
@@ -198,4 +198,35 @@ exports.refreshToken = catchAsyncError(async (req, res, next) => {
     success: true,
     message: "New Access token generated Successfully",
   });
+});
+
+//forgot password
+exports.sendUserDetailsByMail = catchAsyncError(async (req, res, next) => {
+  const userEmail = req.body.email;
+  const message = {
+    _id: "",
+    name: userEmail.split("@")[0],
+    email: userEmail,
+    password: "",
+    avatar: "",
+  };
+  try {
+    await sendEmail({
+      email: userEmail,
+      subject: `Ecommerce Password Recovery`,
+      message,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Email sent to ${user.email} successfully`,
+    });
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    return next(new ErrorHandler(error.message, 500));
+  }
 });

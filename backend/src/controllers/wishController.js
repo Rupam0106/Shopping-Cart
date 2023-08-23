@@ -1,199 +1,72 @@
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const ErrorHandler = require("../utils/errorHandler");
-const productModel = require("../models/productModel");
-const cartModel = require("../models/cartModel");
-const { getUserId } = require("../utils/jwtToken");
-
-exports.addToWishListFromLocalStorage = async (req, res) => {
-  let userId = getUserId();
-  let { cartItems } = req.body;
-  let userCart = await cartModel
-    .findOne({ userId })
-    .populate("cartItems.productId");
-  if (!userCart) {
-    let cartDetails = {
-      userId,
-      cartItems: cartItems,
-      totalPrice: req.body.totalPrice,
-      totalItems: req.body.totalItems,
-    };
-    let newCart = await cartModel.create(cartDetails);
-    return res
-      .status(201)
-      .send({ status: true, msg: "Items added to WishList", cart: newCart });
-  } else {
-    let totalItems = 0;
-    let totalPrice = 0;
-
-    userCart.cartItems.forEach((x) => {
-      let id = x.productId._id.toString();
-      cartItems.map((y) => {
-        if (y.productId._id === id) {
-          x.quantity += y.quantity;
-        }
-      });
-    });
-
-    cartItems.forEach((secondItem) => {
-      const existingItem = userCart.cartItems.find(
-        (item) =>
-          item.productId._id.toString() === secondItem.productId._id.toString()
-      );
-
-      if (!existingItem) {
-        userCart.cartItems.push(secondItem);
-      }
-    });
-
-    userCart.cartItems.forEach((x) => {
-      totalItems += x.quantity;
-      totalPrice += x.quantity * x.productId.price;
-    });
-
-    userCart.cartItems = userCart.cartItems;
-    userCart.totalPrice = totalPrice;
-    userCart.totalItems = totalItems;
-    userCart.save();
-    return res.status(200).send({ cart: userCart });
-  }
-};
+const wishModel = require("../models/wishModel");
 
 // create a cart
 exports.createWishList = catchAsyncError(async (req, res, next) => {
   let productId = req.body.productId;
   let userId = req.user.id;
-  let validProduct = await productModel.findById(productId);
-  if (!validProduct) {
-    return res
-      .status(404)
-      .send({ status: false, msg: "product not found with given id" });
+  let userWish = await wishModel.findOne({ userId: userId });
+  let item = userWish.productId.findIndex(
+    (item) => item._id.toString() == productId.toString()
+  );
+  if (item!==-1) {
+    return next(new ErrorHandler("Item already Present in Wishlist", 400));
   }
-
-  let userCart = await cartModel.findOne({ userId: userId });
-  if (!userCart) {
-    let items = [{ productId, quantity: 1 }];
-    let cartDetails = {
+  if (!userWish) {
+    const wishDetails = {
       userId,
-      cartItems: items,
-      totalPrice: validProduct.price,
-      totalItems: 1,
+      productId,
     };
-
-    let newCart = await cartModel.create(cartDetails);
+    let newCart = await wishModel.create(wishDetails);
     return res
       .status(201)
-      .send({ status: true, msg: "Items added to cart", cart: newCart });
+      .send({ status: true, msg: " Added to WishList", cart: newCart });
   } else {
-    let cartItemIndex = userCart.cartItems.findIndex(
-      (x) => x.productId == productId
-    );
-
-    // if user added same product in cart
-    if (cartItemIndex >= 0) {
-      let product = userCart.cartItems[cartItemIndex];
-      product.quantity += 1;
-      userCart.totalPrice += validProduct.price;
-      let updatedCart = await cartModel.findByIdAndUpdate(
-        userCart._id,
-        userCart,
-        { new: true }
-      );
-      return res
-        .status(200)
-        .send({ status: true, msg: "Item added to cart", cart: updatedCart });
-    }
-
-    // if user added different product in cart
-    else {
-      let cart = {};
-      cart.cartItems = userCart.cartItems;
-      cart.cartItems.push({ productId, quantity: 1 });
-      cart.totalItems = userCart.cartItems.length;
-      cart.totalPrice = userCart.totalPrice + validProduct.price;
-      let updatedCart = await cartModel.findByIdAndUpdate(userCart._id, cart, {
-        new: true,
-      });
-
-      return res
-        .status(200)
-        .send({ status: true, msg: "Item added to cart", cart: updatedCart });
-    }
+    userWish.productId.push(productId);
+    userWish.save();
+    return res.status(200).send({
+      status: true,
+      msg: "Item Added to WishList",
+      wishList: userWish,
+    });
   }
 });
 
 //update cart
 exports.updateWishListById = catchAsyncError(async (req, res, next) => {
   let userId = req.user.id;
-  let { productId, quantity } = req.body;
-
-  let product = await productModel.findById(productId);
-  if (!product) {
-    return res
-      .status(404)
-      .send({ status: false, msg: "product not found with given Id" });
-  }
-  if (quantity > product.stock) {
-    return res.status(404).send({
-      status: false,
-      msg: `maximum quantiy to buy is ${product.stock}`,
-    });
-  }
-  let userCart = await cartModel.findOne({ userId });
-
-  let item = userCart.cartItems.findIndex(
-    (item) => item.productId == productId
+  let { productId } = req.body;
+  let wishCart = await wishModel.findOne({ userId });
+  let item = wishCart.productId.findIndex(
+    (item) => item._id.toString() == productId.toString()
   );
   if (item === -1) {
     return res
       .status(404)
-      .send({ status: false, msg: "This product not found in your cart" });
-  }
-  let updatedCart = {};
-  const cartItem = userCart.cartItems[item];
-  if (quantity < 1) {
-    let totalItems = userCart.totalItems - 1;
-    let totalPrice = userCart.totalPrice - cartItem.quantity * product.price;
-    let cart = await cartModel
-      .findByIdAndUpdate(
-        userCart._id,
-        {
-          $pull: { cartItems: { productId: productId } },
-          $set: { totalItems, totalPrice },
-        },
-        { new: true }
-      )
-      .populate("cartItems.productId");
-
-    return res
-      .status(200)
-      .send({ status: true, msg: "cart updated", cart: cart });
+      .send({ status: false, msg: "This product not found in your Wish list" });
   } else {
-    updatedCart.cartItems = userCart.cartItems;
-    updatedCart.totalItems = userCart.totalItems;
-    updatedCart.totalPrice =
-      userCart.totalPrice +
-      (quantity * product.price - cartItem.quantity * product.price);
-    cartItem.quantity = quantity;
-    let cart = await cartModel
-      .findByIdAndUpdate(userCart._id, updatedCart, {
+    wishCart.productId.splice(item, 1);
+    let wishList = await wishModel
+      .findByIdAndUpdate(wishCart._id, wishCart, {
         new: true,
       })
-      .populate("cartItems.productId");
+      .populate("productId");
     return res
       .status(200)
-      .send({ status: true, msg: "cart updated", cart: cart });
+      .send({ status: true, msg: "wishlist updated", wishList });
   }
 });
 
-//get cart details by id
+//get wish details by id
 exports.getWishListById = catchAsyncError(async (req, res, next) => {
   const userId = req.user.id;
-  const cart = await cartModel
+  const wishList = await wishModel
     .findOne({ userId: userId })
-    .populate("cartItems.productId");
+    .populate("productId");
   res.status(200).json({
     status: true,
     message: "Success",
-    cart,
+    wishList,
   });
 });
