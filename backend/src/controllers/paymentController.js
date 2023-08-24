@@ -1,6 +1,9 @@
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const stripe = require("stripe")(process.env.SCRET_STRIPE_KEY);
 const orderModel = require("../models/orderModel");
+const userModel = require("../models/userModel");
+const ErrorHandler = require("../utils/errorHandler");
+const sendEmail = require("../utils/sendEmail");
 
 exports.createPayment = catchAsyncError(async (req, res, next) => {
   let session = await stripe.checkout.sessions.create({
@@ -75,4 +78,39 @@ exports.trackOrder = catchAsyncError(async (req, res, next) => {
     .findById(orderId)
     .populate("orderDetails.products.productId");
   res.status(200).json({ order: order });
+});
+
+//send mail order Details
+exports.sendOrderDetailsByMail = catchAsyncError(async (req, res, next) => {
+  const orderId = req.body.orderId;
+  const userId = req.user.id;
+  const user = await userModel.findById(userId);
+  const order = await orderModel
+    .findById(orderId)
+    .populate("orderDetails.products.productId");
+  // const mess = {
+  //   Date: order.createdAt,
+  //   Name: order.shippingDetails.name,
+  //   Phone: order.shippingDetails.phone,
+  //   Address: order.shippingDetails.address.city,
+  //   Status: order.status,
+  //   TotalItem: order.orderDetails.totalItems,
+  //   TotalPrice: order.orderDetails.totalPrice,
+  // };
+  const message = `OrderId:#${orderId}\n\nDate:${order.createdAt}\n\nName:${order.shippingDetails.name}\n\nAddress: ${order.shippingDetails.address.house} ,${order.shippingDetails.address.street} ,${order.shippingDetails.address.city}, ${order.shippingDetails.address.state}, ${order.shippingDetails.address.pincode}\n\nStatus:${order.status}\n\nTotalItem:${order.orderDetails.totalItems}\n\nTotalPrice:${order.orderDetails.totalPrice}`;
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: `Order Details`,
+      message,
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: `Email sent to ${user.email} successfully`,
+      message,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
 });
