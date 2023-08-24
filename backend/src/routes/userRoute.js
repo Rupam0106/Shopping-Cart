@@ -9,6 +9,7 @@ const {
   deleteUser,
   getUserDetails,
   refreshToken,
+  guestUser,
 } = require("../controllers/userController");
 const { isAuthenticate } = require("../middlewares/auth");
 
@@ -16,6 +17,7 @@ const router = express.Router();
 
 router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
+router.route("/guest-login").post(guestUser);
 router.route("/password/forgot").post(forgotPassword);
 router.route("/password/update").put(isAuthenticate, updatePassword);
 router.route("/refresh-token").post(refreshToken)

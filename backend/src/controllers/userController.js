@@ -46,6 +46,25 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
+exports.guestUser = catchAsyncError(async (req, res, next) => {
+  const { email, password } = req.body;
+  const findEmail = await userModel.findOne({ email });
+  if (findEmail) {
+    return next(new ErrorHandler("User already present ", 400));
+  }
+  const name = email.split("@")[0];
+  let avatar = "https://source.unsplash.com/1600x900/?portrait";
+
+  const user = await userModel.create({
+    name,
+    email,
+    password,
+    avatar,
+  });
+
+  sendToken(user, 201, res);
+});
+
 //logout
 exports.logoutUser = catchAsyncError(async (req, res, next) => {
   res.cookie("token", null, {
