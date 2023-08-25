@@ -8,121 +8,54 @@ const cartModel = require("../models/cartModel");
 exports.createOrder = catchAsyncError(async (req, res, next) => {
   let userId = req.user.id;
   let { name, phone, house, street, city, state, pincode } = req.body.form;
-  if (userId) {
-    let cart = await cartModel
-      .findOne({ userId: userId })
-      .populate("cartItems.productId", "stock");
-    if (!cart) {
-      return next(new ErrorHandler("User cart not found", 404));
-    }
-    if (cart.cartItems.length <= 0) {
-      return next(new ErrorHandler("Cart Is Empty!", 400));
-    }
-    const filter = cart.cartItems.filter((x) => x.quantity > x.productId.stock);
-    if (filter.length > 0) {
-      return next(new ErrorHandler("Out of Stock", 400));
-    }
-    let order = {
-      userId,
-      orderDetails: {
-        totalItems: cart.totalItems,
-        totalPrice: cart.totalPrice,
-        products: cart.cartItems,
+  let cart = await cartModel
+    .findOne({ userId: userId })
+    .populate("cartItems.productId", "stock");
+  if (!cart) {
+    return next(new ErrorHandler("User cart not found", 404));
+  }
+  if (cart.cartItems.length <= 0) {
+    return next(new ErrorHandler("Cart Is Empty!", 400));
+  }
+  const filter = cart.cartItems.filter((x) => x.quantity > x.productId.stock);
+  if (filter.length > 0) {
+    return next(new ErrorHandler("Out of Stock", 400));
+  }
+  let order = {
+    userId,
+    orderDetails: {
+      totalItems: cart.totalItems,
+      totalPrice: cart.totalPrice,
+      products: cart.cartItems,
+    },
+    shippingDetails: {
+      name,
+      phone,
+      address: {
+        house,
+        street,
+        city,
+        state,
+        pincode,
       },
-      shippingDetails: {
-        name,
-        phone,
-        address: {
-          house,
-          street,
-          city,
-          state,
-          pincode,
-        },
-      },
-    };
-    let userOrder = await orderModel.create(order);
-    cart.cartItems.forEach(async (item) => {
-      await productModel.findByIdAndUpdate(
-        item.productId._id,
-        { $inc: { stock: -item.quantity } },
-        { new: true }
-      );
-    });
-
-    await cartModel.findByIdAndUpdate(
-      cart._id,
-      { $set: { cartItems: [], totalItems: 0, totalPrice: 0 } },
+    },
+  };
+  let userOrder = await orderModel.create(order);
+  cart.cartItems.forEach(async (item) => {
+    await productModel.findByIdAndUpdate(
+      item.productId._id,
+      { $inc: { stock: -item.quantity } },
       { new: true }
     );
+  });
 
-    return res.status(200).send({ status: true, msg: "Order Done", userOrder });
-  } else {
-    let cart = await cartModel
-      .findOne({ userId: userId })
-      .populate("cartItems.productId", "stock");
-    if (!cart) {
-      return res
-        .status(404)
-        .send({ status: false, msg: "User cart not found" });
-    }
-    if (cart.cartItems.length <= 0) {
-      if (cartItems.length <= 0) {
-        return res.status(400).send({
-          status: false,
-          msg: "Please Add items in cart to place order",
-        });
-      }
-      const filterProduct = cartItems.filter(
-        (x) => x.quantity > x.productId.stock
-      );
-      if (filterProduct.length > 0) {
-        return res.status(400).send({
-          status: false,
-          msg: "Products are Out of Stock",
-          filterProduct,
-        });
-      }
-      let order = {
-        userId,
-        orderDetails: {
-          totalItems: cart.totalItems,
-          totalPrice: cart.totalPrice,
-          products: cart.cartItems,
-          totalItems: totalItems,
-          totalPrice: totalPrice,
-          products: cartItems,
-        },
-        shippingDetails: {
-          name,
-          phone,
-          address: {
-            house,
-            street,
-            city,
-            state,
-            pincode,
-          },
-        },
-      };
-      let userOrder = await orderModel.create(order);
-      cart.cartItems.forEach(async (item) => {
-        await productModel.findByIdAndUpdate(
-          item.productId._id,
-          { $inc: { stock: -item.quantity } },
-          { new: true }
-        );
-      });
-      await cartModel.findByIdAndUpdate(
-        cart._id,
-        { $set: { cartItems: [], totalItems: 0, totalPrice: 0 } },
-        { new: true }
-      );
-      return res
-        .status(200)
-        .send({ status: true, msg: "Order Done", userOrder });
-    }
-  }
+  await cartModel.findByIdAndUpdate(
+    cart._id,
+    { $set: { cartItems: [], totalItems: 0, totalPrice: 0 } },
+    { new: true }
+  );
+
+  return res.status(200).send({ status: true, msg: "Order Done", userOrder });
 });
 
 exports.getOrder = catchAsyncError(async (req, res, next) => {

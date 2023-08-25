@@ -52,7 +52,6 @@ exports.getSingleProduct = catchAsyncError(async (req, res, next) => {
 //update product
 exports.updateProduct = catchAsyncError(async (req, res, next) => {
   const product = await productModel.findById(req.params.id);
-
   if (!product) {
     return next(
       new ErrorHandler(`No product exist with this id : ${req.params.id}`)

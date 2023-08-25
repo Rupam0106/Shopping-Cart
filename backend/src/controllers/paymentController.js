@@ -1,4 +1,5 @@
 const catchAsyncError = require("../middlewares/catchAsyncError");
+const Order = require("../models/orderModel");
 const stripe = require("stripe")(process.env.SCRET_STRIPE_KEY);
 const orderModel = require("../models/orderModel");
 const userModel = require("../models/userModel");
@@ -88,19 +89,32 @@ exports.sendOrderDetailsByMail = catchAsyncError(async (req, res, next) => {
   const order = await orderModel
     .findById(orderId)
     .populate("orderDetails.products.productId");
-  // const mess = {
-  //   Date: order.createdAt,
-  //   Name: order.shippingDetails.name,
-  //   Phone: order.shippingDetails.phone,
-  //   Address: order.shippingDetails.address.city,
-  //   Status: order.status,
-  //   TotalItem: order.orderDetails.totalItems,
-  //   TotalPrice: order.orderDetails.totalPrice,
-  // };
-  const message = `OrderId:#${orderId}\n\nDate:${order.createdAt}\n\nName:${order.shippingDetails.name}\n\nAddress: ${order.shippingDetails.address.house} ,${order.shippingDetails.address.street} ,${order.shippingDetails.address.city}, ${order.shippingDetails.address.state}, ${order.shippingDetails.address.pincode}\n\nStatus:${order.status}\n\nTotalItem:${order.orderDetails.totalItems}\n\nTotalPrice:${order.orderDetails.totalPrice}`;
+
+  const message = `
+  <div style="background-color: powderblue;padding:20px">
+    <h1 style="color:black; text-align:center" >Welcome to R-Shop<h1>
+    <h3 style="color:black; text-align:center"> Woo hoo! Your order is on its way. Your order details can be found below.</h3>
+    <h3> Track Your Order : <a href="https://ru-shop.netlify.app/user/order/payment/track/${orderId}">Click here </a></h3>
+
+    <h3>Order Summary :-</h3>
+    <div style="padding:3px"><strong>OrderId: </strong>#${orderId}</div>
+    <div style="padding:3px"><strong>Date: </strong>${order.createdAt}</div> 
+    <div style="padding:3px"><strong> Name: </strong>${order.shippingDetails.name} </div>
+    <div style="padding:3px"><strong> Shipping Address:</strong> ${order.shippingDetails.address.house} ,
+    ${order.shippingDetails.address.street} ,
+    ${order.shippingDetails.address.city} ,
+    ${order.shippingDetails.address.state} ,
+    ${order.shippingDetails.address.pincode}</div>
+    <div style="padding:3px"><strong> Status: </strong>${order.status}<span style=" color:green;"> ✔</span>
+    </div>
+    <div style="padding:3px"><strong>TotalItem:  </strong>${order.orderDetails.totalItems}</div>
+    <div style="padding:3px"><strong>TotalPrice:  </strong>${order.orderDetails.totalPrice}</div>
+    <h3 style="color:black; text-align:center">We hope you enjoyed your shopping experience with us and that you will visit us again soon.</h3>
+  </div>
+  `;
   try {
     await sendEmail({
-      email: user.email,
+      email: process.env.SMPT_MAIL,
       subject: `Order Details`,
       message,
     });

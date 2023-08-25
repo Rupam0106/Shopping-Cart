@@ -18,6 +18,6 @@ router.route("/get/:orderId").get(isAuthenticate, getSpecificOrder);
 router.route("/:orderId").put(isAuthenticate, updatedOrder);
 router.route("/cancel/:orderId").put(isAuthenticate, cancelOrder);
 router.route("/summary").get(isAuthenticate, getOrderOfCurrentUser);
-router.route("/mail").post(isAuthenticate,sendOrderDetailsByMail);
+router.route("/mail").post(isAuthenticate, sendOrderDetailsByMail);
 
 module.exports = router;

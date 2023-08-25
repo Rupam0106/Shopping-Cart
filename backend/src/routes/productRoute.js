@@ -18,7 +18,7 @@ router
   .post(isAuthenticate, authorizeRoles("admin"), createProduct);
 router
   .route("/:id")
-  .put(authorizeRoles("admin"), updateProduct)
+  .put(isAuthenticate,authorizeRoles("admin"), updateProduct)
   .delete(isAuthenticate, authorizeRoles("admin"), deleteProduct)
   .get(getSingleProduct);
 
