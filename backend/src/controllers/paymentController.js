@@ -83,18 +83,20 @@ exports.trackOrder = catchAsyncError(async (req, res, next) => {
 //send mail order Details
 exports.sendOrderDetailsByMail = catchAsyncError(async (req, res, next) => {
   const orderId = req.body.orderId;
-  console.log(orderId);
-
   const userId = req.user.id;
-  console.log(userId);
   const user = await userModel.findById(userId);
   const order = await orderModel
     .findById(orderId)
     .populate("orderDetails.products.productId");
   const date = new Date(order.createdAt);
+  const hours = date.getHours();
+  const amOrPm = hours >= 12 ? "PM" : "AM";
   const message = `
   <div style="background-color: powderblue;padding:20px">
     <h1 style="color:black; text-align:center" >Welcome to R-Shop<h1>
+    <h1 style="color:black; text-align:center" >Hi, ${
+      order.shippingDetails.name
+    } <h1>
     <h3 style="color:black; text-align:center"> Woo hoo! Your order is on its way. Your order details can be found below.</h3>
     <h3> Track Your Order : <a href="https://ru-shop.netlify.app/user/order/payment/track/${orderId}">Click here </a></h3>
 
@@ -102,7 +104,7 @@ exports.sendOrderDetailsByMail = catchAsyncError(async (req, res, next) => {
     <div style="padding:3px"><strong>OrderId: </strong>#${orderId}</div>
     <div style="padding:3px"><strong>Date: </strong> ${date.getDate()}-${
     date.getMonth() + 1
-  }-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}</div> 
+  }-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ${amOrPm}</div> 
     <div style="padding:3px"><strong> Name: </strong>${
       order.shippingDetails.name
     } </div>
@@ -123,13 +125,14 @@ exports.sendOrderDetailsByMail = catchAsyncError(async (req, res, next) => {
     <div style="padding:3px"><strong>TotalPrice:  </strong>${
       order.orderDetails.totalPrice
     }</div>
+    
     <h3 style="color:black; text-align:center">We hope you enjoyed your shopping experience with us and that you will visit us again soon.</h3>
   </div>
   `;
   try {
     await sendEmail({
-      email: process.env.SMPT_MAIL,
-      subject: `Order Details`,
+      email: user.email,
+      subject: `Order Receipt.`,
       message: message,
     });
 
