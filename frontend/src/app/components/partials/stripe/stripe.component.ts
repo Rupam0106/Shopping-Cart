@@ -1,4 +1,3 @@
-import { LoginComponent } from './../../pages/login/login.component';
 import { Component, Input } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
 import { OrderService } from 'src/app/services/order.service';
@@ -19,7 +18,6 @@ export class StripeComponent {
   @Input()
   status!: any;
   handler: any;
-  orderId: any;
 
   constructor(
     private orderService: OrderService,
@@ -27,24 +25,22 @@ export class StripeComponent {
   ) {}
   onPayment() {
     this.orderService.orderPlace(this.form, this.order).subscribe((res) => {
-      this.orderId = res.userOrder._id;
+      this.sendMail(res.userOrder._id);
     });
 
     this.paymentService
       .payment(this.order, this.form)
       .subscribe(async (res: any) => {
         let stripe = await loadStripe(PUBLISHABLE_KEY);
+
         localStorage.setItem('paymentResponse', JSON.stringify(res));
         stripe?.redirectToCheckout({
           sessionId: res.id,
         });
       });
-    if (localStorage.getItem('paymentResponse')) {
-      this.sendMail();
-    }
   }
 
-  sendMail() {
-    this.paymentService.orderDetailsMail(this.orderId).subscribe();
+  sendMail(id: any) {
+    this.paymentService.orderDetailsMail(id).subscribe();
   }
 }

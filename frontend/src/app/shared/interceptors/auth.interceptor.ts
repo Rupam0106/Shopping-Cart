@@ -43,7 +43,7 @@ export class AuthInterceptor implements HttpInterceptor {
         }
         if (err.status === 401 || err.status === 409) {
         } else if (err.status === 404 || err.status === 400) {
-          this.toastr.error(err.error.msg);
+          this.toastr.error(err.error.message);
         }
         // else if (err.error.message == 'TokenExpired') {
         // return this.http.post(REFREASH_TOKEN_URL, {}).pipe(

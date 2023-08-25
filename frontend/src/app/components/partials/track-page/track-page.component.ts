@@ -9,6 +9,7 @@ import { OrderService } from 'src/app/services/order.service';
 })
 export class TrackPageComponent {
   order!: any;
+  count:number=1
   constructor(activatedRoute: ActivatedRoute, orderService: OrderService) {
     const params = activatedRoute.snapshot.params['orderId'];
   

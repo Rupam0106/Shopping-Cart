@@ -58,7 +58,8 @@ export class UserService {
           this.invalidUserAuth.emit(false);
         },
         error: (errorResponse) => {
-          this.toastr.error(errorResponse.error.message, 'Register Failed');
+          console.log(errorResponse)
+          // this.toastr.error(errorResponse, 'Register Failed');
           this.invalidUserAuth.emit(true);
         },
       })
@@ -83,8 +84,8 @@ export class UserService {
           this.toastr.success(` Welome ${user.user.name}!`, 'Login Successful');
           this.invalidUserAuth.emit(false);
         },
-        error: () => {
-          this.toastr.error('Login Failed');
+        error: (err) => {
+          this.toastr.error(err,'Login Failed');
           this.invalidUserAuth.emit(true);
         },
       })
@@ -110,7 +111,7 @@ export class UserService {
           this.invalidUserAuth.emit(false);
         },
         error: () => {
-          this.toastr.error('Login Failed');
+          
           this.invalidUserAuth.emit(true);
         },
       })
