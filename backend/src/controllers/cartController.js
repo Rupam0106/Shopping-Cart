@@ -20,7 +20,7 @@ exports.addToCartFromLocalStorage = async (req, res) => {
     let newCart = await cartModel.create(cartDetails);
     return res
       .status(201)
-      .send({ status: true, msg: "Items added to cart", cart: newCart });
+      .send({ status: true, message: "Items added to cart", cart: newCart });
   } else {
     let totalItems = 0;
     let totalPrice = 0;
@@ -66,13 +66,13 @@ exports.createCart = catchAsyncError(async (req, res, next) => {
   if (!validProduct) {
     return res
       .status(404)
-      .send({ status: false, msg: "product not found with given id" });
+      .send({ status: false, message: "product not found with given id" });
   }
 
   if (validProduct.stock === 0) {
     return res
       .status(400)
-      .send({ status: false, msg: "item is not currently available" });
+      .send({ status: false, message: "item is not currently available" });
   }
 
   let userCart = await cartModel.findOne({ userId: userId });
@@ -88,7 +88,7 @@ exports.createCart = catchAsyncError(async (req, res, next) => {
     let newCart = await cartModel.create(cartDetails);
     return res
       .status(201)
-      .send({ status: true, msg: "Items added to cart", cart: newCart });
+      .send({ status: true, message: "Items added to cart", cart: newCart });
   } else {
     let cartItemIndex = userCart.cartItems.findIndex(
       (x) => x.productId == productId
@@ -106,7 +106,7 @@ exports.createCart = catchAsyncError(async (req, res, next) => {
       );
       return res
         .status(200)
-        .send({ status: true, msg: "Item added to cart", cart: updatedCart });
+        .send({ status: true, message: "Item added to cart", cart: updatedCart });
     }
 
     // if user added different product in cart
@@ -122,7 +122,7 @@ exports.createCart = catchAsyncError(async (req, res, next) => {
 
       return res
         .status(200)
-        .send({ status: true, msg: "Item added to cart", cart: updatedCart });
+        .send({ status: true, message: "Item added to cart", cart: updatedCart });
     }
   }
 });
@@ -136,12 +136,12 @@ exports.updateCartById = catchAsyncError(async (req, res, next) => {
   if (!product) {
     return res
       .status(404)
-      .send({ status: false, msg: "product not found with given Id" });
+      .send({ status: false, message: "product not found with given Id" });
   }
   if (quantity > product.stock) {
     return res.status(404).send({
       status: false,
-      msg: `maximum quantiy to buy is ${product.stock}`,
+      message: `maximum quantiy to buy is ${product.stock}`,
     });
   }
   let userCart = await cartModel.findOne({ userId });
@@ -152,7 +152,7 @@ exports.updateCartById = catchAsyncError(async (req, res, next) => {
   if (item === -1) {
     return res
       .status(404)
-      .send({ status: false, msg: "This product not found in your cart" });
+      .send({ status: false, message: "This product not found in your cart" });
   }
   let updatedCart = {};
   const cartItem = userCart.cartItems[item];
@@ -187,7 +187,7 @@ exports.updateCartById = catchAsyncError(async (req, res, next) => {
       .populate("cartItems.productId");
     return res
       .status(200)
-      .send({ status: true, msg: "cart updated", cart: cart });
+      .send({ status: true, message: "cart updated", cart: cart });
   }
 });
 

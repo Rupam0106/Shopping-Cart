@@ -55,7 +55,7 @@ exports.createOrder = catchAsyncError(async (req, res, next) => {
     { new: true }
   );
 
-  return res.status(200).send({ status: true, msg: "Order Done", userOrder });
+  return res.status(200).send({ status: true, message: "Order Done", userOrder });
 });
 
 exports.getOrder = catchAsyncError(async (req, res, next) => {
@@ -88,7 +88,7 @@ exports.cancelOrder = catchAsyncError(async (req, res, next) => {
   if (!orderId) {
     return res
       .status(400)
-      .send({ status: false, msg: "Please provide orderId" });
+      .send({ status: false, message: "Please provide orderId" });
   }
   let userOrder = await orderModel.findById(orderId);
 
@@ -109,7 +109,7 @@ exports.cancelOrder = catchAsyncError(async (req, res, next) => {
     { $set: { status: "cancled" } },
     { new: true }
   );
-  return res.status(200).send({ status: true, msg: "order cancled", order });
+  return res.status(200).send({ status: true, message: "order cancled", order });
 });
 
 //updatedOrder the order
@@ -119,35 +119,35 @@ exports.updatedOrder = catchAsyncError(async (req, res, next) => {
   if (!orderId) {
     return res
       .status(400)
-      .send({ status: false, msg: "Please provide orderId" });
+      .send({ status: false, message: "Please provide orderId" });
   }
 
   if (!productId) {
     return res
       .status(400)
-      .send({ status: false, msg: "Please provide productId" });
+      .send({ status: false, message: "Please provide productId" });
   }
 
   let userOrder = await orderModel.findById(orderId);
   if (!userOrder) {
     return res
       .status(404)
-      .send({ status: false, msg: "order not found with this id" });
+      .send({ status: false, message: "order not found with this id" });
   }
 
   if (userOrder.status !== "payed") {
     return res
       .status(400)
-      .send({ status: false, msg: "Order cannot be updated" });
+      .send({ status: false, message: "Order cannot be updated" });
   }
   let product = await productModel.findById(productId);
   if (!product) {
-    return res.status(404).send({ status: false, msg: "productId invalid" });
+    return res.status(404).send({ status: false, message: "productId invalid" });
   }
   if (userOrder.orderDetails.products.length === 0) {
     return res
       .status(400)
-      .send({ status: false, msg: "your order is already empty" });
+      .send({ status: false, message: "your order is already empty" });
   }
   // get quantity of removed product
   let quantity = 0;
@@ -164,7 +164,7 @@ exports.updatedOrder = catchAsyncError(async (req, res, next) => {
   if (filteredProducts.length === userOrder.orderDetails.products.length) {
     return res
       .status(404)
-      .send({ status: false, msg: "given product not found in your order" });
+      .send({ status: false, message: "given product not found in your order" });
   }
 
   product.stock += quantity;
@@ -182,7 +182,7 @@ exports.updatedOrder = catchAsyncError(async (req, res, next) => {
       { $set: { orderDetails: updatedData, status: "cancled" } },
       { new: true }
     );
-    return res.status(200).send({ status: true, msg: "order cancled", order });
+    return res.status(200).send({ status: true, message: "order cancled", order });
   } else {
     (updatedData.products = filteredProducts),
       (updatedData.totalItems = userOrder.orderDetails.totalItems - quantity),
@@ -205,7 +205,7 @@ exports.updatedOrder = catchAsyncError(async (req, res, next) => {
       .populate("orderDetails.products.productId");
     return res
       .status(200)
-      .send({ status: true, msg: "product cancled", order });
+      .send({ status: true, message: "product cancled", order });
   }
 });
 
@@ -217,5 +217,5 @@ exports.getOrderOfCurrentUser = catchAsyncError(async (req, res, next) => {
   if (!order) {
     return next(new ErrorHandler("Not completed any order", 404));
   }
-  return res.status(200).send({ status: true, msg: "User order", order });
+  return res.status(200).send({ status: true, message: "User order", order });
 });

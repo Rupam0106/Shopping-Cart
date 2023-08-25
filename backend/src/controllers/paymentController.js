@@ -90,7 +90,7 @@ exports.sendOrderDetailsByMail = catchAsyncError(async (req, res, next) => {
     .populate("orderDetails.products.productId");
   const date = new Date(order.createdAt);
   const hours = date.getHours();
-  const amOrPm = hours >= 12 ? "PM" : "AM";
+  const amOrPm = hours >= 12 ? "AM" : "PM";
   const message = `
   <div style="background-color: powderblue;padding:20px">
     <h1 style="color:black; text-align:center" >Welcome to R-Shop<h1>

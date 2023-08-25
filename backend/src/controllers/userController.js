@@ -50,7 +50,7 @@ exports.guestUser = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
   const findEmail = await userModel.findOne({ email });
   if (findEmail) {
-    return next(new ErrorHandler("User already present ", 400));
+    return next(new ErrorHandler("User already present, Please Login", 400));
   }
   const name = email.split("@")[0];
   let avatar = "https://source.unsplash.com/1600x900/?portrait";
