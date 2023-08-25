@@ -6,6 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import {
   DELETE_USER_URL,
   FORGOT_USER_URL,
+  LOGIN_GUEST_URL,
   LOGIN_USER_URL,
   LOGOUT_URL,
   REGISTER_USER_URL,
@@ -89,6 +90,33 @@ export class UserService {
       })
     );
   }
+
+  guestLogin(guestLogin: IUserLogin): Observable<User> {
+    return this.http.post<User>(LOGIN_GUEST_URL, guestLogin).pipe(
+      tap({
+        next: (user: any) => {
+          if (user.user.role === 'user') {
+            this.setUserToLocalStorage('user', user);
+            this.setUserToLocalStorage('token', user.accessToken);
+          } else {
+            this.setUserToLocalStorage('admin', user);
+            this.setUserToLocalStorage('token', user.accessToken);
+          }
+          this.cartService.storeLocalCart();
+          this.userSubject.next(user);
+          this.cartService.getUserCart();
+          this.cookieService.set('refreshToken', user.refreshToken);
+          this.toastr.success(` Welome ${user.user.name}!`, 'Login Successful');
+          this.invalidUserAuth.emit(false);
+        },
+        error: () => {
+          this.toastr.error('Login Failed');
+          this.invalidUserAuth.emit(true);
+        },
+      })
+    );
+  }
+
   public get currentUser(): any {
     return this.userSubject.value;
   }
@@ -182,6 +210,7 @@ export class UserService {
       })
     );
   }
+
 
   private setUserToLocalStorage(USER_KEY: any, user: User) {
     localStorage.setItem(USER_KEY, JSON.stringify(user));

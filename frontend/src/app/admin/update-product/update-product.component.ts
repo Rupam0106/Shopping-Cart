@@ -13,7 +13,7 @@ export class UpdateProductComponent {
   productImage: string = '';
   constructor(
     private route: ActivatedRoute,
-    private routes: Router,
+    private router: Router,
     private product: ProductsService,
     private toastr: ToastrService
   ) {}
@@ -25,21 +25,21 @@ export class UpdateProductComponent {
         this.productData = data.product;
       });
   }
+//  onFileSelected(event: any) {
+//     if (event.target.files.length > 0) {
+//       this.productImage = event.target.files[0];
+//     }
+//   }
 
   updateProductByAdmin(data: any) {
     const formData = new FormData();
-    formData.append('id', data._id);
     formData.append('title', data.title);
     formData.append('description', data.description);
     formData.append('price', data.price);
-    formData.append('productImage', this.productImage);
     formData.append('stock', data.stock);
-    this.product.updateProduct(formData).subscribe()
-  }
-
-  onFileSelected(event: any) {
-    if (event.target.files.length > 0) {
-      this.productImage = event.target.files[0];
-    }
+    this.product.updateProduct(this.productData._id,formData).subscribe(res=>{
+     this.toastr.success("Product Updated Successfully","Product !")
+     this.router.navigateByUrl('/admin/home')
+    });
   }
 }

@@ -39,24 +39,25 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((err) => {
         if (err.status === 500) {
           this.user.logout().subscribe();
+          localStorage.clear();
         }
         if (err.status === 401 || err.status === 409) {
         } else if (err.status === 404 || err.status === 400) {
-          this.toastr.error(err.error.message);
-        } 
+          this.toastr.error(err.error.msg);
+        }
         // else if (err.error.message == 'TokenExpired') {
-          // return this.http.post(REFREASH_TOKEN_URL, {}).pipe(
-          //   switchMap((res: any) => {
-          //     console.log(res);
-          //     return next.handle(
-          //       request.clone({
-          //         setHeaders: {
-          //           authorization: this.cookieService.get('refreshToken'),
-          //         },
-          //       })
-          //     );
-          //   })
-          // );
+        // return this.http.post(REFREASH_TOKEN_URL, {}).pipe(
+        //   switchMap((res: any) => {
+        //     console.log(res);
+        //     return next.handle(
+        //       request.clone({
+        //         setHeaders: {
+        //           authorization: this.cookieService.get('refreshToken'),
+        //         },
+        //       })
+        //     );
+        //   })
+        // );
         // }
         const error = err.error.message || err.statusText;
         return throwError(error);

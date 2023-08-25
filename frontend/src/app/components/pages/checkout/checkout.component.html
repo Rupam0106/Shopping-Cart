@@ -1,38 +1,4 @@
-<div>
-  <app-title title="For Guest Login" fontSize="1.6rem"></app-title>
-  <form class="row g-2 container w-50 d-flex align-items-center " [formGroup]="form">
-    <div class="col-sm-6">
-      <label for="email" class="form-label">Email</label>
-      <input
-        type="email"
-        class="form-control"
-        id="email"
-        formControlName="email"
-      />
-      <div *ngIf="email && email.touched" class="text-danger">
-        <span *ngIf="email.errors?.['required'] ">Enter Email</span>
-        <span *ngIf="email?.errors?.['minlength'] ">Enter valid Email</span>
-      </div>
-    </div>
-    <div class="col-sm-6">
-      <label for="password" class="form-label">Password</label>
-      <input
-        type="password"
-        class="form-control"
-        id="password"
-        formControlName="password"
-      />
-      <div *ngIf="password && password.touched" class="text-danger">
-        <span *ngIf="password.errors?.['required'] ">Enter Password</span>
-        <span *ngIf="password?.errors?.['minlength'] "
-          >Enter valid Password min 8 char</span
-        >
-      </div>
-    </div>
-    <button class="btn btn-info">Login</button>
-  </form>
-</div>
-<app-title title="Order Form" fontSize="1.6rem"></app-title>
+<app-title title="Shipping Details" fontSize="1.6rem"></app-title>
 <div class="d-flex p-3 flex-column flex-md-row align-items-center">
   <div>
     <form class="row g-2 p-4" [formGroup]="form">
@@ -174,7 +140,7 @@
         <span>Total :</span>
         <span>{{ cartDetails.totalPrice }}</span>
       </div>
-      <app-stripe [order]="cartDetails" [form]="form.value"></app-stripe>
+      <app-stripe [order]="cartDetails" [status]="form"  [form]="form.value"  ></app-stripe>
     </div>
   </div>
 </div>

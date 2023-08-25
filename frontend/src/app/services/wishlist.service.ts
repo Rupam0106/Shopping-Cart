@@ -6,6 +6,7 @@ import {
   GET_WISH_LIST_URL,
   UPDATE_WISH_LIST_URL,
 } from '../shared/constants/urls';
+import { Wish } from '../shared/models/Wish';
 
 @Injectable({
   providedIn: 'root',

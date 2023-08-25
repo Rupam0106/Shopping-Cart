@@ -1,5 +1,5 @@
 <button
-  [disabled]="form.status === 'INVALID'"
+  [disabled]="status.status === 'INVALID'"
   class="btn btn-info"
   #paypal
   (click)="onPayment()"

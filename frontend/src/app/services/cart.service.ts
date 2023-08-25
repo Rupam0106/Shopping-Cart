@@ -122,7 +122,7 @@ export class CartService {
     }
   }
 
-  //UPDATE HTE EXITING-CARD
+  //UPDATE THE EXITING-CARD
   cartUpdate(data: any, quantity: number): void {
     if (!localStorage.getItem('token')) {
       let cart = localStorage.getItem('cart');

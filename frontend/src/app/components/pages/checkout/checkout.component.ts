@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 import { states } from 'src/app/state';
 
 @Component({
@@ -10,12 +11,14 @@ import { states } from 'src/app/state';
 })
 export class CheckoutComponent {
   paymentHandler: any;
+  returnUrl = '';
   cartItems: any[] = [];
-  constructor(private router: Router) {}
+  constructor(private router: Router,  private userService: UserService, private activatedRoute: ActivatedRoute) {}
   cartDetails: any;
   states: string[] = states;
 
   ngOnInit(): void {
+    this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'];
     if (localStorage.getItem('token')) {
     } else {
       this.router.navigate(['/login']);
@@ -27,13 +30,11 @@ export class CheckoutComponent {
       if (!this.cartDetails.cartItems.length) {
         this.router.navigate(['/user/order/checkout']);
       }
-    } 
+    }
   }
 
   form = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    email: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     phone: new FormControl('', [
       Validators.required,
       Validators.minLength(10),
@@ -55,12 +56,6 @@ export class CheckoutComponent {
   get name() {
     return this.form.get('name');
   }
-  get email() {
-    return this.form.get('email');
-  }
-  get password() {
-    return this.form.get('password');
-  }
   get phone() {
     return this.form.get('phone');
   }
@@ -79,4 +74,5 @@ export class CheckoutComponent {
   get pincode() {
     return this.form.get('pincode');
   }
+
 }

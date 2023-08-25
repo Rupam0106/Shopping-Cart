@@ -1,7 +1,10 @@
-import { CartItem } from "./CartItem";
+import { CartItem } from './CartItem';
 
-export class Cart{
-  items:CartItem[] = [];
-  totalPrice:number = 0;
-  totalCount:number = 0;
+export class Cart {
+  _id?: any;
+  cartItems: CartItem[] = [];
+  totalPrice!: number;
+  totalItems!: number;
+  createdAt?: any;
+  updatedAt?: any;
 }

@@ -1,69 +1,124 @@
-<div
-  class="w-100 d-flex align-items-center justify-content-center"
-  style="height: 34.75rem"
->
-  <div class="bg-dark mt-4 rounded">
-    <form
-      class="m-2 p-2"
-      #userLogin="ngForm"
-      (ngSubmit)="loginUser(userLogin.value)"
-    >
-      <div class="form-group">
-        <label for="email"></label>
-        <input
-          name="email"
-          type="email"
-          class="form-control"
-          #email="ngModel"
-          required
-          placeholder="Enter email"
-          ngModel
-        />
-        <p *ngIf="email.invalid && email.touched" class="text-danger">
-          Enter valid Email
-        </p>
-      </div>
-      <div class="form-group">
-        <label for="password"></label>
-        <input
-          name="password"
-          type="password"
-          class="form-control"
-          #password="ngModel"
-          required
-          placeholder="Password"
-          ngModel
-        />
-        <p *ngIf="password.invalid && password.touched" class="text-danger">
-          Password must be Required
-        </p>
-        <span class="text-white"
-          >Forget Password ?<a
-            class="text-decoration-none text-info"
-            href="/user/password/forgot"
-          >
-            click here</a
-          ></span
-        >
-        >
-      </div>
-      <button type="submit" class="btn btn-info w-100 mt-3">Login</button>
-      <div class="text-white p-2">
-        Don't have an Account ?
-        <a
-          class="text-info text-decoration-none"
-          routerLink="/register"
-          [queryParams]="{ returnUrl: returnUrl }"
-          ><span>Sign-Up</span></a
-        >
-      </div>
-      <!-- <div
-        class="d-flex justify-content-center text-info"
-        style="cursor: pointer"
-        (click)="gestLogin()"
+<div *ngIf="!showLogin">
+  <app-title title="Login Page" fontSize="1.6rem"></app-title>
+
+  <div class="d-flex align-items-center justify-content-center">
+    <div class="bg-dark mt-4 rounded">
+      <form
+        class="m-2 p-2"
+        #userLogin="ngForm"
+        (ngSubmit)="loginUser(userLogin.value)"
       >
-        Guest Login
-      </div> -->
-    </form>
+        <div class="form-group">
+          <label for="email"></label>
+          <input
+            name="email"
+            type="email"
+            class="form-control"
+            #email="ngModel"
+            required
+            placeholder="Enter email"
+            ngModel
+          />
+          <p *ngIf="email.invalid && email.touched" class="text-danger">
+            Enter valid Email
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="password"></label>
+          <input
+            name="password"
+            type="password"
+            class="form-control"
+            #password="ngModel"
+            required
+            placeholder="Password"
+            ngModel
+          />
+          <p *ngIf="password.invalid && password.touched" class="text-danger">
+            Password must be Required
+          </p>
+          <span class="text-white"
+            >Forget Password ?<a
+              class="text-decoration-none text-info"
+              href="/user/password/forgot"
+            >
+              click here</a
+            ></span
+          >
+          >
+        </div>
+        <button type="submit" class="btn btn-info w-100 mt-3">Login</button>
+        <div class="text-white p-2">
+          Don't have an Account ?
+          <a
+            class="text-info text-decoration-none"
+            routerLink="/register"
+            [queryParams]="{ returnUrl: returnUrl }"
+            ><span>Sign-Up</span></a
+          >
+        </div>
+        <div
+          class="d-flex justify-content-center text-info"
+          style="cursor: pointer"
+          (click)="openGuest()"
+        >
+          Guest Login
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showLogin">
+  <app-title title=" Guest Login" fontSize="1.6rem"></app-title>
+  <div class="d-flex align-items-center justify-content-center">
+    <div class="bg-dark mt-4 rounded">
+      <form
+        class="m-2 p-2"
+        #guestLoginUser="ngForm"
+        (ngSubmit)="guestLogin(guestLoginUser.value)"
+      >
+        <div class="form-group">
+          <label for="email"></label>
+          <input
+            name="email"
+            type="email"
+            class="form-control"
+            #email="ngModel"
+            required
+            placeholder="Enter email"
+            ngModel
+          />
+          <p *ngIf="email.invalid && email.touched" class="text-danger">
+            Enter valid Email
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="password"></label>
+          <input
+            name="password"
+            type="password"
+            class="form-control"
+            #password="ngModel"
+            required
+            placeholder="Password"
+            ngModel
+          />
+          <p *ngIf="password.invalid && password.touched" class="text-danger">
+            Password must be Required
+          </p>
+        </div>
+        <button type="submit" class="btn btn-info w-100 mt-3">
+          Guest Login
+        </button>
+        <div
+          class="d-flex justify-content-center text-info mt-3"
+          style="cursor: pointer"
+          (click)="openLogin()"
+        >
+          Login
+        </div>
+      </form>
+    </div>
   </div>
 </div>

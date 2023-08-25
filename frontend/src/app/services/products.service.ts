@@ -23,9 +23,10 @@ export class ProductsService {
     return this.http.get<Product>(PRODUCT_BY_ID_URL + productId);
   }
 
-  updateProduct(product: any) {
+  updateProduct(productId:any,product: any) {
+  
     return this.http.put<any>(
-      `${UPDATE_PEODUCT_BY_ID_URL}${product._id}`,
+      `${UPDATE_PEODUCT_BY_ID_URL}${productId}`,
       product
     );
   }

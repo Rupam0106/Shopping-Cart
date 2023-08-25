@@ -102,7 +102,6 @@ const routes: Routes = [
   {
     path: 'user/order/payment/track/:orderId',
     component: TrackPageComponent,
-    canActivate: [authGuard],
   },
   {
     path: 'admin/home',

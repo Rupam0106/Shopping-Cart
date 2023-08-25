@@ -17,7 +17,6 @@ export class SearchComponent {
         .getAllProductBySearchTerm(params['searchTerm'])
         .subscribe((data: any) => {
           this.searchResult = data.products;
-          console.log(data.products)
         });
     });
   }

@@ -24,7 +24,7 @@ export class WishlistComponent {
     });
   }
 
-  wishUpdate(productId: string) {
+  wishUpdate(productId: any) {
     this.wishService.wishUpdate(productId).subscribe((data: any) => {
       if (data) {
         this.wishItems = data.wishList;
@@ -32,8 +32,11 @@ export class WishlistComponent {
     });
   }
 
-  moveToCart(productId: string) {
-    this.cartService.addToCart({ productId });
+  moveToCart(productId: any) {
+    let data={
+      _id:productId
+    }
+    this.cartService.addToCart(data);
     this.wishUpdate(productId);
   }
 }

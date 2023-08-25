@@ -1,5 +1,4 @@
 const catchAsyncError = require("../middlewares/catchAsyncError");
-const Order = require("../models/orderModel");
 const stripe = require("stripe")(process.env.SCRET_STRIPE_KEY);
 const orderModel = require("../models/orderModel");
 const userModel = require("../models/userModel");
@@ -84,12 +83,15 @@ exports.trackOrder = catchAsyncError(async (req, res, next) => {
 //send mail order Details
 exports.sendOrderDetailsByMail = catchAsyncError(async (req, res, next) => {
   const orderId = req.body.orderId;
+  console.log(orderId);
+
   const userId = req.user.id;
+  console.log(userId);
   const user = await userModel.findById(userId);
   const order = await orderModel
     .findById(orderId)
     .populate("orderDetails.products.productId");
-
+  const date = new Date(order.createdAt);
   const message = `
   <div style="background-color: powderblue;padding:20px">
     <h1 style="color:black; text-align:center" >Welcome to R-Shop<h1>
@@ -98,17 +100,29 @@ exports.sendOrderDetailsByMail = catchAsyncError(async (req, res, next) => {
 
     <h3>Order Summary :-</h3>
     <div style="padding:3px"><strong>OrderId: </strong>#${orderId}</div>
-    <div style="padding:3px"><strong>Date: </strong>${order.createdAt}</div> 
-    <div style="padding:3px"><strong> Name: </strong>${order.shippingDetails.name} </div>
-    <div style="padding:3px"><strong> Shipping Address:</strong> ${order.shippingDetails.address.house} ,
+    <div style="padding:3px"><strong>Date: </strong> ${date.getDate()}-${
+    date.getMonth() + 1
+  }-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}</div> 
+    <div style="padding:3px"><strong> Name: </strong>${
+      order.shippingDetails.name
+    } </div>
+    <div style="padding:3px"><strong> Shipping Address:</strong> ${
+      order.shippingDetails.address.house
+    } ,
     ${order.shippingDetails.address.street} ,
     ${order.shippingDetails.address.city} ,
     ${order.shippingDetails.address.state} ,
     ${order.shippingDetails.address.pincode}</div>
-    <div style="padding:3px"><strong> Status: </strong>${order.status}<span style=" color:green;"> ✔</span>
+    <div style="padding:3px"><strong> Status: </strong>${
+      order.status
+    }<span style=" color:green;"> ✔</span>
     </div>
-    <div style="padding:3px"><strong>TotalItem:  </strong>${order.orderDetails.totalItems}</div>
-    <div style="padding:3px"><strong>TotalPrice:  </strong>${order.orderDetails.totalPrice}</div>
+    <div style="padding:3px"><strong>TotalItem:  </strong>${
+      order.orderDetails.totalItems
+    }</div>
+    <div style="padding:3px"><strong>TotalPrice:  </strong>${
+      order.orderDetails.totalPrice
+    }</div>
     <h3 style="color:black; text-align:center">We hope you enjoyed your shopping experience with us and that you will visit us again soon.</h3>
   </div>
   `;
@@ -116,7 +130,7 @@ exports.sendOrderDetailsByMail = catchAsyncError(async (req, res, next) => {
     await sendEmail({
       email: process.env.SMPT_MAIL,
       subject: `Order Details`,
-      message,
+      message: message,
     });
 
     res.status(200).json({

@@ -21,7 +21,7 @@
       </tr>
       <tr *ngFor="let item of order.orderDetails.products">
         <td>
-          <a routerLink="/product/{{ item._id }}">
+          <a routerLink="/product/{{ item.productId._id }}">
             <img [src]="item.productId.productImage" />
           </a>
         </td>

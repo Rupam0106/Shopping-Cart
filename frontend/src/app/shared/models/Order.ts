@@ -1,12 +1,12 @@
 import { CartItem } from './CartItem';
+import { ShipItem } from './ShipItem';
 
 export class Order {
-  id!: number;
-  items!: CartItem[];
-  totalPrice!: number;
-  name!: string;
-  address!: string;
-  paymentId!: string;
-  createdAt!: string;
+  id!: any;
+  orderDetails!: CartItem[];
+  shippingDetails!: ShipItem[];
   status!: string;
+  paymentId?: any;
+  createdAt!: string;
+  updatedAt!: string;
 }
