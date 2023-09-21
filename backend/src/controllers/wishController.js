@@ -10,7 +10,7 @@ exports.createWishList = catchAsyncError(async (req, res, next) => {
   let item = userWish.productId.findIndex(
     (item) => item._id.toString() == productId.toString()
   );
-  if (item!==-1) {
+  if (item !== -1) {
     return next(new ErrorHandler("Item already Present in Wishlist", 400));
   }
   if (!userWish) {

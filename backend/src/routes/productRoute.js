@@ -10,14 +10,14 @@ const {
 } = require("../controllers/productController");
 const router = express.Router();
 
-router.route("/all").get(getAllProduct);
-router.route("/search/:searchTerm").get(searchProduct);
+router.route("/products").get(getAllProduct);
+router.route("/products/:searchTerm").get(searchProduct);
 
 router
-  .route("/new")
+  .route("/product/new")
   .post(isAuthenticate, authorizeRoles("admin"), createProduct);
 router
-  .route("/:id")
+  .route("/product/:id")
   .put(isAuthenticate,authorizeRoles("admin"), updateProduct)
   .delete(isAuthenticate, authorizeRoles("admin"), deleteProduct)
   .get(getSingleProduct);

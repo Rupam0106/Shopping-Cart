@@ -8,8 +8,10 @@ const {
 
 const router = express.Router();
 
-router.route("/create").post(isAuthenticate, createWishList);
-router.route("/update").put(isAuthenticate, updateWishListById);
-router.route("/get").get(isAuthenticate, getWishListById);
+router
+  .route("/")
+  .post(isAuthenticate, createWishList)
+  .put(isAuthenticate, updateWishListById)
+  .get(isAuthenticate, getWishListById);
 
 module.exports = router;

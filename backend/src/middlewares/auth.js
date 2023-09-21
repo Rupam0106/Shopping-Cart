@@ -7,10 +7,10 @@ exports.isAuthenticate = catchAsyncError(async (req, res, next) => {
   const { refreshToken } = req.cookies;
   const accessToken = req.headers["authorization"];
 
-  if (!accessToken) {
+  if (!refreshToken) {
     return next(new ErrorHandler("Please Login", 401));
   }
-  const decodedToken = jwt.verify(accessToken, process.env.JWT_SECRET);
+  const decodedToken = jwt.verify(refreshToken, process.env.JWT_SECRET);
   req.user = await userModel.findById(decodedToken.id);
   next();
 });

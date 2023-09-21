@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: [true, "Please Provide Profile Image"],
+    default:"https://unsplash.com/photos/Z55YG0Kzg3g"
   },
   createdAt: {
     type: Date,

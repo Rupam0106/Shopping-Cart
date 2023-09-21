@@ -9,10 +9,11 @@ const {
 
 const router = express.Router();
 
-router.route("/create").post(isAuthenticate, createCart);
-router.route("/update").put(isAuthenticate, updateCartById);
-router.route("/all").get(isAuthenticate, getCartById);
+router
+  .route("/")
+  .post(isAuthenticate, createCart)
+  .put(isAuthenticate, updateCartById)
+  .get(isAuthenticate, getCartById);
 router.route("/local-store").put(addToCartFromLocalStorage);
-
 
 module.exports = router;

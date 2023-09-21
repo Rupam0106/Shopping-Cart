@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 
 //register User
 exports.registerUser = catchAsyncError(async (req, res, next) => {
-  let avatar = await aws.uploadFile(req.files[0]);
+  // let avatar = await aws.uploadFile(req.files[0]);
 
   const { name, email, password } = req.body;
 
@@ -17,7 +17,7 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
     name,
     email,
     password,
-    avatar,
+    // avatar,
   });
 
   sendToken(user, 201, res);

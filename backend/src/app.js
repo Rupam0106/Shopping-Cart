@@ -26,12 +26,12 @@ app.use(cors("*"));
 const { swaggerServe, swaggerSetup } = require("./config/swagger");
 app.use("/api-docs", swaggerServe, swaggerSetup);
 
-app.use("/api/v1/user", User);
-app.use("/api/v1/product", Product);
-app.use("/api/v1/user/cart", Cart);
-app.use("/api/v1/user/wish", WishList);
-app.use("/api/v1/user/order", Order);
-app.use("/api/v1/user/order/payment", Payment);
+app.use("/api/v1", User);
+app.use("/api/v1", Product);
+app.use("/api/v1/cart", Cart);
+app.use("/api/v1/wish", WishList);
+app.use("/api/v1/order", Order);
+app.use("/api/v1/payment", Payment);
 
 //error handle middleware
 app.use(ErrorHandler);
