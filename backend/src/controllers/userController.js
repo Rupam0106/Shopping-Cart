@@ -67,12 +67,12 @@ exports.guestUser = catchAsyncError(async (req, res, next) => {
 
 //logout
 exports.logoutUser = catchAsyncError(async (req, res, next) => {
-  res.cookie("token", null, {
+  res.cookie("refreshToken", null, {
     expires: new Date(new Date().getTime()),
     httpOnly: true,
   });
 
-  res.status(200).json({
+  res.status(200).send({
     sucess: true,
     message: "Logged Out Successfully",
   });

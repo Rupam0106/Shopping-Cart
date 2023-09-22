@@ -15,8 +15,8 @@ const sendToken = (user, statusCode, res) => {
   localUser=user._id;
   res
     .status(statusCode)
-    .cookie("refreshToken", refreshToken, options)
-    .header("Authorization", refreshToken)
+    .cookie("refreshToken", refreshToken)
+    .setHeader("authorization", accessToken)
     .json({
       success: true,
       user,
