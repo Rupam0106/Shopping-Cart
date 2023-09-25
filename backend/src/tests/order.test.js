@@ -4,7 +4,7 @@ let server;
 let data;
 let user;
 let token, userToken;
-
+let productId = "650c2d13e6e25c0fdf978d75";
 beforeEach(async () => {
   server = require("../server");
   address = {
@@ -30,10 +30,12 @@ beforeEach(async () => {
     orderDetails,
   };
 });
+
 afterEach(async () => {
   await server.close();
 });
 
+let orderId = "64ec2fdb8190aae898c6ddc6";
 describe("USER API TESTING ", () => {
   describe("POST - LOGIN ", () => {
     // USER LOGIN
@@ -55,7 +57,7 @@ describe("USER API TESTING ", () => {
 describe("ORDER API TESTING", () => {
   describe("POST", () => {
     // CREATE ORDER
-    it("should return 200 if cart created", async () => {
+    it("should return 200 if order created", async () => {
       response = await request(server)
         .post("/api/v1/order")
         .set("authorization", userToken)
@@ -69,10 +71,10 @@ describe("ORDER API TESTING", () => {
   describe("PUT", () => {
     it("should return 200 if order updated", async () => {
       response = await request(server)
-        .put("/api/v1/order")
+        .put(`/api/v1/order/${orderId}`)
         .set("authorization", userToken)
         .set("set-cookie", `refreshToken=${token} Path=/`)
-        .send(data);
+        .send(productId);
       expect(response.status).toBe(200);
     }, 8000);
   });
@@ -92,7 +94,7 @@ describe("ORDER API TESTING", () => {
   describe("PUT", () => {
     it("should return 200 when order is canceled", async () => {
       response = await request(server)
-        .put("/api/v1/order")
+        .put(`/api/v1/order/${orderId}`)
         .set("authorization", userToken)
         .set("set-cookie", `refreshToken=${token} Path=/`);
       expect(response.status).toBe(200);

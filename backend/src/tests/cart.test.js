@@ -16,6 +16,7 @@ beforeEach(async () => {
     totalItems: 1,
   };
 });
+
 afterEach(async () => {
   await server.close();
 });

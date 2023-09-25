@@ -13,6 +13,7 @@ const cookie = require("cookie-parser");
 const app = express();
 const multer = require("multer");
 const bodyParser = require("body-parser");
+const swaggerDocs = require('./swagger/swagger')
 
 app.use(cookie());
 app.use(express.json());
@@ -23,8 +24,7 @@ const upload = multer();
 app.use(upload.any());
 app.use(cors("*"));
 
-const { swaggerServe, swaggerSetup } = require("./config/swagger");
-app.use("/api-docs", swaggerServe, swaggerSetup);
+swaggerDocs(app, process.env.PORT)
 
 app.use("/api/v1", User);
 app.use("/api/v1", Product);

@@ -40,14 +40,14 @@ describe("USER AUTH-API TESTING ", () => {
 describe("PRODUCT-API TESTING", () => {
   describe("POST", () => {
     // PRODUCT CREATE
-    // TODO : we can add the admin role
+    // TODO :add the admin role
     it.skip("should return 201 if product created", async () => {
       response = await request(server)
         .post("/api/v1/product/new")
         .set("authorization", userToken)
         .set("set-cookie", `refreshToken=${token} Path=/`)
         .send(data);
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(201);w
     }, 8000);
   });
 

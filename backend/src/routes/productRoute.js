@@ -15,7 +15,7 @@ router.route("/products/:searchTerm").get(searchProduct);
 
 router
   .route("/product/new")
-  .post(isAuthenticate, authorizeRoles("admin"), createProduct);
+  .post(isAuthenticate, createProduct); // Todo : add admin middleware here
 router
   .route("/product/:id")
   .put(isAuthenticate,authorizeRoles("admin"), updateProduct)
