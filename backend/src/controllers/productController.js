@@ -6,9 +6,8 @@ const aws = require("../Aws/aws.js");
 //createProduct
 exports.createProduct = catchAsyncError(async (req, res, next) => {
   let user = req.user.id;
-  let productImage = await aws.uploadFile(req.files[0]);
-
-  const { title, description, price, stock } = req.body;
+  // let productImage = await aws.uploadFile(req.files[0]);
+  const { title, description, price, productImage, stock } = req.body;
   const product = await productModel.create({
     user,
     title,
@@ -74,7 +73,7 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
 //search product
 exports.searchProduct = catchAsyncError(async (req, res, next) => {
   const searchRegex = new RegExp(req.params.searchTerm, "i");
-  if(!searchRegex){
+  if (!searchRegex) {
     return next(
       new ErrorHandler(`No product exist : ${req.params.searchTerm}`)
     );
@@ -97,5 +96,6 @@ exports.deleteProduct = catchAsyncError(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Product is Successfully Deleted",
+    product
   });
 });

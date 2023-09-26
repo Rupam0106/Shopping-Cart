@@ -26,7 +26,7 @@ app.use(cors("*"));
 
 swaggerDocs(app, process.env.PORT)
 
-app.use("/api/v1", User);
+app.use("/api/v1/user", User);
 app.use("/api/v1", Product);
 app.use("/api/v1/cart", Cart);
 app.use("/api/v1/wish", WishList);

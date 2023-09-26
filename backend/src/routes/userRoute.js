@@ -18,10 +18,12 @@ const router = express.Router();
 router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
 router.route("/guest").post(guestUser);
-router.route("/password/forgot").post(forgotPassword);
-router.route("/password/update").put(isAuthenticate, updatePassword);
+router
+  .route("/password")
+  .post(forgotPassword)
+  .put(isAuthenticate, updatePassword);
 router.route("/refresh-token").post(refreshToken);
-router.route("/password/reset/:token").put(resetPassword);
+router.route("/password/:token").put(resetPassword);
 router
   .route("/me")
   .get(isAuthenticate, getUserDetails)
