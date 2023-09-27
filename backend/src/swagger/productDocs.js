@@ -90,7 +90,7 @@
  *         required: true
  *         schema:
  *           type: string
- *           example: '650c2d13e6e25c0fdf978d75'
+ *           example: phone
  *     description: Responds if the app is up and running
  *     responses:
  *      200:

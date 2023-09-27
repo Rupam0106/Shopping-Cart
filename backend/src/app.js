@@ -29,7 +29,7 @@ swaggerDocs(app, process.env.PORT)
 app.use("/api/v1/user", User);
 app.use("/api/v1", Product);
 app.use("/api/v1/cart", Cart);
-app.use("/api/v1/wish", WishList);
+app.use("/api/v1/wishlist", WishList);
 app.use("/api/v1/order", Order);
 app.use("/api/v1/payment", Payment);
 

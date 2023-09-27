@@ -11,7 +11,7 @@ const {
 const router = express.Router();
 
 router.route("/products").get(getAllProduct);
-router.route("/products/:searchTerm").get(searchProduct);
+router.route("/product/search/:searchTerm").get(searchProduct);
 
 router
   .route("/product/new")

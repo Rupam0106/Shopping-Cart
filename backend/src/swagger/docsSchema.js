@@ -139,27 +139,11 @@
  *    CreateCartInput:
  *      type: object
  *      required:
- *        - title
- *        - description
- *        - productImage
- *        - price
- *        - stock
+ *        - productId
  *      properties:
- *        title:
+ *        productId:
  *          type: string
- *          default: I phone 15
- *        description:
- *          type: string
- *          default: One of the best product by Apple
- *        productImage:
- *          type: string
- *          default: https://picsum.photos/200/300
- *        price:
- *          type: number
- *          default: 1000
- *        stock:
- *          type: number
- *          default: 100
+ *          default: '6512a244d2afd8d5a45edfe3'
  *    CreateCartResponse:
  *      type: object
  *      properties:
@@ -229,4 +213,12 @@
  *          type: string
  *        updatedAt:
  *          type: string
+ *    CreateOrderUpdateInput:
+ *      type: object
+ *      required:
+ *        - productId
+ *      properties:
+ *        productId:
+ *          type: string
+ *          default: 64df120cbc8a77e4377c1bcf
  */

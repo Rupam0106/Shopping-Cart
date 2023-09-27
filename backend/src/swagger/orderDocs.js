@@ -28,7 +28,7 @@
  */
 /**
  * @openapi
- * /api/v1/order/{orderId}:
+ * /api/v1/order/{id}:
  *  put:
  *     security:
  *      - bearerAuth: []
@@ -40,15 +40,21 @@
  *         required: true
  *         schema:
  *           type: string
- *           example: '650c2d13e6e25c0fdf978d75'
+ *           example: '64ec2fdb8190aae898c6ddc6'
  *     description: Responds if the app is up and running
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateOrderUpdateInput'
  *     responses:
  *       200:
  *         description: App is up and running
  */
 /**
  * @openapi
- * /api/v1/order/cancel/{orderId}:
+ * /api/v1/order/cancel/{id}:
  *  put:
  *     security:
  *      - bearerAuth: []
@@ -62,6 +68,12 @@
  *           type: string
  *           example: '650c2d13e6e25c0fdf978d75'
  *     description: Responds if the app is up and running
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateOrderUpdateInput'
  *     responses:
  *       200:
  *         description: App is up and running

@@ -1,13 +1,13 @@
 
 /**
  * @openapi
- * /api/v1/cart:
+ * /api/v1/wishlist:
  *  post:
  *     security:
  *      - bearerAuth: []
  *     tags: 
- *       - Cart
- *     summary: Create Cart
+ *       - Wishlist
+ *     summary: Create WishList
  *     description: Responds if the app is up and running
  *     requestBody:
  *       required: true
@@ -22,27 +22,28 @@
 
 /**
  * @openapi
- * /api/v1/cart:
+ * /api/v1/wishlist:
  *  get:
  *     security:
  *      - bearerAuth: []
  *     tags: 
- *       - Cart
- *     summary: get Cart Details
+ *       - Wishlist
+ *     summary: Create WishList
  *     description: Responds if the app is up and running
  *     responses:
  *       200:
  *         description: App is up and running
  */
+
 /**
  * @openapi
- * /api/v1/cart:
+ * /api/v1/wishlist:
  *  put:
  *     security:
  *      - bearerAuth: []
  *     tags: 
- *       - Cart
- *     summary: Update Existing Cart
+ *       - Wishlist
+ *     summary: Create WishList
  *     description: Responds if the app is up and running
  *     responses:
  *       200:

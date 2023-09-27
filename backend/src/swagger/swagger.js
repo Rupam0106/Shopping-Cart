@@ -36,6 +36,7 @@ const options = {
     "./src/swagger/productDocs.js",
     "./src/swagger/cartDocs.js",
     "./src/swagger/orderDocs.js",
+    "./src/swagger/wishListDocs.js",
   ],
 };
 
